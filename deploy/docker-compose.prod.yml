@@ -1,4 +1,6 @@
 # Regras do servidor (docs/10-deploy-e-operacao.md): nada publica 80/443; só loopback; container_name com prefixo.
+# Sem `name`, o Compose usaria o nome da pasta ("deploy") como projeto e poderia recriar o serviço `web` de outro sistema do VPS.
+name: portfolio
 services:
   web:
     build:

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Coloca a versão mais recente no ar. Rode NO SERVIDOR, depois do push:
-#   cd /var/www/docker-instances/Portfolio && ./deploy/atualizar.sh [--forcar]
+#   cd /var/www/docker-instances/portfolio && ./deploy/atualizar.sh [--forcar]
 # Constrói a imagem, troca o contêiner e confere /saude.txt por 60 s. Se falhar, volta à imagem anterior.
 set -euo pipefail
 cd "$(dirname "$0")/.."

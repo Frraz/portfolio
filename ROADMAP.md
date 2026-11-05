@@ -129,6 +129,7 @@ pnpm modelos      # gera os modelos 3D (exige Blender em ~/.local/opt)
 - [ ] `git init`, commits e push
 - [ ] Certificado e vhost
 - [ ] Primeiro deploy
+- [ ] Remover `X-Robots-Tag: noindex` do vhost, para o Google poder indexar
 - [ ] Testar em produção e publicar o texto final de `/seguranca`
 - [ ] Search Console
 
@@ -138,4 +139,5 @@ pnpm modelos      # gera os modelos 3D (exige Blender em ~/.local/opt)
 |---|---|
 | 05/11/2026 | Documentação concluída e pendências respondidas pelo titular. Início do desenvolvimento |
 | 05/11/2026 | Fases 3 e 5 concluídas. Fase 4 aguarda avaliação em aparelho real. Próximo: Fase 6 |
+| 05/11/2026 | Compose com nome de projeto próprio e `noindex` no vhost, antes do primeiro deploy de acompanhamento |
 | 05/11/2026 | Fase 6 implementada: nave 3D, storyboard, Divisor, terminal, CTF, som e service worker. Faltam revisão de animação e avaliação em aparelho real |

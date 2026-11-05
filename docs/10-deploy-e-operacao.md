@@ -19,7 +19,8 @@ Vêm de `/var/www/docker-instances/README.md`, citadas em `../byakugan/DEPLOY.md
 1. Nenhum contêiner publica 80 ou 443. Só o nginx do host.
 2. O site publica apenas em `127.0.0.1:<porta>`.
 3. `container_name` com prefixo: `portfolio_web`.
-4. Diretório: `/var/www/docker-instances/Portfolio`.
+4. Diretório: `/var/www/docker-instances/portfolio`.
+5. O Compose tem `name: portfolio`. Sem isso, o projeto herdaria o nome da pasta `deploy` e poderia recriar o serviço `web` de outro sistema.
 
 ### Reserva
 
@@ -123,6 +124,8 @@ server {
     client_max_body_size 256k;
 
     add_header Strict-Transport-Security "max-age=31536000" always;
+    # Durante o desenvolvimento: o texto ainda não foi aprovado. Remover no lançamento (Fase 11).
+    add_header X-Robots-Tag "noindex, nofollow" always;
 
     location / {
         proxy_pass http://127.0.0.1:8030;
@@ -148,7 +151,7 @@ ss -ltn | grep 8030   # não deve retornar nada
 free -h
 
 # 2. Clonar e configurar
-cd /var/www/docker-instances && git clone <repo> Portfolio && cd Portfolio
+cd /var/www/docker-instances && git clone <repo> portfolio && cd portfolio
 cp .env.example .env && nano .env      # SITE_URL, PORTA, WHATSAPP_NUMERO, chaves opcionais
 
 # 3. Subir
@@ -185,14 +188,14 @@ A renovação do certificado é a do Certbot já instalado. Depois do primeiro d
 7. Se passar, grava `IMAGE_TAG` no `.env` e testa o domínio público.
 
 ```bash
-ssh deploy@147.93.15.214 'cd /var/www/docker-instances/Portfolio && ./deploy/atualizar.sh'
+ssh deploy@147.93.15.214 'cd /var/www/docker-instances/portfolio && ./deploy/atualizar.sh'
 ```
 
 Use `--forcar` depois de mudar o `.env`, pois os valores entram no build.
 
 ## Git
 
-O titular cria o repositório. O `.gitignore` já exclui `.env*`, `node_modules/`, `.next/`, `out/` e relatórios de teste. **`docs/` não é excluída:** se o repositório for público, decida antes do primeiro commit, porque ela traz IP, porta e detalhes do VPS.
+O titular cria o repositório. O `.gitignore` já exclui `.env*`, `node_modules/`, `.next/`, `out/` e relatórios de teste. **`docs/` não é excluída:** ela traz IP, portas e nomes de outros sistemas do VPS. O repositório deve ficar **privado**, e o VPS o lê por uma chave de implantação somente leitura. Para publicar o código no futuro, gerar antes uma cópia sem `docs/` e sem as regras internas.
 
 ## Antes de cada push
 

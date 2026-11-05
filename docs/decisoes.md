@@ -58,3 +58,4 @@ Registro das decisões do projeto, com motivo e alternativa rejeitada. Decisão 
 | 52 | 05/11/2026 | Ambiente do metal do relicário gerado no navegador, sem HDRI em arquivo | Dispensa arquivo e fica coerente com a cena | HDRI assado no Blender | Proposta |
 | 53 | 05/11/2026 | Respostas do terminal em linguagem neutra: `Ainda estou aprendendo` no lugar de `Ainda sou noviço` | Segue a decisão 34 | Manter o termo | Proposta |
 | 54 | 05/11/2026 | Verificador aceita `warley.ferzion.com.br`, e continua barrando o nome Ferzion fora do domínio | O build de produção falhava com o endereço real | Tirar Ferzion da lista | Proposta |
+| 55 | 05/11/2026 | Site no ar durante o desenvolvimento com `noindex` no vhost, até o lançamento | O titular quer acompanhar visualmente, e o texto ainda não foi aprovado | Indexar desde já ou proteger com senha | Proposta |
