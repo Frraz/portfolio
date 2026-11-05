@@ -1,0 +1,195 @@
+import { z } from "zod";
+
+export const Evidencia = z.enum(["trabalho", "projetos", "formacao", "laboratorio"]);
+export const Area = z.enum(["redes", "linux", "devops", "seguranca", "programacao"]);
+const AnoMes = z.string().regex(/^\d{4}-\d{2}$/);
+
+export const Experiencia = z.object({
+  empresa: z.string(),
+  cargo: z.string(),
+  inicio: AnoMes,
+  fim: AnoMes.nullable(),
+  ti: z.boolean(),
+  descricao: z.string(),
+});
+
+export const GrupoCompetencias = z.object({
+  evidencia: Evidencia,
+  titulo: z.string(),
+  explicacao: z.string(),
+  itens: z.array(z.object({ nome: z.string(), areas: z.array(Area).min(1) })),
+  nota: z.string().optional(),
+});
+
+export const Certificado = z.object({
+  nome: z.string(),
+  emissor: z.string(),
+  conclusao: z.string().nullable(),
+  periodo: z.string(),
+  carga: z.string().nullable(),
+  validacaoUrl: z.url().nullable(),
+  codigo: z.string().nullable(),
+  area: z.union([Area, z.literal("outros")]),
+  prioridade: z.enum(["A", "B", "C"]),
+});
+
+export const Curso = z.object({
+  nome: z.string(),
+  instituicao: z.string(),
+  inicio: AnoMes,
+  fim: AnoMes,
+  concluido: z.boolean(),
+  carga: z.string().nullable(),
+  destaques: z.array(z.string()),
+});
+
+export const Projeto = z.object({
+  slug: z.string(),
+  nome: z.string(),
+  resumo: z.string(),
+  contexto: z.string(),
+  situacao: z.enum(["producao", "demonstracao", "desenvolvimento", "academico"]),
+  demoUrl: z.url().nullable(),
+  stack: z.array(z.string()),
+  destaques: z.array(z.string()),
+  capa: z.string().nullable(),
+  publicado: z.boolean(),
+});
+
+export const IDS_SECOES = ["inicio", "sobre", "agora", "trajetoria", "formacao", "competencias", "certificados", "obras", "contato"] as const;
+export const IdSecao = z.enum(IDS_SECOES);
+
+const Secao = z.object({ id: IdSecao, rotulo: z.string(), margem: z.string() });
+
+export const Conteudo = z.object({
+  idioma: z.string(),
+  obrasAtivas: z.boolean(),
+  secoes: z.array(Secao),
+  pessoa: z.object({ nome: z.string(), linhasNome: z.array(z.string()).length(2), local: z.string(), email: z.email(), linkedin: z.url(), github: z.url() }),
+  ui: z.record(z.string(), z.string()),
+  inicio: z.object({ subtitulo: z.string(), apoio: z.string(), local: z.string(), acaoPrincipal: z.string(), acaoSecundaria: z.string() }),
+  sobre: z.object({
+    titulo: z.string(),
+    paragrafos: z.array(z.string()).min(1),
+    aindaNaoTenhoTitulo: z.string(),
+    aindaNaoTenho: z.string(),
+    procuroTitulo: z.string(),
+    procuro: z.string(),
+  }),
+  agora: z.object({
+    titulo: z.string(),
+    cargo: z.string(),
+    empresa: z.string(),
+    periodo: z.string(),
+    atividades: z.array(z.string()).min(1),
+    ferramentasTitulo: z.string(),
+    ferramentas: z.array(z.string()),
+    luzTitulo: z.string(),
+    luz: z.string(),
+    legendaDiagrama: z.string(),
+    divisor: z.object({ grupo: z.string(), instrucao: z.string(), olt: z.string(), divisor: z.string(), onu: z.string(), painel: z.string(), completa: z.string(), reiniciar: z.string() }),
+  }),
+  trajetoria: z.object({ titulo: z.string(), introducao: z.string(), experiencias: z.array(Experiencia).length(10) }),
+  formacao: z.object({
+    titulo: z.string(),
+    cursos: z.array(Curso).length(3),
+    legendaLanceta: z.string(),
+    estudoTitulo: z.string(),
+    estudo: z.string(),
+    idiomasTitulo: z.string(),
+    idiomas: z.string(),
+    previsao: z.string(),
+    concluido: z.string(),
+    emAndamento: z.string(),
+  }),
+  competencias: z.object({ titulo: z.string(), introducao: z.string(), grupos: z.array(GrupoCompetencias).length(4), filtros: z.record(z.string(), z.string()) }),
+  certificados: z.object({
+    titulo: z.string(),
+    introducao: z.string(),
+    verTodos: z.string(),
+    verMenos: z.string(),
+    validar: z.string(),
+    semValidacao: z.string(),
+    filtros: z.record(z.string(), z.string()),
+    itens: z.array(Certificado).length(36),
+  }),
+  projetos: z.array(Projeto),
+  contato: z.object({
+    titulo: z.string(),
+    texto: z.string(),
+    email: z.string(),
+    copiar: z.string(),
+    copiado: z.string(),
+    copiarFalha: z.string(),
+    mostrarWhatsapp: z.string(),
+    baixarPdf: z.string(),
+  }),
+  cv: z.object({ subtitulo: z.string(), objetivoTitulo: z.string(), objetivo: z.string(), resumoTitulo: z.string(), resumo: z.string(), experienciaTi: z.string(), anteriores: z.string(), cursosTitulo: z.string(), baixar: z.string(), imprimir: z.string(), voltar: z.string() }),
+  seguranca: z.object({
+    titulo: z.string(),
+    abertura: z.string(),
+    relatar: z.string(),
+    aplicadoTitulo: z.string(),
+    aplicado: z.array(z.object({ controle: z.string(), significa: z.string(), conferir: z.string(), testadoEmProducao: z.boolean() })),
+    naoGaranteTitulo: z.string(),
+    naoGarante: z.string(),
+    regrasTitulo: z.string(),
+    regras: z.array(z.string()),
+    privacidadeTitulo: z.string(),
+    privacidade: z.string(),
+  }),
+  sistema: z.object({ titulo: z.string(), abertura: z.string() }),
+  terminal: z.object({
+    titulo: z.string(),
+    rotuloEntrada: z.string(),
+    boasVindas: z.string(),
+    ajuda: z.record(z.string(), z.string()),
+    naoEncontrado: z.string(),
+    sudo: z.string(),
+    rm: z.string(),
+    nmap: z.string(),
+    matrix: z.string(),
+    script: z.string(),
+    semPdf: z.string(),
+    abrindo: z.string(),
+    temas: z.string(),
+    temaTrocado: z.string(),
+    temaInvalido: z.string(),
+    temaBloqueado: z.string(),
+    chuvaLigada: z.string(),
+    chuvaPausada: z.string(),
+    somLigado: z.string(),
+    somDesligado: z.string(),
+    whatsapp: z.string(),
+    cabecalhosErro: z.string(),
+    semCabecalho: z.string(),
+    areaInvalida: z.string(),
+    semValidacao: z.string(),
+    emAndamento: z.string(),
+    concluido: z.string(),
+    previsao: z.string(),
+    atual: z.string(),
+    ls: z.array(z.string()),
+    lsTudo: z.array(z.string()),
+  }),
+  ctf: z.object({
+    regra: z.string(),
+    progresso: z.string(),
+    confirmado: z.string(),
+    repetido: z.string(),
+    invalido: z.string(),
+    uso: z.string(),
+    completo: z.string(),
+    dicas: z.array(z.object({ dica: z.string(), link: z.string() })).length(9),
+    maca: z.string(),
+  }),
+  rodape: z.object({ assinatura: z.string(), creditos: z.string() }),
+  estados: z.object({ naoEncontradaTitulo: z.string(), naoEncontrada: z.string(), voltar: z.string(), offlineTitulo: z.string(), offline: z.string() }),
+  seo: z.object({
+    inicio: z.object({ titulo: z.string(), descricao: z.string() }),
+    cv: z.object({ titulo: z.string(), descricao: z.string() }),
+    seguranca: z.object({ titulo: z.string(), descricao: z.string() }),
+    sistema: z.object({ titulo: z.string(), descricao: z.string() }),
+  }),
+});
+export type ConteudoSite = z.infer<typeof Conteudo>;

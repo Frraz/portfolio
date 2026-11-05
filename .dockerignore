@@ -1,0 +1,10 @@
+node_modules
+.next
+out
+.env*
+.claude
+docs
+tests
+test-results
+playwright-report
+*.md

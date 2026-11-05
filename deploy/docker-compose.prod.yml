@@ -1,0 +1,24 @@
+# Regras do servidor (docs/10-deploy-e-operacao.md): nada publica 80/443; só loopback; container_name com prefixo.
+services:
+  web:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        SITE_URL: ${SITE_URL:?defina SITE_URL no .env}
+        WHATSAPP_NUMERO: ${WHATSAPP_NUMERO:-}
+    image: portfolio:${IMAGE_TAG:-latest}
+    container_name: portfolio_web
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    mem_limit: 96m
+    pids_limit: 64
+    ports:
+      - "127.0.0.1:${PORTA:?defina PORTA no .env}:8080"
+    logging:
+      driver: json-file
+      options: { max-size: "5m", max-file: "3" }

@@ -1,0 +1,3 @@
+# Scripts de instalação ficam bloqueados por padrão. Só o que está aqui pode rodar.
+allowBuilds:
+  esbuild: true

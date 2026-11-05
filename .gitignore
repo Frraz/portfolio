@@ -1,0 +1,17 @@
+node_modules/
+.next/
+out/
+.env
+.env.*
+!.env.example
+*.tsbuildinfo
+next-env.d.ts
+test-results/
+playwright-report/
+.lighthouseci/
+storybook-static/
+.taste-skill/
+.impeccable/
+deploy/csp-map.conf
+deploy/csp-map.json
+assets-3d/brutos/
