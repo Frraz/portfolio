@@ -12,8 +12,7 @@ export type Efeito =
   | { tipo: "abrir"; rota: string }
   | { tipo: "baixar"; arquivo: string }
   | { tipo: "tema"; id: string; temporario?: boolean }
-  | { tipo: "chuva"; pausada: boolean }
-  | { tipo: "som"; ligado: boolean };
+  | { tipo: "chuva"; pausada: boolean };
 
 export type Resposta = { linhas: string[]; efeito?: Efeito };
 
@@ -31,7 +30,7 @@ const CABECALHOS = ["content-security-policy", "x-content-type-options", "referr
 
 const trocar = (t: string, v: string) => t.replace("{x}", v);
 
-export const NOMES = ["ajuda", "help", "quemsou", "whoami", "sobre", "agora", "trajetoria", "formacao", "competencias", "certificados", "contato", "cv", "pdf", "tema", "chuva", "som", "seguranca", "cabecalhos", "selos", "selo", "ls", "limpar", "clear", "sair", "exit"];
+export const NOMES = ["ajuda", "help", "quemsou", "whoami", "sobre", "agora", "trajetoria", "formacao", "competencias", "certificados", "contato", "cv", "pdf", "tema", "chuva", "seguranca", "cabecalhos", "selos", "selo", "ls", "limpar", "clear", "sair", "exit"];
 
 export async function executar(entrada: string, ctx: Contexto): Promise<Resposta> {
   const bruto = entrada.trim();
@@ -99,8 +98,6 @@ export async function executar(entrada: string, ctx: Contexto): Promise<Resposta
       return { linhas: [trocar(k.temaTrocado, arg)], efeito: { tipo: "tema", id: arg } };
     case "chuva":
       return arg === "ligar" ? { linhas: [k.chuvaLigada], efeito: { tipo: "chuva", pausada: false } } : { linhas: [k.chuvaPausada], efeito: { tipo: "chuva", pausada: true } };
-    case "som":
-      return arg === "desligar" ? { linhas: [k.somDesligado], efeito: { tipo: "som", ligado: false } } : { linhas: [k.somLigado], efeito: { tipo: "som", ligado: true } };
     case "cabecalhos": {
       const h = await ctx.cabecalhos();
       if (!h) return { linhas: [k.cabecalhosErro] };

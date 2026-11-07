@@ -25,8 +25,8 @@ test("com movimento reduzido, a cena não fica animando", async ({ browser }) =>
   await page.waitForSelector('.palco[data-pronta="sim"]', { timeout: 45_000 });
   await page.waitForLoadState("networkidle");
   await page.waitForTimeout(6000); // a máscara de travamento e a moldura pedem alguns quadros
-  // O Playwright fotografa tudo o que está por cima do canvas: a moldura tem relógio e muda a cada segundo.
-  await page.evaluate(() => document.querySelectorAll<HTMLElement>(".moldura, .regua").forEach((e) => (e.style.visibility = "hidden")));
+  // O Playwright fotografa tudo o que está por cima do canvas: a moldura mostra FPS e rolagem, que mudam a cada quadro.
+  await page.evaluate(() => document.querySelectorAll<HTMLElement>(".moldura").forEach((e) => (e.style.visibility = "hidden")));
   const a = await page.locator(".palco canvas").screenshot({ timeout: 45_000 });
   await page.waitForTimeout(1500);
   const b = await page.locator(".palco canvas").screenshot({ timeout: 45_000 });
@@ -61,7 +61,7 @@ for (const { tema, limite, secao } of CASOS) {
     await page.evaluate((s) => document.getElementById(s)?.scrollIntoView({ behavior: "instant" as ScrollBehavior }), secao);
     await page.waitForTimeout(3500);
     await page.evaluate(() => {
-      document.querySelectorAll<HTMLElement>("main > *:not(.palco), .barra, .fibra, .moldura, .regua").forEach((e) => (e.style.visibility = "hidden"));
+      document.querySelectorAll<HTMLElement>("main > *:not(.palco), .barra, .fibra, .moldura").forEach((e) => (e.style.visibility = "hidden"));
     });
     await page.waitForTimeout(400);
     const png = (await page.screenshot({ timeout: 45_000 })).toString("base64");

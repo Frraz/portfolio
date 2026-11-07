@@ -1,37 +1,35 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { TOTAL_SELOS } from "@/ctf/progresso";
 
 /**
- * Sigilo animado ao confirmar um selo. Fica fora do terminal, que não anima.
- * `lottie_light` não usa `eval`: passa pela CSP. Sem movimento reduzido, o traço se desenha; com ele, aparece pronto.
+ * Aviso ao confirmar um selo do CTF, fora do terminal (que não anima). Mostra só o dado real: qual selo e quantos
+ * foram reunidos. Entrada e saída em CSS; com movimento reduzido, aparece e some sem transição.
+ * O terminal já anuncia o selo para leitores de tela, por isso aqui fica `aria-hidden`.
  */
 export function SeloToast() {
-  const [selo, setSelo] = useState<number | null>(null);
-  const caixa = useRef<HTMLDivElement>(null);
+  const [selo, setSelo] = useState<{ indice: number; total: number } | null>(null);
   useEffect(() => {
-    const aoSelo = (e: Event) => setSelo((e as CustomEvent<{ indice: number }>).detail.indice);
-    addEventListener("nave:selo", aoSelo);
-    return () => removeEventListener("nave:selo", aoSelo);
-  }, []);
-  useEffect(() => {
-    if (selo === null || !caixa.current) return;
-    let anim: { destroy: () => void; goToAndStop: (v: number, q: boolean) => void; totalFrames: number } | null = null;
-    let cancelado = false;
-    (async () => {
-      const [{ default: lottie }, dados] = await Promise.all([import("lottie-web/build/player/lottie_light"), fetch(`/gl/selos/selo-${selo}.json`).then((r) => r.json())]);
-      if (cancelado || !caixa.current) return;
-      const reduzido = matchMedia("(prefers-reduced-motion: reduce)").matches;
-      anim = lottie.loadAnimation({ container: caixa.current, renderer: "svg", loop: false, autoplay: !reduzido, animationData: dados });
-      if (reduzido) anim!.goToAndStop(anim!.totalFrames - 1, true);
-    })();
-    const t = window.setTimeout(() => setSelo(null), 2600);
-    return () => {
-      cancelado = true;
+    let t = 0;
+    const aoSelo = (e: Event) => {
+      setSelo((e as CustomEvent<{ indice: number; total: number }>).detail);
       window.clearTimeout(t);
-      anim?.destroy();
+      t = window.setTimeout(() => setSelo(null), 2600);
     };
-  }, [selo]);
+    addEventListener("sinal:selo", aoSelo);
+    return () => {
+      removeEventListener("sinal:selo", aoSelo);
+      window.clearTimeout(t);
+    };
+  }, []);
   if (selo === null) return null;
-  return <div ref={caixa} className="selo-sigilo" aria-hidden="true" />;
+  return (
+    <div className="selo-aviso" aria-hidden="true">
+      <span className="dado">selo {selo.indice}</span>
+      <span className="dado selo-aviso-total">
+        {selo.total}/{TOTAL_SELOS}
+      </span>
+    </div>
+  );
 }

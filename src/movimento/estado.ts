@@ -12,6 +12,6 @@ export const estadoCena = {
 };
 
 /** Dados reais da cena para a moldura de instrumento (docs/05). Quem decide o nível escreve aqui. */
-export const hud: { cena: "carregando" | "ativa" | "estatica"; nivel: string } = { cena: "carregando", nivel: "" };
+export const hud: { nivel: string } = { nivel: "" };
 
 export const reduzido = () => matchMedia("(prefers-reduced-motion: reduce)").matches;

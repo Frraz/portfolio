@@ -1,6 +1,6 @@
 # 05 — Design system
 
-Tokens, tipografia, moldura e componentes do conceito Sinal. Fonte única para `src/temas/` e para `/sistema`. Hierarquia de tokens: primitivo → semântico → componente, como na skill `ui-ux-pro-max:design-system`.
+Tokens, tipografia, moldura e componentes do conceito Sinal. Fonte única para `src/temas/` e para `/sistema`. Hierarquia de tokens: primitivo → semântico → componente.
 
 **Situação:** especificação do redesign de 06/11/2026, a aprovar pelo titular antes do código (Fase R0). Os valores abaixo já passam no cálculo de contraste. `scripts/verificar-contraste.ts` confirma no build.
 
@@ -56,9 +56,9 @@ Valores em hexadecimal, com OKLCH calculado. O CSS usa OKLCH, e o shader recebe 
 | `chuva` | `#14080A` a 8% | `oklch(15.4% 0.022 8.6 / 0.08)` |
 | `chuva-cabeca` | `#A0001A` a 25% | `oklch(44.5% 0.180 24.2 / 0.25)` |
 
-### Fósforo (escondido)
+### Fósforo (prêmio do CTF)
 
-Liberado pelo comando `matrix` no terminal ou pelo CTF completo ([07](07-recursos-interativos.md#ctf-de-flags)).
+Aparece no menu de tema como "Fósforo (bloqueado)", desabilitado, até o visitante reunir os nove selos do CTF ([07](07-recursos-interativos.md#ctf-de-flags), [decisão 103](decisoes.md)). Depois disso fica livre e é reaplicado ao recarregar. O comando `matrix` o mostra por 10 segundos.
 
 | Papel | Hex | OKLCH |
 |---|---|---|
@@ -88,7 +88,7 @@ Todos passam. O pior caso é `sinal` sobre `superficie-2` no Rubro (5,34), ainda
 
 ## Tipografia
 
-Duas famílias, como pede a skill `taste-skill`. Licença, eixos e subconjuntos conferidos na API do Fontsource em 06/11/2026. Ambas OFL 1.1, auto-hospedadas em WOFF2 com subconjunto.
+Duas famílias. Licença, eixos e subconjuntos conferidos na API do Fontsource em 06/11/2026. Ambas OFL 1.1, auto-hospedadas em WOFF2 com subconjunto.
 
 | Papel | Fonte | Eixos | Subconjuntos | Uso |
 |---|---|---|---|---|
@@ -137,22 +137,21 @@ Tudo em `clamp()`, com `rem`, para respeitar o zoom.
 
 ## Moldura de instrumento (HUD)
 
-Peça fixa no viewport, em DOM. Os dados são `aria-hidden` quando duplicam informação da página, e o relógio e a seção atual também estão no fluxo para quem usa leitor de tela. **Todo valor da moldura é real** ([04](04-direcao-criativa.md#princípio-inegociável-todo-enfeite-técnico-mostra-um-dado-real)).
+Peça fixa no viewport, em DOM, com `aria-hidden`: nenhum dado dela é necessário para usar o site. **Todo valor da moldura é real** ([04](04-direcao-criativa.md#princípio-inegociável-todo-enfeite-técnico-mostra-um-dado-real)). As marcas são CSS e chegam com o HTML; os dados entram depois da primeira pintura, com o navegador ocioso, para não pesar no JavaScript inicial.
 
 | Canto | Conteúdo | Atualização |
 |---|---|---|
-| Superior esquerdo | `warley.ferzion.com.br` e estado da cena (`cena: carregando`, `ativa`, `estática`) | Ao mudar de estado |
-| Superior direito | Hora de Rondon do Pará, `UTC−3`, com segundos | A cada segundo, pelo ticker do GSAP |
+| Superior esquerdo e direito | Só a marca em L. A faixa com domínio, estado da cena, hora e fuso saiu a pedido do titular ([decisão 99](decisoes.md)): a barra de navegação fica no topo da tela | — |
 | Inferior esquerdo | Seção atual e rolagem em px, em duas células (`agora` e `y 2418`) | A cada quadro, por ref, sem re-render |
 | Inferior direito | FPS, nível de qualidade e tema, em três células (`58 fps`, `alto`, `rubro`) | A cada 500 ms |
 
-**Régua de progresso:** puramente visual, `aria-hidden` e fora da ordem de foco (a navegação real é a barra). Na borda direita, marcações a cada 100 px de documento e um traço maior no início de cada seção, com o rótulo da seção ao passar o mouse. O indicador desce com a rolagem. Clicar em um traço leva à seção, e a navegação real continua na barra. É o único elemento da moldura com interação.
+**Sem régua de progresso.** A régua da borda direita saiu: junto da barra de rolagem do navegador, ocupava espaço e chamava atenção demais ([decisão 99](decisoes.md)).
 
 Os valores ficam em células separadas por espaço, sem ponto médio nem barra.
 
 **Cantos:** marcas em L de 12 px nos quatro cantos da moldura, na cor `forma`. Delimitam a área de medida.
 
-**Celular (< 768 px):** só os cantos superiores (identificador e hora), régua de 4 px sem rótulos e o restante recolhido no Índice.
+**Celular (< 768 px):** só as marcas em L. Os dados ocupariam a tela pequena sem acrescentar leitura.
 
 **Movimento reduzido:** os números atualizam, mas sem transição.
 
@@ -179,7 +178,7 @@ O titular pediu o "vidro líquido" do iOS 26 na barra de navegação. O pacote n
 
 - **Cápsula** (`.vidro`): fundo de `tinta` a 7%, `backdrop-filter: blur(12px) saturate(1.8) brightness(1.12)`, realce especular de 1 px no canto superior esquerdo e sombra de 1 px no oposto (`inset box-shadow`), brilho interno e sombra externa (a barra flutua).
 - **Lente:** um segundo vidro, mais claro, desliza até o link da seção atual (`.barra-links::before`, por variáveis `--lente-x` e `--lente-l`, medidas no cliente). Mola de 450 ms.
-- **Onde:** a cápsula dos links e a das ações (`Currículo`, chuva, som, terminal, tema). Outras partes só entram se o titular pedir.
+- **Onde:** a cápsula dos links e a das ações (chuva, terminal e tema). Outras partes só entram se o titular pedir.
 - **Tema Claro:** fundo de `superficie` a 55% e realce branco.
 - **Sem suporte a `backdrop-filter`:** fundo de `superficie` a 94%, sem desfoque.
 - **Desempenho:** o desfoque é refeito a cada quadro da chuva, mas em duas áreas pequenas (cerca de 640 × 44 e 290 × 44 px). Não se aplica a painéis grandes.
@@ -191,7 +190,7 @@ SVGs e textos gerados por script a partir de dados, com `aria-hidden`. Cada um t
 
 | Elemento | Gerador | Dado de origem | Uso |
 |---|---|---|---|
-| **Trilhas de placa** | `scripts/gerar-trilhas.ts` | Semente fixa por seção. Traços em 45°, vias e pads, sem componente de marca | Fundo de seções; ligam blocos de conteúdo à moldura |
+| **Trilhas de placa** | `scripts/gerar-trilhas.ts` e `scripts/trilhas/placa.ts` | Semente fixa por seção. Grade de ocupação de 6 unidades: CIs com pinos em dois ou quatro lados, componentes passivos, barramentos em leque a 45° e vias, sem nada se cruzar ou encostar (folga de 12 unidades entre redes, conferida em teste). Traço de 1 px que não escala, sem componente de marca | Fundo de Início, Trajetória e Certificados, do lado oposto ao texto |
 | **Hexdump** | No build, em `src/conteudo/derivados.ts` | UTF-8 do parágrafo de Sobre | Sobre, terminal `hexdump` |
 | **Faixa binária** | No build | Hash do commit | Rodapé |
 | **Código de barras** | No build | Hash do commit | `/seguranca` |
@@ -226,26 +225,25 @@ Base UI para comportamento acessível, com visual próprio. O shadcn/ui serve de
 |---|---|---|---|
 | `Botao` | `button`/`a` | Hover, foco, pressionado, desativado, carregando | Principal em `sinal` sólido com texto `fundo`. Secundário só com `--borda`. Escala 0,97 ao pressionar. Sem seta |
 | `Link` | `a` | Hover, foco, visitado | Sublinhado que se preenche da esquerda para a direita, como barra de progresso |
-| `Secao` | `section` | Com e sem cena | Título, forma da seção e trilhas. Posição derivada da ordem, mostrada só na régua |
+| `Secao` | `section` | Com e sem cena | Título, forma da seção e trilhas. Posição derivada da ordem |
 | `Moldura` | `div` fixo | Completa, celular, estática | [Moldura de instrumento](#moldura-de-instrumento-hud) |
-| `Regua` | `nav` secundária | Atual, hover, foco | Duplica uma navegação real |
 | `BootLog` | `ol` com `aria-hidden` | Em andamento, concluído | Passos reais com tempos medidos. Some 4 s após concluir |
 | `Hexdump` | `pre` com `aria-hidden` | Linha ativa | Offset, bytes e ASCII. Real |
 | `Traceroute` | `ol` | Salto atual, passado, futuro | Lista real, mesmo se animada |
 | `BlocosCarga` | `ul` | Concluído, em andamento | Área proporcional às horas reais |
-| `AneisEvidencia` | `section` com listas | Por anel, filtrado | Os itens continuam sendo listas |
+| `DegrausEvidencia` | `section` com listas | Por degrau, filtrado | Os itens continuam sendo listas ([decisão 91](decisoes.md)) |
 | `TabelaCertificados` | `table` | Com e sem validação | Link externo com `rel="noopener noreferrer"` |
 | `Handshake` | `ol` com `aria-hidden` | Etapas | Decora as ações reais de contato |
 | `RegistroSessao` | `aside` com `role="log"` | Recolhido, aberto, vazio | Eventos reais da visita ([07](07-recursos-interativos.md#registro-da-sessão)) |
 | `FiltroUrl` | Base UI Toggle Group | Selecionado, foco | Sincroniza com a URL |
-| `TrocadorTema` | Base UI Menu | Tema atual, bloqueado | Fósforo aparece como bloqueado até ser liberado |
+| `TrocadorTema` | Base UI Menu | Tema atual, bloqueado | Amostra redonda com o **fundo do próprio tema** e anel em `sinal`: o Claro aparece claro. Fósforo aparece desabilitado até ser liberado |
 | `Terminal` | Base UI Dialog | Aberto, vazio, erro | Abre sem animação |
 | `RevelarWhatsapp` | `button` → `a` | Oculto, revelado | Foco passa para o link |
-| `BotaoSom` | `button` | Ligado, desligado, indisponível | `aria-pressed` |
-| `BotaoChuva` | `button` | Pausada, ligada | `Pausar chuva`, com `aria-pressed` |
-| `ModoDireto` | `a` para `/cv` | Sempre visível | Atalho de quem tem pressa |
+| `BotaoChuva` | `button` | Pausada, ligada | `Pausar chuva`, com `aria-pressed`. Ícone próprio em SVG |
+| `AvisoSelo` | `div` com `aria-hidden` | Visível por 2,6 s | Selo confirmado e progresso real (`selo 3` e `4/9`). O terminal anuncia o mesmo para leitores de tela |
+| `ModoDireto` | `a` para `/cv` | No hero, no rodapé e no terminal | Atalho de quem tem pressa. Saiu da barra a pedido do titular ([decisão 97](decisoes.md)) |
 
-**Estados globais obrigatórios:** foco visível com contorno de 2 px em `sinal` e deslocamento de 3 px em todo interativo; seleção de texto em `sinal` com texto `fundo`; cursor de texto em `sinal`; barra de rolagem fina em `forma` sobre `fundo`; `color-scheme` e `theme-color` por tema; alvos de toque de 44 px ou mais.
+**Estados globais obrigatórios:** foco visível com contorno de 2 px em `sinal` e deslocamento de 3 px em todo interativo; seleção de texto em `sinal` com texto `fundo`; cursor de texto em `sinal`; barra de rolagem fina em `--rolagem` (tinta a 22%) sobre trilho transparente, sem cor de destaque; `color-scheme` e `theme-color` por tema; alvos de toque de 44 px ou mais.
 
 ## Tailwind e tokens
 

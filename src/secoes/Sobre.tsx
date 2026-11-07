@@ -27,10 +27,6 @@ export function Sobre({ c }: { c: ConteudoSite }) {
               <dd>{c.agora.cargo}</dd>
             </div>
             <div>
-              <dt>{f.local}</dt>
-              <dd>{c.pessoa.local}</dd>
-            </div>
-            <div>
               <dt>{f.estudo}</dt>
               <dd>
                 <span className="dado">{formatarMesAno(inicioEstudo)}</span>, {formatarTempo(tempoDecorrido(inicioEstudo), f)}

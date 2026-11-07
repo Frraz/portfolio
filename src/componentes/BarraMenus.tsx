@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { Dialog } from "@base-ui/react/dialog";
 import { Menu } from "@base-ui/react/menu";
 import { LazyMotion, domAnimation, m } from "motion/react";
-import { Palette, Pause, Play, SquareTerminal, Volume2, VolumeX } from "lucide-react";
+import { Palette, SquareTerminal } from "lucide-react";
+import { IconePausar, IconeTocar } from "./Icones";
 import { ctfCompleto } from "@/ctf/progresso";
 import { TEMAS, type Tema } from "@/temas/temas";
 import { trocarTema } from "@/temas/trocar";
@@ -19,26 +20,23 @@ type Props = {
   naInicial: boolean;
   pausada: boolean;
   alternarChuva: () => void;
-  somLigado: boolean;
-  alternarSomBarra: () => void;
   abrirTerminal: () => void;
 };
 
-export default function BarraMenus({ secoes, ui, prefixo, naInicial, pausada, alternarChuva, somLigado, alternarSomBarra, abrirTerminal }: Props) {
+export default function BarraMenus({ secoes, ui, prefixo, naInicial, pausada, alternarChuva, abrirTerminal }: Props) {
   const [indice, setIndice] = useState(false);
   const [selado, setSelado] = useState(false);
   useEffect(() => {
     const ler = () => setSelado(ctfCompleto());
     ler();
-    addEventListener("nave:selo", ler);
-    return () => removeEventListener("nave:selo", ler);
+    addEventListener("sinal:selo", ler);
+    return () => removeEventListener("sinal:selo", ler);
   }, []);
-  const temas = TEMAS.filter((t) => !t.oculto || selado);
+  // O Fósforo é o prêmio do CTF (decisão 59): aparece sempre, mas só fica disponível com os nove selos.
+  const bloqueado = (t: Tema) => Boolean(t.oculto) && !selado;
+  const nomeTema = (t: Tema) => (bloqueado(t) ? ui.temaFosforoBloqueado : ui[NOME_TEMA[t.id]]);
   return (
     <LazyMotion features={domAnimation}>
-        <button type="button" className="botao-quieto so-largo" aria-pressed={somLigado} aria-label={somLigado ? ui.desligarSom : ui.ligarSom} title={somLigado ? ui.desligarSom : ui.ligarSom} onClick={alternarSomBarra}>
-          {somLigado ? <Volume2 size={16} strokeWidth={1.5} aria-hidden="true" /> : <VolumeX size={16} strokeWidth={1.5} aria-hidden="true" />}
-        </button>
         <button type="button" className="botao-quieto so-largo" aria-label={ui.terminal} title={ui.terminal} onClick={abrirTerminal}>
           <SquareTerminal size={16} strokeWidth={1.5} aria-hidden="true" />
         </button>
@@ -49,10 +47,10 @@ export default function BarraMenus({ secoes, ui, prefixo, naInicial, pausada, al
           <Menu.Portal>
             <Menu.Positioner sideOffset={6} align="end" style={{ zIndex: 70 }}>
               <Menu.Popup className="menu-tema">
-                {temas.map((t) => (
-                  <Menu.Item key={t.id} className="menu-item" onClick={() => trocarTema(t.id)}>
-                    <span className="amostra" data-tema={t.id} style={{ background: "var(--acento)" }} aria-hidden="true" />
-                    {ui[NOME_TEMA[t.id]]}
+                {TEMAS.map((t) => (
+                  <Menu.Item key={t.id} className="menu-item" disabled={bloqueado(t)} title={bloqueado(t) ? ui.temaFosforoDica : undefined} onClick={() => trocarTema(t.id)}>
+                    <span className="amostra-tema" data-tema={t.id} aria-hidden="true" />
+                    {nomeTema(t)}
                   </Menu.Item>
                 ))}
               </Menu.Popup>
@@ -79,23 +77,19 @@ export default function BarraMenus({ secoes, ui, prefixo, naInicial, pausada, al
               </ul>
               <div className="indice-rodape">
                 <div className="indice-temas" role="group" aria-label={ui.tema}>
-                  {temas.map((t) => (
-                    <button key={t.id} type="button" className="botao-quieto" onClick={() => trocarTema(t.id)}>
-                      <span className="amostra" data-tema={t.id} style={{ background: "var(--acento)" }} aria-hidden="true" />
-                      {ui[NOME_TEMA[t.id]]}
+                  {TEMAS.map((t) => (
+                    <button key={t.id} type="button" className="botao-quieto" disabled={bloqueado(t)} title={bloqueado(t) ? ui.temaFosforoDica : undefined} onClick={() => trocarTema(t.id)}>
+                      <span className="amostra-tema" data-tema={t.id} aria-hidden="true" />
+                      {nomeTema(t)}
                     </button>
                   ))}
                 </div>
                 {naInicial ? (
                   <button type="button" className="botao-quieto" aria-pressed={pausada} onClick={alternarChuva}>
-                    {pausada ? <Play size={16} strokeWidth={1.5} aria-hidden="true" /> : <Pause size={16} strokeWidth={1.5} aria-hidden="true" />}
+                    {pausada ? <IconeTocar /> : <IconePausar />}
                     {pausada ? ui.ligarChuva : ui.pausarChuva}
                   </button>
                 ) : null}
-                <button type="button" className="botao-quieto" aria-pressed={somLigado} onClick={alternarSomBarra}>
-                  {somLigado ? <Volume2 size={16} strokeWidth={1.5} aria-hidden="true" /> : <VolumeX size={16} strokeWidth={1.5} aria-hidden="true" />}
-                  {somLigado ? ui.desligarSom : ui.ligarSom}
-                </button>
                 <button
                   type="button"
                   className="botao-quieto"

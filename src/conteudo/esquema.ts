@@ -65,7 +65,7 @@ export const Conteudo = z.object({
   idioma: z.string(),
   obrasAtivas: z.boolean(),
   secoes: z.array(Secao),
-  pessoa: z.object({ nome: z.string(), linhasNome: z.array(z.string()).length(2), local: z.string(), email: z.email(), linkedin: z.url(), github: z.url() }),
+  pessoa: z.object({ nome: z.string(), linhasNome: z.array(z.string()).length(2), email: z.email(), linkedin: z.url(), github: z.url() }),
   ui: z.record(z.string(), z.string()),
   inicio: z.object({ subtitulo: z.string(), apoio: z.string(), local: z.string(), acaoPrincipal: z.string(), acaoSecundaria: z.string() }),
   sobre: z.object({
@@ -75,7 +75,7 @@ export const Conteudo = z.object({
     aindaNaoTenho: z.string(),
     procuroTitulo: z.string(),
     procuro: z.string(),
-    ficha: z.object({ cargo: z.string(), local: z.string(), estudo: z.string(), noCargo: z.string(), ano: z.string(), anos: z.string(), mes: z.string(), meses: z.string(), e: z.string() }),
+    ficha: z.object({ cargo: z.string(), estudo: z.string(), noCargo: z.string(), ano: z.string(), anos: z.string(), mes: z.string(), meses: z.string(), e: z.string() }),
   }),
   agora: z.object({
     titulo: z.string(),
@@ -159,8 +159,6 @@ export const Conteudo = z.object({
     temaBloqueado: z.string(),
     chuvaLigada: z.string(),
     chuvaPausada: z.string(),
-    somLigado: z.string(),
-    somDesligado: z.string(),
     whatsapp: z.string(),
     cabecalhosErro: z.string(),
     semCabecalho: z.string(),
@@ -191,6 +189,8 @@ export const Conteudo = z.object({
     cv: z.object({ titulo: z.string(), descricao: z.string() }),
     seguranca: z.object({ titulo: z.string(), descricao: z.string() }),
     sistema: z.object({ titulo: z.string(), descricao: z.string() }),
+    imagemAlt: z.string(),
+    descricaoPessoa: z.string(),
   }),
 });
 export type ConteudoSite = z.infer<typeof Conteudo>;

@@ -48,7 +48,6 @@
   --raio-1: 2px;
   --altura-barra: 4rem;
   --moldura: 12px;
-  --faixa: 1.75rem;
 }
 @media (min-width: 768px) {
   :root {
@@ -56,22 +55,14 @@
   }
 }
 
-/* Aliases provisórios para as seções do conceito antigo. Somem na R4, quando elas forem reescritas.
-   Em `[data-tema]` também, para os cartões de pré-visualização de /sistema resolverem pelo tema deles. */
+/* Tokens derivados da cor de cada tema. Em `[data-tema]` também, para os cartões de pré-visualização de /sistema
+   e as amostras do menu de tema resolverem pelo tema deles. */
 :root,
 [data-tema] {
-  --acento: var(--sinal);
-  --acento-2: var(--forma);
   --borda: 1px solid color-mix(in oklch, var(--forma) 35%, transparent);
   --borda-ativa: 1px solid var(--sinal);
-}
-:root {
-  --font-titulo: var(--font-texto);
-  --font-numero: var(--font-dado);
-  --t-display: var(--t-nome);
-  --sombra-pedra: var(--sombra-flutua);
-  --vidro-alfa: 0.92;
-  --margem: clamp(0px, 8vw, 128px);
+  /* Barra de rolagem: tinta em baixa opacidade, sem disputar atenção com o conteúdo. */
+  --rolagem: color-mix(in oklch, var(--tinta) 22%, transparent);
 }
 
 /* Selo 5 do CTF, de propósito à vista: Base64 é codificação, não criptografia. */
@@ -83,9 +74,9 @@
   html {
     background: var(--fundo);
     color: var(--tinta);
-    scroll-padding-top: calc(var(--altura-barra) + var(--faixa));
+    scroll-padding-top: var(--altura-barra);
     -webkit-text-size-adjust: 100%;
-    scrollbar-color: var(--forma) var(--fundo);
+    scrollbar-color: var(--rolagem) transparent;
     scrollbar-width: thin;
   }
   body {
@@ -165,7 +156,7 @@
     left: 1rem;
     top: -6rem;
     z-index: 100;
-    background: var(--acento);
+    background: var(--sinal);
     color: var(--fundo);
     padding: 0.5rem 1rem;
     font-weight: 600;
@@ -182,7 +173,7 @@
     white-space: nowrap;
   }
 
-  /* Coelho e sigilo: só aparecem como recompensa. */
+  /* Coelho e aviso de selo: só aparecem como recompensa. */
   .coelho {
     position: fixed;
     left: 0;
@@ -192,14 +183,28 @@
     pointer-events: none;
     will-change: transform;
   }
-  .selo-sigilo {
+  .selo-aviso {
     position: fixed;
-    right: 1.5rem;
-    bottom: 1.5rem;
-    width: 6.5rem;
-    height: 6.5rem;
+    right: calc(var(--moldura) + 1rem);
+    bottom: calc(var(--moldura) + 2.5rem);
     z-index: 90;
+    display: flex;
+    gap: 1.25ch;
+    padding: 0.6rem 0.9rem;
+    border: var(--borda-ativa);
+    background: color-mix(in oklch, var(--fundo) 94%, transparent);
+    color: var(--tinta);
     pointer-events: none;
+    animation: selo-entra var(--dur-ui) var(--ease-saida) both;
+  }
+  .selo-aviso-total {
+    color: var(--sinal);
+  }
+  @keyframes selo-entra {
+    from {
+      opacity: 0;
+      transform: translateY(0.5rem);
+    }
   }
 
   /* Terminal: sem animação ao abrir, por ser ação de teclado. */
@@ -220,8 +225,8 @@
     display: flex;
     flex-direction: column;
     background: color-mix(in oklch, var(--superficie) 96%, transparent);
-    border: 1px solid color-mix(in oklch, var(--acento) 45%, transparent);
-    box-shadow: var(--sombra-pedra);
+    border: 1px solid color-mix(in oklch, var(--sinal) 45%, transparent);
+    box-shadow: var(--sombra-flutua);
     font-family: var(--font-dado);
     font-size: var(--t-dado);
     line-height: 1.55;
@@ -236,7 +241,7 @@
     color: var(--tinta-2);
   }
   .terminal-entrada {
-    color: var(--acento);
+    color: var(--sinal);
     margin-top: 0.5rem;
   }
   .terminal-linha {
@@ -244,8 +249,8 @@
     align-items: center;
     gap: 0.6rem;
     padding: 0.5rem 1.25rem;
-    border-top: 1px solid color-mix(in oklch, var(--acento) 30%, transparent);
-    color: var(--acento);
+    border-top: 1px solid color-mix(in oklch, var(--sinal) 30%, transparent);
+    color: var(--sinal);
   }
   .terminal-linha input {
     flex: 1;
@@ -259,7 +264,7 @@
     font-size: max(16px, var(--t-dado));
   }
   .terminal-linha:focus-within {
-    box-shadow: inset 0 0 0 1px var(--acento);
+    box-shadow: inset 0 0 0 1px var(--sinal);
   }
 
   /* Palco: o canvas fica fixo atrás de tudo; o pôster cobre quando não há WebGL. */
@@ -295,7 +300,7 @@
   /* Barra */
   .barra {
     position: fixed;
-    inset: var(--faixa) 0 auto 0;
+    inset: 0 0 auto 0;
     z-index: 40;
     height: var(--altura-barra);
     display: flex;
@@ -306,18 +311,17 @@
     padding-top: env(safe-area-inset-top);
   }
   /* A barra flutua sobre a chuva: o texto do nome não pode depender do que passa atrás. */
-  /* Cobre também a faixa da moldura acima da barra: sem isso, o texto rolado aparece atrás dos cantos de cima. */
   .barra::before {
     content: "";
     position: absolute;
-    inset: calc(var(--faixa) * -1) 0 -1.5rem 0;
+    inset: 0 0 -1.5rem 0;
     z-index: -1;
     pointer-events: none;
     background: linear-gradient(to bottom, var(--fundo) 55%, color-mix(in oklch, var(--fundo) 80%, transparent) 75%, transparent);
     transition: opacity var(--dur-ui) ease;
   }
   .barra-nome {
-    font-family: var(--font-titulo);
+    font-family: var(--font-texto);
     font-size: clamp(1rem, 0.8rem + 0.6vw, 1.375rem);
     font-weight: var(--peso-sub);
     font-stretch: 100%;
@@ -404,9 +408,9 @@
     font-weight: 560;
     text-decoration: none;
     cursor: pointer;
-    background: var(--acento);
+    background: var(--sinal);
     color: var(--fundo);
-    border: 1px solid var(--acento);
+    border: 1px solid var(--sinal);
     transition:
       transform var(--dur-toque) ease-out,
       box-shadow var(--dur-hover) ease,
@@ -414,7 +418,7 @@
   }
   .botao:hover {
     filter: brightness(1.1);
-    box-shadow: 0 8px 24px -8px var(--acento);
+    box-shadow: 0 8px 24px -8px var(--sinal);
   }
   .botao:active {
     transform: scale(0.97);
@@ -437,24 +441,24 @@
     border-radius: 2px;
   }
   .botao-quieto:hover {
-    color: var(--acento);
+    color: var(--sinal);
   }
   .botao-quieto:active {
     transform: scale(0.97);
   }
-  .link-ouro {
+  .link-destaque {
     color: var(--tinta);
     text-decoration: none;
     /* Sublinhado permanente em cor baixa e uma linha de ouro que corre da esquerda para a direita. */
-    background-image: linear-gradient(var(--acento), var(--acento)), linear-gradient(color-mix(in oklch, var(--acento) 55%, transparent), color-mix(in oklch, var(--acento) 55%, transparent));
+    background-image: linear-gradient(var(--sinal), var(--sinal)), linear-gradient(color-mix(in oklch, var(--sinal) 55%, transparent), color-mix(in oklch, var(--sinal) 55%, transparent));
     background-size: 0% 1px, 100% 1px;
     background-position: 0 100%, 0 100%;
     background-repeat: no-repeat;
     padding-bottom: 0.12em;
     transition: color var(--dur-hover) ease, background-size var(--dur-ui) var(--ease-saida);
   }
-  .link-ouro:hover {
-    color: var(--acento);
+  .link-destaque:hover {
+    color: var(--sinal);
     background-size: 100% 1px, 100% 1px;
   }
 
@@ -478,24 +482,24 @@
     align-items: baseline;
     gap: 1rem;
     padding: 0.4rem 0;
-    font-family: var(--font-titulo);
+    font-family: var(--font-texto);
     font-size: clamp(2rem, 8vw, 3rem);
     text-decoration: none;
     font-weight: 600;
   }
   .indice-link small {
-    font-family: var(--font-numero);
-    color: var(--acento);
+    font-family: var(--font-dado);
+    color: var(--sinal);
     font-size: 0.8em;
     width: 1.2em;
   }
   .menu-tema {
     z-index: 70;
     background: var(--superficie);
-    border: 1px solid color-mix(in oklch, var(--acento) 40%, transparent);
+    border: 1px solid color-mix(in oklch, var(--sinal) 40%, transparent);
     padding: 0.25rem;
     min-width: 11rem;
-    box-shadow: var(--sombra-pedra);
+    box-shadow: var(--sombra-flutua);
     transform-origin: var(--transform-origin);
     transition: opacity var(--dur-hover) ease, transform var(--dur-hover) var(--ease-saida);
   }
@@ -515,13 +519,24 @@
     color: var(--tinta);
   }
   .menu-item[data-highlighted] {
-    background: color-mix(in oklch, var(--acento) 22%, transparent);
+    background: color-mix(in oklch, var(--sinal) 22%, transparent);
   }
-  .amostra {
+  /* Amostra do menu de tema: o fundo do próprio tema, com um anel na cor de sinal dele. O Claro aparece claro. */
+  .amostra-tema {
+    flex: none;
     width: 1rem;
     height: 1rem;
     border-radius: 999px;
-    border: 1px solid color-mix(in oklch, var(--tinta) 40%, transparent);
+    background: var(--fundo);
+    box-shadow: inset 0 0 0 2px var(--sinal), 0 0 0 1px color-mix(in oklch, var(--tinta) 30%, transparent);
+  }
+  .menu-item[data-disabled] {
+    cursor: not-allowed;
+    color: var(--tinta-2);
+  }
+  .menu-item[data-disabled] .amostra-tema,
+  .indice-temas button:disabled .amostra-tema {
+    opacity: 0.5;
   }
 
   /* Páginas de leitura */
@@ -558,11 +573,11 @@
     padding-left: 1.25em;
   }
   .leitura ul li::marker {
-    color: var(--acento);
+    color: var(--sinal);
   }
   .regras {
     list-style: decimal;
-    font-family: var(--font-titulo);
+    font-family: var(--font-texto);
     font-size: var(--t-h3);
     line-height: 1.25;
     padding-left: 1.5em;
@@ -571,7 +586,7 @@
     gap: 0.75rem;
   }
   .regras li::marker {
-    font-family: var(--font-numero);
+    font-family: var(--font-dado);
     color: var(--alerta);
   }
 
@@ -628,7 +643,7 @@
   display: none;
 }
 
-/* ===== Conceito Sinal: moldura de instrumento, régua e elementos de base (docs/05) ===== */
+/* ===== Conceito Sinal: moldura de instrumento e elementos de base (docs/05) ===== */
 @layer components {
   .moldura {
     position: fixed;
@@ -670,93 +685,19 @@
     /* Sem isto, o texto dos cantos se mistura ao conteúdo que passa por baixo. */
     background: color-mix(in oklch, var(--fundo) 94%, transparent);
   }
-  .moldura-se,
-  .moldura-sd {
-    top: calc(var(--moldura) * 0.25);
-  }
   .moldura-ie,
   .moldura-id {
     bottom: calc(var(--moldura) * 0.25);
   }
-  .moldura-se,
   .moldura-ie {
     left: 0;
   }
-  .moldura-sd,
   .moldura-id {
     right: 0;
   }
-  /* Celular: só os cantos de cima. O resto fica no Índice. */
+  /* Celular: só as marcas em L. Os dados ocupariam a tela pequena sem acrescentar leitura. */
   @media (max-width: 767px) {
-    .moldura-ie,
-    .moldura-id,
-    .moldura-se span:nth-child(2) {
-      display: none;
-    }
-  }
-
-  .regua {
-    position: fixed;
-    right: calc(var(--moldura) * 0.25);
-    top: calc(var(--faixa) + var(--altura-barra));
-    bottom: calc(var(--moldura) + 1.5rem);
-    width: 2.5rem;
-    z-index: 44;
-    container-type: size;
-  }
-  .regua-trilho {
-    position: absolute;
-    right: 0.5rem;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-    /* Uma marcação a cada 100 px de rolagem. `--passo` é calculado da altura real do documento. */
-    background: repeating-linear-gradient(to bottom, color-mix(in oklch, var(--tinta-2) 45%, transparent) 0 1px, transparent 1px var(--passo, 4%));
-  }
-  .regua-marca {
-    position: absolute;
-    right: -4px;
-    top: 0;
-    width: 12px;
-    height: 2px;
-    background: var(--sinal);
-  }
-  .regua-traco {
-    position: absolute;
-    right: 0.5rem;
-    width: 12px;
-    height: 2px;
-    background: var(--forma);
-    transform: translateY(-1px);
-    display: block;
-  }
-  /* Alvo de toque de 44 px sem aumentar o traço visível. */
-  .regua-traco::before {
-    content: "";
-    position: absolute;
-    inset: -20px -12px;
-  }
-  .regua-nome {
-    position: absolute;
-    right: 20px;
-    top: -0.55rem;
-    padding: 0 0.4rem;
-    font-size: var(--t-dado);
-    background: var(--fundo);
-    color: var(--tinta);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity var(--dur-hover) ease;
-  }
-  .regua-traco:hover .regua-nome,
-  .regua-traco:focus-visible .regua-nome {
-    opacity: 1;
-  }
-  @media (max-width: 767px) {
-    .regua {
-      width: 1rem;
-    }
-    .regua-nome {
+    .moldura-canto {
       display: none;
     }
   }

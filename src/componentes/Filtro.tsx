@@ -58,7 +58,7 @@ export function Filtro({ grupo, rotulo, opcoes }: Props) {
     alvo?.querySelectorAll("[data-areas]").forEach((el) => antes.set(el, el.getBoundingClientRect()));
     const visiveis = aplicar(grupo, novo);
     if (alvo) void reordenar(alvo, antes);
-    dispatchEvent(new CustomEvent("nave:filtro", { detail: { grupo, visiveis } }));
+    dispatchEvent(new CustomEvent("sinal:filtro", { detail: { grupo, visiveis } }));
     const url = new URL(location.href);
     if (novo === "todas") url.searchParams.delete(grupo);
     else url.searchParams.set(grupo, novo);

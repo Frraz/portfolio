@@ -8,9 +8,10 @@ import { mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "n
 import { gzipSync } from "node:zlib";
 import { join, relative } from "node:path";
 import { ARTE_FONTE, SELOS } from "../src/ctf/selos.ts";
+import { TEMAS } from "../src/temas/temas.ts";
 
 const SAIDA = "out";
-const URL_SITE = process.env.SITE_URL ?? "https://warley.ferzion.com.br";
+const URL_SITE = process.env.SITE_URL || "https://warley.ferzion.com.br";
 const LIMITE_CABECALHO = 6 * 1024;
 
 const percorrer = (d: string): string[] => readdirSync(d).flatMap((n) => { const p = join(d, n); return statSync(p).isDirectory() ? percorrer(p) : [p]; });
@@ -59,13 +60,12 @@ const inicial = join(SAIDA, "index.html");
 const htmlInicial = readFileSync(inicial, "utf8");
 writeFileSync(inicial, htmlInicial.replace(/^<!DOCTYPE html>/i, `<!DOCTYPE html><!--${ARTE_FONTE}selo 0: ${SELOS[0]}\n-->`));
 
-// Manifesto e ícone: a página cabe em um atalho no celular, sem nenhuma permissão extra.
-writeFileSync(join(SAIDA, "manifest.webmanifest"), JSON.stringify({ name: "Warley Ferraz Almeida", short_name: "Warley", start_url: "/", display: "standalone", background_color: "#030304", theme_color: "#030304", lang: "pt-BR", icons: [{ src: "/icone.svg", sizes: "any", type: "image/svg+xml", purpose: "any" }] }));
-writeFileSync(join(SAIDA, "icone.svg"), `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-110 -110 220 220"><rect x="-110" y="-110" width="220" height="220" fill="#030304"/><g fill="none" stroke="#D2A94E" stroke-width="5"><circle r="96"/><circle r="30"/>${Array.from({ length: 12 }, (_, i) => { const a = (i / 12) * Math.PI * 2; return `<circle cx="${(Math.cos(a) * 64).toFixed(1)}" cy="${(Math.sin(a) * 64).toFixed(1)}" r="20"/>`; }).join("")}</g></svg>\n`);
+// Manifesto: a página cabe em um atalho no celular, sem nenhuma permissão extra. Ícones em public/ (pnpm og).
+writeFileSync(join(SAIDA, "manifest.webmanifest"), JSON.stringify({ name: "Warley Ferraz Almeida", short_name: "Warley", start_url: "/", display: "standalone", background_color: TEMAS[0].cores.fundo, theme_color: TEMAS[0].cores.fundo, lang: "pt-BR", icons: [{ src: "/icone.svg", sizes: "any", type: "image/svg+xml", purpose: "any" }, { src: "/icone-192.png", sizes: "192x192", type: "image/png" }, { src: "/icone-512.png", sizes: "512x512", type: "image/png" }] }));
 const hoje = new Date().toISOString().slice(0, 10);
 const rotas = ["", "/cv", "/seguranca", "/sistema"];
 writeFileSync(join(SAIDA, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${rotas.map((r) => `  <url><loc>${URL_SITE}${r}</loc><lastmod>${hoje}</lastmod></url>`).join("\n")}\n</urlset>\n`);
-writeFileSync(join(SAIDA, "humans.txt"), `/* Pessoa */\nWarley Ferraz Almeida, Rondon do Pará, Brasil\n\n/* Site */\nFeito com Next.js, Three.js e GSAP, com apoio do Claude Code.\nTextos revisados pelo autor.\n`);
+writeFileSync(join(SAIDA, "humans.txt"), `/* Pessoa */\nWarley Ferraz Almeida\n${URL_SITE}\n\n/* Site */\nNext.js, React, Three.js, GSAP e Lenis. Estático, servido por nginx.\n`);
 writeFileSync(join(SAIDA, "saude.txt"), "ok\n");
 
 // 2. CSP por rota
@@ -84,7 +84,11 @@ writeFileSync("deploy/csp-map.conf", `# Gerado por scripts/pos-build.ts. Não ed
 writeFileSync("deploy/csp-map.json", JSON.stringify({ padrao, rotas: mapa }, null, 1));
 
 // 2b. Service worker: lista de pré-cache e versão saem do próprio build.
-const precache = ["/offline", "/cv", "/", "/tema.js", "/gl/atlas.png", ...arquivos.filter((f) => f.startsWith(join(SAIDA, "_next/static")) && /\.(js|css|woff2)$/.test(f)).map((f) => "/" + relative(SAIDA, f))];
+// Só o que a primeira tela usa: os recursos referenciados pelo HTML das páginas (scripts iniciais, CSS e fontes
+// pré-carregadas). Os chunks da cena 3D ficam de fora e entram no cache em tempo de execução, quando forem pedidos.
+const paginas = ["index.html", "cv.html", "offline.html"].map((f) => join(SAIDA, f));
+const doHtml = new Set(paginas.flatMap((p) => [...readFileSync(p, "utf8").matchAll(/(?:src|href)="(\/_next\/static\/[^"]+\.(?:js|css|woff2))"/g)].map((m) => m[1])));
+const precache = ["/", "/cv", "/offline", "/tema.js", ...doHtml];
 writeFileSync(join(SAIDA, "sw.js"), readFileSync("scripts/sw-modelo.js", "utf8").replace('"__VERSAO__"', JSON.stringify(versao)).replace('["__PRECACHE__"]', JSON.stringify(precache)));
 
 // 3. SBOM mínimo em CycloneDX, a partir das dependências de produção instaladas

@@ -60,23 +60,24 @@ Meta: WCAG 2.2 AA. A automação só pega parte dos problemas, então o teste ma
 - [ ] Sem flashes acima de 3 por segundo, inclusive nas decodificações de título.
 - [ ] Controle para pausar a chuva, visível.
 - [ ] Decodificação de títulos e mudança de largura do nome: leitor de tela lê o texto final, sem embaralhamento.
-- [ ] Moldura e régua: nada do que só a moldura mostra é necessário para usar o site.
+- [ ] Moldura: nada do que só a moldura mostra é necessário para usar o site.
 
 ## SEO
 
-Aplicação da skill SEO Audit ao site. Palavras-chave reais, sem repetição artificial (OB).
+Auditoria de SEO sobre o build. Palavras-chave reais, sem repetição artificial (OB).
 
-**Busca-alvo:** o próprio nome, e combinações como `analista de redes NOC Pará`, `analista NOC remoto` e `analista de redes GPON`. Ranquear para termos gerais não é meta realista: o objetivo é que quem procura o nome encontre o site e o entenda.
+**Busca-alvo:** o próprio nome, e combinações como `analista de redes N2 NOC`, `analista NOC remoto` e `analista de redes GPON`. A cidade fica fora do site ([decisão 98](decisoes.md)). Ranquear para termos gerais não é meta realista: o objetivo é que quem procura o nome encontre o site e o entenda.
 
 | Item | Regra |
 |---|---|
-| Rastreamento | `robots.txt` permissivo, sitemap com as 3 rotas indexáveis e o PDF |
+| Rastreamento | `robots.txt` permissivo, sitemap com as 4 rotas indexáveis (e o PDF, quando existir) |
 | Renderização | Conteúdo em HTML estático, testado com JavaScript desligado |
 | Títulos | Um `h1` por rota, ordem correta, títulos únicos |
 | Metadados | Título ≤ 60 caracteres, descrição ≤ 155, texto em [02](02-conteudo.md#seo) |
-| Canonical | Sempre com `https://warley.ferzion.com.br` sem barra final |
-| Dados estruturados | JSON-LD `Person` estático na página inicial. Testar no Rich Results Test |
-| Compartilhamento | OG 1200×630 por rota, em `/og/`, com o nome legível no WhatsApp |
+| Canonical | Em toda rota indexável, sempre com `https://warley.ferzion.com.br` sem barra final (`src/site.ts`) |
+| Dados estruturados | JSON-LD com `Person` e `WebSite` na página inicial: cargo, empresa, formação concluída, o que é usado no trabalho e perfis. Sem endereço. Testar no Rich Results Test |
+| Compartilhamento | Título, descrição e endereço próprios por rota; imagem 1200×630 em `/og/` (`pnpm og`), com o nome legível no WhatsApp; `summary_large_image` |
+| Ícones | SVG, 192 e 512 px no manifesto; `apple-touch-icon` de 180 px |
 | Idioma | `lang` correto por rota e `hreflang` entre versões, com pt-BR como `x-default` |
 | Links | `/`, `/cv` e `/seguranca` se interligam. LinkedIn e GitHub apontam de volta |
 | 404 | Status real 404, servido pelo nginx |
@@ -95,7 +96,7 @@ Aplicação da skill SEO Audit ao site. Palavras-chave reais, sem repetição ar
 | Cabeçalhos | Playwright com a imagem real do Docker | CSP, HSTS e demais cabeçalhos em cada rota; sem violações de CSP no console |
 | Acessibilidade | axe + Playwright | Todas as rotas nos 3 temas e idiomas |
 | Legibilidade sobre a cena | Playwright com quadros fixos | Luminância atrás de cada bloco de texto, nos três temas e nas duas cenas enquanto existirem ([limites](06-motion-e-webgl.md#legibilidade-sobre-a-cena)) |
-| Regressão visual | Playwright + Storybook | Componentes e cada seção, em 390 e 1440 px, com a cena em quadro fixo |
+| Regressão visual | Playwright (`scripts/capturas.ts`) | Cada seção, em 390, 768 e 1440 px, com a chuva pausada |
 | WebGL | Playwright com GPU em software e aparelhos reais | Cena inicia sem erro, perda de contexto, fallback, cada nível de qualidade |
 | Desempenho | Lighthouse CI + orçamentos | Rotas principais |
 | Links | Script próprio | Validação de todos os certificados e links externos antes de publicar |
@@ -107,16 +108,16 @@ Aplicação da skill SEO Audit ao site. Palavras-chave reais, sem repetição ar
 
 ## Verificação visual
 
-As skills Impeccable e `taste-skill` insistem em olhar o resultado. A cada fase visual:
+O resultado precisa ser olhado, e não só medido. A cada fase visual:
 
 1. Tirar capturas em 390, 768 e 1440 px, em todos os temas relevantes.
 2. Olhar as imagens, e não só medir.
 3. Corrigir em lote e olhar de novo.
-4. Passar pela auditoria de Web Interface Guidelines (Vercel), buscando a versão atual das regras antes de cada auditoria.
+4. Passar pela auditoria de diretrizes de interface web, buscando a versão atual das regras antes de cada auditoria.
 
 **Adaptações às Web Interface Guidelines:** as regras de "Title Case" e "evite primeira pessoa" não se aplicam, porque o site é em português e é um portfólio pessoal. O restante vale.
 
-**Itens do piso de qualidade da skill Impeccable:**
+**Piso de qualidade:**
 
 - Corpo com 65–75 caracteres; `tracking` nunca abaixo de −0,04 em.
 - Hover, foco, pressionado, desativado, carregando, erro, vazio.
@@ -149,7 +150,7 @@ Pesos das [Awwwards](https://awwwards.com/about-evaluation): design 40%, usabili
 |---|---|---|
 | **Design (40%)** | A composição é memorável? Tipografia e cor têm voz própria? O acabamento se mantém em cada seção, inclusive no rodapé? | Capturas em todas as seções, comparadas com sites premiados recentes |
 | **Usabilidade (30%)** | Acha-se tudo em segundos? Funciona no celular, sem WebGL, por teclado e com pouca banda? | Métricas, testes de 10 segundos, Lighthouse |
-| **Criatividade (20%)** | A ideia pertence a este titular? Passa no teste do concorrente: outra pessoa de TI poderia usar o mesmo site? O Divisor faz sentido? | Avaliador explica a ideia sem ajuda |
+| **Criatividade (20%)** | A ideia pertence a este titular? Passa no teste do concorrente: outra pessoa de TI poderia usar o mesmo site? A chuva e as formas contam o conceito? | Avaliador explica a ideia sem ajuda |
 | **Conteúdo (10%)** | O texto é específico e verdadeiro? O visitante sabe o próximo passo? | Revisão pelas regras de [02](02-conteudo.md) e [01](01-veracidade-e-fontes.md) |
 
 **Inscrições:** deixadas de lado por enquanto, por decisão do titular. A rubrica continua orientando a qualidade.

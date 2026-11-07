@@ -4,20 +4,21 @@ import "../globais.css";
 import { classesFontes } from "../fontes";
 import { Barra } from "@/componentes/Barra";
 import { Moldura } from "@/componentes/moldura/Moldura";
-import { Regua } from "@/componentes/moldura/Regua";
 import { conteudo, secoesAtivas } from "@/conteudo";
 import { TEMAS } from "@/temas/temas";
+import { metadadosPagina, URL_SITE } from "@/site";
 
 const c = conteudo("pt-BR");
-const URL_SITE = process.env.SITE_URL ?? "http://localhost:3000";
 
+// Padrão de todas as páginas: cada rota indexável sobrescreve título, descrição, canônico e cartões (src/site.ts).
 export const metadata: Metadata = {
+  ...metadadosPagina({ titulo: c.seo.inicio.titulo, descricao: c.seo.inicio.descricao, caminho: "/" }),
   metadataBase: new URL(URL_SITE),
   manifest: "/manifest.webmanifest",
-  title: c.seo.inicio.titulo,
-  description: c.seo.inicio.descricao,
-  authors: [{ name: c.pessoa.nome }],
-  openGraph: { type: "profile", locale: "pt_BR", siteName: c.pessoa.nome, title: c.seo.inicio.titulo, description: c.seo.inicio.descricao },
+  authors: [{ name: c.pessoa.nome, url: URL_SITE }],
+  creator: c.pessoa.nome,
+  icons: { icon: [{ url: "/icone.svg", type: "image/svg+xml" }], apple: "/apple-touch-icon.png" },
+  formatDetection: { telephone: false },
 };
 
 export const viewport: Viewport = { themeColor: TEMAS[0].cores.fundo, colorScheme: "dark light" };
@@ -36,7 +37,6 @@ export default function Layout({ children }: { children: ReactNode }) {
           {c.ui.pularConteudo}
         </a>
         <Moldura secoes={secoes} ui={c.ui} />
-        <Regua secoes={secoes} rotulo={c.ui.regua} />
         <Barra nome={c.pessoa.nome} secoes={secoes} ui={c.ui} />
         {/* Só a troca de rota anima. Sem isto, cada chunk carregado depois dispararia uma transição e engoliria cliques. */}
         <ViewTransition default="none" update={{ rota: "auto", default: "none" }}>

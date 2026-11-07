@@ -4,12 +4,12 @@ Texto final do site, em pt-BR e em primeira pessoa. É a matéria-prima de `src/
 
 **Situação:** aprovado pelo titular para desenvolvimento, com revisão final ao rodar localmente. Este texto é a versão pt-BR, idioma principal do site.
 
-**Diagnóstico:** Diagnóstico da skill Copywriting: situação A (sem texto próprio para este site), com latitude de ângulo e nenhuma sobre fatos.
+**Ponto de partida:** não havia texto próprio para este site. Havia liberdade de ângulo e nenhuma sobre fatos.
 
 **Regras de redação usadas**
 
 - Toda frase passa em três perguntas: dá para imaginar? Dá para provar verdadeira ou falsa? Outra pessoa poderia escrever igual?
-- Sem as marcas de texto de IA da skill Copywriting: revelação por contraste, listas de negação, oração final colada por vírgula, pergunta retórica com resposta, revelação com dois-pontos.
+- Sem fórmulas de texto genérico: revelação por contraste, listas de negação, oração final colada por vírgula, pergunta retórica com resposta, revelação com dois-pontos.
 - Rótulos são simples. Os nomes poéticos de margem saíram com o redesign de 06/11/2026.
 - **Redesign:** os fatos não mudaram. Trechos marcados com **(a aprovar)** foram reescritos porque dependiam do design antigo e esperam a leitura do titular.
 - Códigos de origem estão em [01-veracidade-e-fontes.md](01-veracidade-e-fontes.md#fontes).
@@ -39,11 +39,11 @@ Cada seção existe porque sustenta uma afirmação.
 
 **Frase de apoio:** Monitoro uma rede de fibra óptica em um provedor de internet e estudo para proteger redes como essa.
 
-**Local:** Rondon do Pará, PA. Disponível para trabalho remoto.
+**Disponibilidade:** Disponível para trabalho remoto. A cidade fica fora do site por decisão do titular ([decisão 98](decisoes.md)).
 
 **Ações:** `Ver currículo` é a ação principal e leva a `/cv`. `Falar comigo` é um link secundário e leva a `#contato`.
 
-**Hierarquia da primeira tela:** H1 em até duas linhas ("Warley Ferraz / Almeida" no celular), subtítulo logo abaixo em tamanho de destaque, frase de apoio menor, e a ação principal. Local em tamanho de legenda. Tudo visível sem esperar animação.
+**Hierarquia da primeira tela:** H1 em até duas linhas ("Warley Ferraz / Almeida" no celular), subtítulo logo abaixo em tamanho de destaque, frase de apoio menor, e a ação principal. Disponibilidade em tamanho de legenda. Tudo visível sem esperar animação.
 
 **Canvas:** decorativo, com `aria-hidden`. Nenhuma informação vive só nele.
 
@@ -69,7 +69,7 @@ Função técnica em redes, NOC, infraestrutura Linux, DevOps, DevSecOps ou segu
 
 **Hexdump:** ao lado do texto, o UTF-8 real dos parágrafos acima, gerado no build e com `aria-hidden`. Não é texto novo ([05](05-design-system.md#elementos-gráficos)).
 
-**Dado calculado (a aprovar):** `Estudo formal desde 2022`, derivado do início da UNIASSELVI (02/2022). Aparece na ficha de Sobre, junto de cargo e local.
+**Dado calculado (a aprovar):** `Estudo formal desde 2022`, derivado do início da UNIASSELVI (02/2022). Aparece na ficha de Sobre, junto do cargo e do tempo no cargo.
 
 ## Agora
 
@@ -321,15 +321,15 @@ Versão direta, em HTML semântico, sem WebGL, pronta para impressão. Usa os me
 
 **H1:** Sistema de design
 
-**Abertura (a aprovar):** Tudo o que compõe este site: cores, tipos, moldura, elementos gráficos e movimento. Está aqui porque um design system também é trabalho a mostrar, e foi construído com apoio de IA.
+**Abertura (a aprovar):** Tudo o que compõe este site: cores, tipos, moldura, elementos gráficos e movimento. Está aqui porque um design system também é trabalho a mostrar.
 
 Conteúdo: tokens vivos dos três temas, escala tipográfica, moldura, elementos gráficos e componentes.
 
 ## Rodapé
 
-Warley Ferraz Almeida, Rondon do Pará.
+Warley Ferraz Almeida.
 
-Site feito com Next.js, Three.js e GSAP, com apoio do Claude Code. Os textos foram revisados por mim, e os efeitos visuais não representam competências minhas em computação gráfica.
+Feito com Next.js, Three.js e GSAP. Os efeitos visuais não representam competência minha em computação gráfica.
 
 Links: Currículo, Segurança, Sistema de design, Privacidade.
 
@@ -344,9 +344,11 @@ Links: Currículo, Segurança, Sistema de design, Privacidade.
 
 ## SEO
 
-**Título da página inicial:** Warley Ferraz Almeida | Analista de Redes N2, NOC e Segurança
+**Título da página inicial:** Warley Ferraz Almeida | Analista de Redes N2 em NOC
 
-**Descrição:** Analista de Redes N2 em NOC, com Zabbix, Grafana e GPON/FTTH. Pós em Engenharia DevOps e estudante de Segurança Cibernética na FIAP.
+**Descrição:** Analista de Redes N2 em NOC de provedor, com Zabbix, Grafana e redes GPON/FTTH. Pós-graduado em Engenharia DevOps e estudante de Segurança Cibernética na FIAP.
+
+O título antigo terminava em "e Segurança", o que podia sugerir cargo na área. Segurança aparece só como estudo.
 
 | Rota | Título | Descrição |
 |---|---|---|
@@ -354,7 +356,11 @@ Links: Currículo, Segurança, Sistema de design, Privacidade.
 | `/seguranca` | Segurança deste site, por Warley Ferraz Almeida | Os controles aplicados neste portfólio, como conferir cada um e o que eles não garantem. |
 | `/sistema` | Sistema de design, por Warley Ferraz Almeida | Cores, tipografia, moldura e movimento do portfólio de Warley Ferraz Almeida. |
 
-**JSON-LD `Person`:** nome, `jobTitle`, `worksFor` (Linknet Telecomunicações), `alumniOf` (UNIASSELVI, Faculdade Focus), `address` com localidade e estado, `url`, `sameAs` (LinkedIn e GitHub). Sem telefone.
+**Imagem de compartilhamento (texto alternativo):** Warley Ferraz Almeida, Analista de Redes N2 em NOC.
+
+**JSON-LD:** `Person` com nome, `jobTitle`, `worksFor` (Linknet Telecomunicações), `alumniOf` só com cursos concluídos (UNIASSELVI, Faculdade Focus), `description`, e-mail, `knowsAbout` (só a fileira "Uso no trabalho" de Competências), `url` e `sameAs` (LinkedIn e GitHub); e `WebSite`. Sem telefone e sem endereço.
+
+**Descrição da pessoa (JSON-LD):** Analista de Redes N2 em NOC de provedor de internet. Pós-graduado em Engenharia DevOps e estudante de Segurança Cibernética na FIAP, sem experiência profissional em cargo de segurança.
 
 ## Textos novos do redesign (a aprovar)
 
@@ -366,16 +372,16 @@ Textos de interface criados pelos recursos novos de [07](07-recursos-interativos
 | Registro da sessão, aviso | Só no seu navegador. Nada é enviado. |
 | Registro da sessão, vazio | Nenhum evento ainda. |
 | Botão da moldura | Eventos |
-| Trocador, Fósforo bloqueado | Fósforo (bloqueado). Encontre no terminal. |
+| Trocador, Fósforo bloqueado | Fósforo (bloqueado). Dica ao passar o mouse: Reúna os nove selos do terminal para liberar. |
 | Terminal, `matrix` | tema Fósforo liberado. Digite matrix de novo para voltar. |
 | Terminal, `ping` | este terminal não sai do seu navegador. |
 | Terminal, `nmap` e similares | só com autorização escrita. Veja /seguranca. |
 | CTF, regra | Todas as flags estão à vista no navegador. Você não precisa varrer nem atacar o servidor para jogar. |
 | Formação, FIAP | tempo decorrido, não aproveitamento |
 | Contato, fim do handshake | Conexão pronta. Escolha um canal. |
-| Sobre, ficha | Cargo, Local, Estudo formal (`02/2022, 4 anos e 9 meses`) e No cargo há (`3 meses`). Datas e tempos vêm de `src/conteudo/` e do primeiro curso, calculados no build |
+| Sobre, ficha | Cargo, Estudo formal (`02/2022, 4 anos e 9 meses`) e No cargo há (`3 meses`). Datas e tempos vêm de `src/conteudo/` e do primeiro curso, calculados no build |
 | Certificados, colunas | Curso, Emissor, Conclusão, Carga, Validação e SHA-256 do registro |
 | Certificados, legenda | O SHA-256 identifica o registro deste site, calculado no build. Não é o código do certificado. |
 | Rodapé, build | `build <commit> <data>`, com a faixa de bits do mesmo hash |
 | Formação, andamento | `38% do tempo decorrido`, calculado da data de hoje no navegador (o HTML traz o valor do build) |
-| Agora, simulação | Uma luz por ONU. Anúncio: `ONU 3 de 8 acesa`. Fim: `As oito ONUs estão acesas.` |
+| ~~Agora, simulação~~ | Removida em 07/11/2026 ([decisão 90](decisoes.md)) |

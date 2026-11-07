@@ -9,14 +9,16 @@ import { ptBR } from "../src/conteudo/pt-BR.ts";
 import { buscarProblemas } from "../src/conteudo/verificacao.ts";
 
 function carregarEnvLocal() {
-  if (process.env.WHATSAPP_NUMERO || !existsSync(".env.local")) return;
+  if (!existsSync(".env.local")) return;
   for (const l of readFileSync(".env.local", "utf8").split("\n")) {
-    const m = l.match(/^WHATSAPP_NUMERO=(.*)$/);
-    if (m) process.env.WHATSAPP_NUMERO = m[1].trim();
+    const m = l.match(/^(WHATSAPP_NUMERO|IP_SERVIDOR)=(.*)$/);
+    if (m && !process.env[m[1]]) process.env[m[1]] = m[2].trim();
   }
 }
 carregarEnvLocal();
 const NUMERO = process.env.WHATSAPP_NUMERO ?? "";
+// Opcional, só em .env.local: o IP do VPS nunca entra no código, mas o build confere que ele não vazou.
+const IP = process.env.IP_SERVIDOR ?? "";
 
 const validacao = Conteudo.safeParse(ptBR);
 if (!validacao.success) {
@@ -24,7 +26,7 @@ if (!validacao.success) {
   process.exit(1);
 }
 
-const problemas: string[] = buscarProblemas(JSON.stringify(ptBR), "conteúdo pt-BR", { numero: NUMERO, ativas: ptBR.obrasAtivas });
+const problemas: string[] = buscarProblemas(JSON.stringify(ptBR), "conteúdo pt-BR", { numero: NUMERO, ativas: ptBR.obrasAtivas, ip: IP });
 
 if (process.argv.includes("--saida")) {
   const percorrer = (dir: string): string[] =>
@@ -36,7 +38,7 @@ if (process.argv.includes("--saida")) {
     if (arquivo.endsWith(".pdf") && !arquivo.endsWith("curriculo-warley-ferraz-almeida.pdf")) problemas.push(`PDF inesperado em ${arquivo}`);
     if (!/\.(html|js|css|json|txt|xml|webmanifest|map|svg)$/.test(arquivo)) continue;
     // O texto das regras do verificador não vai ao site, então tudo aqui é conteúdo público.
-    problemas.push(...buscarProblemas(readFileSync(arquivo, "utf8"), arquivo, { numero: NUMERO, ativas: ptBR.obrasAtivas, estrito: false }));
+    problemas.push(...buscarProblemas(readFileSync(arquivo, "utf8"), arquivo, { numero: NUMERO, ativas: ptBR.obrasAtivas, estrito: false, ip: IP }));
   }
 }
 
@@ -45,4 +47,4 @@ if (problemas.length) {
   for (const p of problemas) console.error("  - " + p);
   process.exit(1);
 }
-console.log("✓ Conteúdo: esquema válido, sem termos proibidos, PII ou telefone.");
+console.log("✓ Conteúdo: esquema válido, sem termos proibidos, PII, telefone, localidade ou IP.");

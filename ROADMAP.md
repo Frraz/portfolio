@@ -103,7 +103,9 @@ Em 06/11/2026, o titular avaliou a primeira versão no ar e pediu para refazer d
 - [x] Competências em degraus tipográficos, sem anéis
 - [x] Contato com canais em linhas e copiar ao lado do e-mail. Rodapé com assinatura, páginas, build numa linha e faixa de bits como fio
 - [x] Formas da chuva de Agora e Contato fora das telas estreitas
-- [x] Capturas em 390, 768 e 1440 px
+- [x] Capturas em 360, 390, 768 e 1440 px, temas Rubro e Claro (`scripts/capturas.ts` agora inclui 768 px)
+- [x] Nome do hero limitado a 11,2vw: "Warley Ferraz" cabia cortado em 390 px. Barra cabe em 360 px
+- [x] Testes: 56 de unidade e 52 E2E passando (os 5 da simulação GPON saíram). Os testes do terminal repetem o atalho até a barra hidratar, porque falhavam sob carga
 - [ ] **O titular revê o resultado localmente**
 
 ## Visão geral das fases originais

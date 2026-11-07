@@ -1,11 +1,15 @@
 /*
  * Service worker do site. Versão e lista são preenchidas no pós-build.
+ * O pré-cache leva só o que a primeira tela usa (HTML, CSS, fontes e os scripts da página inicial). A cena 3D e o
+ * resto entram no cache quando o navegador pede, na primeira vez que forem usados.
  * HTML: rede primeiro, cache como reserva e /offline por último. Arquivos com hash: cache primeiro.
  * Só cuida do próprio domínio. Não guarda dados do visitante.
  */
 const VERSAO = "__VERSAO__";
 const PRECACHE = ["__PRECACHE__"];
-const CACHE = `nave-${VERSAO}`;
+const CACHE = `sinal-${VERSAO}`;
+// Prefixos de caches deste site, inclusive os de versões antigas, apagados quando uma versão nova assume.
+const PREFIXOS = ["sinal-", "nave-"];
 
 self.addEventListener("install", (e) => {
   e.waitUntil(
@@ -21,7 +25,7 @@ self.addEventListener("activate", (e) => {
   e.waitUntil(
     caches
       .keys()
-      .then((ks) => Promise.all(ks.filter((k) => k.startsWith("nave-") && k !== CACHE).map((k) => caches.delete(k))))
+      .then((ks) => Promise.all(ks.filter((k) => PREFIXOS.some((p) => k.startsWith(p)) && k !== CACHE).map((k) => caches.delete(k))))
       .then(() => self.clients.claim()),
   );
 });

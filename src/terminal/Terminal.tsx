@@ -7,7 +7,6 @@ import { PDF_PUBLICO } from "@/arquivos-nomes";
 import { conteudo } from "@/conteudo";
 import { ctfCompleto } from "@/ctf/progresso";
 import { IDS_TEMAS } from "@/temas/temas";
-import { alternarSom } from "@/som/controle";
 import { trocarTema, temaSalvo } from "@/temas/trocar";
 import { completar, executar, type Contexto, type Efeito } from "./comandos";
 
@@ -72,9 +71,6 @@ export default function Terminal({ aberto, aoFechar, alternarChuva }: { aberto: 
       }
       case "chuva":
         alternarChuva(e.pausada);
-        break;
-      case "som":
-        void alternarSom(e.ligado);
         break;
     }
   };

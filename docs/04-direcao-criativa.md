@@ -1,6 +1,6 @@
 # 04 — Direção criativa
 
-O que o conceito **Sinal** é, de onde vem cada decisão visual e onde estão os limites. Em conflito com recomendações genéricas de uma skill, este documento vence, na ordem de [14](14-skills-e-stack.md#quando-as-skills-discordam).
+O que o conceito **Sinal** é, de onde vem cada decisão visual e onde estão os limites. Em conflito com recomendações genéricas de design, este documento vence, na ordem de [14](14-stack.md#quando-as-orientações-discordam).
 
 **Origem:** redesign completo pedido pelo titular em 06/11/2026 ([briefing](00-briefing.md#pedido-de-redesign-06112026)). O conceito anterior, Nave Digital, foi descartado inteiro, com todas as suas referências ([decisão 56](decisoes.md)). Nome do conceito provisório, a confirmar pelo titular.
 
@@ -20,7 +20,7 @@ A tela é um campo de glifos vermelhos caindo, a chuva. Ao rolar, esse ruído se
 
 O vermelho daqui é o de uma sala de operações à noite: instrumentos em modo noturno, LEDs de rack, o alarme que acende no painel, o laser de uma fibra. É **material de luz**, e não um acento de interface sobre preto.
 
-Por isso o vermelho é uma **rampa tonal inteira**: do sangue quase preto das superfícies ao carmim das formas, ao vermelho de sinal da interface, até o branco-quente da cabeça da chuva. Uma tela inteira em vermelho, com profundidade, é uma escolha. Um acento vermelho isolado sobre preto é um padrão comum de página gerada, e fica de fora ([revisão](#revisão-contra-marcas-de-ia)).
+Por isso o vermelho é uma **rampa tonal inteira**: do sangue quase preto das superfícies ao carmim das formas, ao vermelho de sinal da interface, até o branco-quente da cabeça da chuva. Uma tela inteira em vermelho, com profundidade, é uma escolha. Um acento vermelho isolado sobre preto é um padrão comum de página feita em série, e fica de fora ([revisão](#revisão-contra-padrões-genéricos)).
 
 ## Princípio inegociável: todo enfeite técnico mostra um dado real
 
@@ -28,8 +28,7 @@ Por isso o vermelho é uma **rampa tonal inteira**: do sangue quase preto das su
 
 | Elemento | Dado real que ele mostra |
 |---|---|
-| Réguas da moldura | A rolagem, em pixels, e a posição de cada seção |
-| Relógio | A hora local de Rondon do Pará (UTC−3), ao vivo |
+| Cantos da moldura | A seção atual e a rolagem, em pixels; FPS, nível de qualidade e tema |
 | FPS e nível de qualidade | Os da máquina do visitante, medidos pelo controlador de quadros |
 | Boot log do hero | Os passos de carregamento desta visita, com os tempos de `performance.now` |
 | Hexdump de Sobre | O UTF-8 do parágrafo ao lado, calculado no build |
@@ -59,10 +58,10 @@ O titular pediu poucas referências. Cada uma entra como linguagem própria, sem
 
 ## Inventário do tema
 
-Itens que pertencem a este titular e a mais ninguém, usados como fonte de composição, conforme a skill `taste-skill`:
+Itens que pertencem a este titular e a mais ninguém, usados como fonte de composição:
 
 1. **Fibra óptica e GPON:** luz em vidro, OLT, divisores 1:N e ONUs. O trabalho diário dele.
-2. **NOC remoto:** monitorar uma rede de casa, em Rondon do Pará, longe dos grandes centros.
+2. **NOC remoto:** monitorar uma rede de casa, longe dos grandes centros.
 3. **Do caixa ao NOC:** dez empregos com data. Um traceroute de dez saltos até o destino.
 4. **Estudo formal desde 2022:** UNIASSELVI (2.600 h), pós em DevOps (420 h), FIAP até 02/2028.
 5. **Servidores próprios:** Ubuntu, Nginx, Docker, deploy com rollback. O próprio site é prova disso.
@@ -72,7 +71,7 @@ Itens que pertencem a este titular e a mais ninguém, usados como fonte de compo
 
 ## Hierarquia de atenção
 
-O site é **rico**, como pediu o titular. A riqueza está na **camada de instrumento**: moldura com dados, réguas, microtipografia, trilhas de placa, cursor-sonda, registro da sessão. Cada seção tem **um único momento autoral** ([tabela](#tom-visual-por-seção)), e o hero recebe o maior orçamento de impacto.
+O site é **rico**, como pediu o titular. A riqueza está na **camada de instrumento**: moldura com dados, microtipografia, trilhas de placa, registro da sessão. Cada seção tem **um único momento autoral** ([tabela](#tom-visual-por-seção)), e o hero recebe o maior orçamento de impacto.
 
 Densidade no detalhe, nunca empilhamento de efeitos. Dois momentos grandes nunca disputam a mesma tela.
 
@@ -134,14 +133,14 @@ Se o resultado lembrar qualquer um destes, está errado:
 - Sem caveira, sangue, armas ou estética de ameaça. Vermelho é luz de operação.
 - Sem flashes acima de três por segundo (WCAG 2.3.1), inclusive na troca de tema e nas decodificações.
 
-## Revisão contra marcas de IA
+## Revisão contra padrões genéricos
 
-A skill Frontend Design pede para conferir o plano contra os padrões comuns de páginas geradas. Fundo quase preto com um único acento vermelho é um deles, e aqui ele vem do pedido do titular. Por isso o vermelho é uma rampa inteira de luz, e não um acento.
+O plano é conferido contra os padrões que fazem uma página parecer feita em série. Fundo quase preto com um único acento vermelho é um deles, e aqui ele vem do pedido do titular. Por isso o vermelho é uma rampa inteira de luz, e não um acento.
 
 | Padrão comum | Decisão aqui |
 |---|---|
 | Preto com um acento vermelho ou verde neon | Rampa tonal inteira em vermelho, com profundidade de superfícies |
-| Etiqueta em caixa alta acima de cada título | Eliminada. A posição da seção vive na régua da moldura |
+| Etiqueta em caixa alta acima de cada título | Eliminada. A posição da seção vive na barra de navegação |
 | Numeração 01/02/03 como enfeite | Só onde a sequência é real: os saltos do traceroute |
 | Monoespaçada para parecer técnico | Só em dado real. A tipografia de leitura é a grotesca |
 | Réguas, cruzes de mira e grade como figurino | Só quando medem algo real ([princípio](#princípio-inegociável-todo-enfeite-técnico-mostra-um-dado-real)) |

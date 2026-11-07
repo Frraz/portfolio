@@ -63,10 +63,10 @@ form-action 'none';
 | Diretiva | Motivo |
 |---|---|
 | `script-src` com hashes | Nonce exige renderização em servidor. Os scripts inline do Next (`self.__next_f.push`) precisam de hash |
-| Sem `unsafe-inline` nem `unsafe-eval` em script | Objetivo central. `lottie_light` foi escolhido por não usar `eval` |
+| Sem `unsafe-inline` nem `unsafe-eval` em script | Objetivo central. Nenhuma dependência do site usa `eval` |
 | `style-src-attr 'unsafe-inline'` | React e Motion podem renderizar `style=""`. Risco menor que script. Remover se os testes permitirem. CSSOM não precisa dessa permissão |
 | `wasm-unsafe-eval` | **Fora por padrão.** Só entra se meshopt ou KTX2 forem adotados, registrando o motivo |
-| `worker-src 'self'` | Só o `/sw.js`. Sem `blob:`: a cena não usa workers, e o `lottie_light` roda sem eles nem `eval` |
+| `worker-src 'self'` | Só o `/sw.js`. Sem `blob:`: a cena não usa workers |
 | `connect-src 'self'` | Terminal, proxies e cena. Nada de terceiros |
 
 ### Geração dos hashes
@@ -139,7 +139,6 @@ Ficam no nginx do contêiner, com destino fixo no arquivo de configuração, par
 | Trivy em imagem e sistema de arquivos | CI |
 | zizmor para os workflows; ações fixadas por SHA | CI |
 | SBOM CycloneDX em `/sbom.json` | Pós-build |
-| Skills de terceiros: lock em `skills-lock.json`, revisar ao atualizar | Repositório |
 
 ## Segredos
 
@@ -175,7 +174,7 @@ Policy: https://warley.ferzion.com.br/seguranca
 
 **`/robots.txt`:** permite tudo e aponta para o sitemap.
 
-**`/humans.txt`:** créditos, stack e apoio de IA.
+**`/humans.txt`:** nome, endereço do site e stack.
 
 ## Privacidade e LGPD
 

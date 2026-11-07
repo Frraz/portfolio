@@ -1,20 +1,20 @@
 # 10 — Deploy e operação
 
-Segue o padrão já usado no servidor, descrito em `../bibliotheon/docs/06-deploy.md`. **O titular faz o Git e o deploy manualmente:** `git init`, commits, push, comandos no VPS, certificado HTTPS e criação de contas. O agente prepara os arquivos e o passo a passo.
+Segue o padrão dos outros sistemas do servidor. **O titular faz o Git e o deploy manualmente:** `git init`, commits, push, comandos no VPS, certificado HTTPS e criação de contas. Os arquivos e o passo a passo ficam neste repositório.
 
 ## O servidor
 
 | Item | Valor |
 |---|---|
 | Domínio | `warley.ferzion.com.br` |
-| DNS | Registro A → `147.93.15.214`, resolvendo em 05/11/2026 |
-| Acesso | `ssh deploy@147.93.15.214`, usuário no grupo `docker`, sem `sudo` sem senha |
+| DNS | Registro A para o IP do VPS, resolvendo desde 05/11/2026. O IP fica fora do repositório |
+| Acesso | `ssh deploy@<IP do VPS>`, usuário no grupo `docker`, sem `sudo` sem senha |
 | Sistema compartilhado | **Sim**, com vários sistemas, incluindo de clientes |
 | Certificado | Emitido em 05/11/2026 pelo Certbot, válido até 03/02/2027, com renovação automática. Falta confirmar com `sudo certbot renew --dry-run` |
 
 ### Regras do servidor
 
-Vêm de `/var/www/docker-instances/README.md`, citadas em `../byakugan/DEPLOY.md`.
+Vêm de `/var/www/docker-instances/README.md`, no próprio servidor.
 
 1. Nenhum contêiner publica 80 ou 443. Só o nginx do host.
 2. O site publica apenas em `127.0.0.1:<porta>`.
@@ -58,10 +58,9 @@ HEALTHCHECK --interval=30s --timeout=3s CMD wget -qO- http://127.0.0.1:8080/saud
 
 ## nginx do contêiner
 
-```nginx
-limit_req_zone $binary_remote_addr zone=proxy_v:1m rate=5r/s;
-limit_req_zone $binary_remote_addr zone=proxy_e:1m rate=2r/s;
+O arquivo é `deploy/nginx-container.conf`. Como o `add_header` não herda de níveis acima, todo `location` repete o include dos cabeçalhos.
 
+```nginx
 server {
     listen 8080;
     server_name _;
@@ -69,34 +68,52 @@ server {
     server_tokens off;
     access_log off;
     gzip_static on;
+    gzip_vary on; # caches intermediários guardam a versão comprimida e a crua separadas
+    absolute_redirect off;
 
     error_page 404 /404.html;
 
-    # add_header não herda de níveis acima: todo location repete o include.
     location / {
         include /etc/nginx/snippets/cabecalhos.conf;
-        add_header Cache-Control "no-cache";
+        add_header Cache-Control "no-cache" always;
         try_files $uri $uri.html $uri/ =404;
+    }
+    location = /404.html {
+        internal;
+        include /etc/nginx/snippets/cabecalhos.conf;
+        add_header Cache-Control "no-cache" always;
     }
     location /_next/static/ {
         include /etc/nginx/snippets/cabecalhos.conf;
-        add_header Cache-Control "public, max-age=31536000, immutable";
+        add_header Cache-Control "public, max-age=31536000, immutable" always;
     }
-    location ~ ^/(gl|fontes)/ {
+    location = /manifest.webmanifest {
         include /etc/nginx/snippets/cabecalhos.conf;
-        add_header Cache-Control "public, max-age=2592000";
+        types { }
+        default_type application/manifest+json;
+        add_header Cache-Control "no-cache" always;
     }
-    location = /sw.js {
+    location /gl/ {
+        types { model/gltf-binary glb; application/json json; image/png png; }
         include /etc/nginx/snippets/cabecalhos.conf;
-        add_header Cache-Control "no-cache";
+        add_header Cache-Control "public, max-age=86400" always; # nomes sem hash: um dia, para o deploy chegar logo
     }
-    location = /saude.txt { access_log off; add_header Cache-Control "no-store"; }
+    # Imagem de compartilhamento e ícones: nomes sem hash, mudam raramente. Uma semana, com revalidação depois.
+    location ~ ^/(og/|icone|apple-touch-icon) {
+        include /etc/nginx/snippets/cabecalhos.conf;
+        add_header Cache-Control "public, max-age=604800" always;
+    }
+    location = /saude.txt {
+        add_header Cache-Control "no-store" always;
+    }
 }
 ```
 
 **A CSP por rota** vem de `map $uri $csp { ... }`. Como o `add_header` é avaliado no fim da requisição, `$uri` já tem o arquivo final: as chaves do mapa usam `/index.html`, `/cv.html` e assim por diante. Um teste de Playwright confirma cada rota.
 
-**Compressão:** `gzip_static` serve os `.gz` gerados no build. Brotli exige módulo que a imagem oficial não traz, e o ganho não justifica uma imagem de terceiros.
+**Compressão:** `gzip_static` serve os `.gz` gerados no build, com `gzip_vary`. Brotli exige módulo que a imagem oficial não traz, e o ganho não justifica uma imagem de terceiros.
+
+**Cache:** HTML, `sw.js`, `tema.js` e o manifesto revalidam a cada visita (`no-cache`), para um deploy chegar na hora. Os arquivos de `/_next/static/` têm hash no nome e ficam um ano (`immutable`). O atlas da chuva fica um dia; ícones e imagem de compartilhamento, uma semana. O service worker guarda só o que a primeira tela usa e o resto conforme a visita pede ([08](08-arquitetura-tecnica.md#desempenho-de-carregamento)).
 
 ## nginx do host
 
@@ -175,9 +192,24 @@ docker ps    # os outros sistemas continuam intactos
 
 A renovação do certificado é a do Certbot já instalado. Depois do primeiro deploy, confirmar com `sudo certbot renew --dry-run`.
 
+## Lançamento: indexação
+
+O vhost do host ainda manda `X-Robots-Tag: noindex, nofollow`, de propósito, enquanto o titular revisa o site. Para o Google indexar:
+
+```bash
+# No VPS (sudo): apagar a linha do X-Robots-Tag em /etc/nginx/sites-available/portfolio
+sudo nano /etc/nginx/sites-available/portfolio
+sudo nginx -t && sudo systemctl reload nginx
+curl -sI https://warley.ferzion.com.br | grep -i robots   # não deve retornar nada
+```
+
+Apagar a mesma linha em `deploy/nginx-host.conf` no repositório. Depois, no [Google Search Console](https://search.google.com/search-console): adicionar a propriedade de domínio `warley.ferzion.com.br` (verificação por registro TXT no DNS), enviar `https://warley.ferzion.com.br/sitemap.xml` e pedir a indexação da página inicial. O Bing Webmaster Tools importa a propriedade do Search Console.
+
+Para conferir o compartilhamento: colar o endereço no LinkedIn (Post Inspector) e no validador de dados estruturados do Google (Rich Results Test).
+
 ## Atualizar (todo deploy)
 
-**Fluxo:** commit e push na máquina local; no servidor, `./deploy/atualizar.sh`. O script é uma adaptação de `../bibliotheon/atualizar.sh`:
+**Fluxo:** commit e push na máquina local; no servidor, `./deploy/atualizar.sh`, no mesmo fluxo dos outros sistemas do servidor:
 
 1. Recusa rodar se houver alteração local no servidor.
 2. `git fetch`; informa se há versão nova ou se o servidor está à frente (falta push).
@@ -188,14 +220,39 @@ A renovação do certificado é a do Certbot já instalado. Depois do primeiro d
 7. Se passar, grava `IMAGE_TAG` no `.env` e testa o domínio público.
 
 ```bash
-ssh deploy@147.93.15.214 'cd /var/www/docker-instances/portfolio && ./deploy/atualizar.sh'
+ssh deploy@<IP do VPS> 'cd /var/www/docker-instances/portfolio && ./deploy/atualizar.sh'
 ```
 
 Use `--forcar` depois de mudar o `.env`, pois os valores entram no build.
 
 ## Git
 
-O titular cria o repositório. O `.gitignore` já exclui `.env*`, `node_modules/`, `.next/`, `out/` e relatórios de teste. **`docs/` não é excluída:** ela traz IP, portas e nomes de outros sistemas do VPS. O repositório deve ficar **privado**, e o VPS o lê por uma chave de implantação somente leitura. Para publicar o código no futuro, gerar antes uma cópia sem `docs/` e sem as regras internas.
+O titular cria o repositório. O `.gitignore` exclui `.env*`, `node_modules/`, `.next/`, `out/`, os mapas de CSP gerados e os relatórios de teste. `docs/` vai no repositório, sem IP; ainda assim descreve portas e regras do VPS, por isso o repositório fica **privado**, e o VPS o lê por uma chave de implantação somente leitura.
+
+Arquivos de configuração local de editor e de ferramentas ficam fora do Git por `.git/info/exclude`, que não é versionado.
+
+### Repositório limpo
+
+O primeiro repositório, público, guardou no histórico arquivos que não fazem parte do site e o IP do VPS em `docs/`. Apagar agora não os tira do histórico. Em 07/11/2026 o titular decidiu recriar o repositório com um único commit limpo:
+
+```bash
+# 1. No GitHub: apagar o repositório antigo (Settings → Delete) ou criar um novo, privado.
+# 2. Na máquina local, na pasta do portfólio:
+rm -rf .git
+git init -b main
+# Antes do primeiro add: listar em .git/info/exclude os arquivos locais de editor e de ferramentas
+nano .git/info/exclude
+git status --short | head -50       # conferir: só arquivos do site, da documentação e dos testes
+git add -A && git commit -m "Portfólio Sinal"
+git remote add origin git@github.com:Frraz/portfolio.git
+git push -u origin main
+# 3. No VPS: o clone antigo aponta para o histórico apagado. Clonar de novo:
+#    cd /var/www/docker-instances && mv portfolio portfolio-antigo && git clone <repo> portfolio
+#    cp portfolio-antigo/.env portfolio/.env && cd portfolio && ./deploy/atualizar.sh --forcar
+#    Depois de conferir o site: rm -rf ../portfolio-antigo
+```
+
+Forks e cópias que alguém tenha feito enquanto o repositório era público não são alcançados por isso.
 
 ## Antes de cada push
 
@@ -214,7 +271,7 @@ O site não tem dados, então não há banco a restaurar. Tudo se recupera pelo 
 
 ## Backup
 
-Sem backup de dados, pois tudo está no repositório. O repositório precisa ter uma cópia fora do VPS, no GitHub. Os assets gerados (GLB, pôsteres, PDF) também vão no Git, para o build não depender de Blender.
+Sem backup de dados, pois tudo está no repositório. O repositório precisa ter uma cópia fora do VPS, no GitHub. Os assets gerados (atlas da chuva, trilhas, imagem de compartilhamento, ícones e PDF) também vão no Git, para o build não depender dos scripts de geração.
 
 ## Monitoramento
 
@@ -238,7 +295,7 @@ O titular monitora redes no trabalho, e um laboratório próprio com Zabbix ou P
 
 | Armadilha | Prevenção |
 |---|---|
-| `SITE_URL` fixada no build; ausência leva a `localhost` em canonical e sitemap | O compose usa `${SITE_URL:?}` e o pós-build verifica |
+| `SITE_URL` fixada no build | Sem ela, vale o domínio real, nunca `localhost` (`src/site.ts`). O compose exige `${SITE_URL:?}` |
 | `add_header` não herda entre níveis do nginx | Include em todo `location`, com teste E2E de cabeçalhos |
 | CSP defasada depois de editar HTML à mão | HTML nunca é editado depois do pós-build |
 | Service worker antigo prendendo versão velha | `sw.js` sem cache, com `skipWaiting` e versão por build |

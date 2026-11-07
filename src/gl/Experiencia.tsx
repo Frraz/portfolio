@@ -21,8 +21,8 @@ import { estadoCena, hud, reduzido as movimentoReduzido } from "@/movimento/esta
 // As formas das seções são um chunk próprio: só baixa depois da pintura.
 const Forma = lazy(() => import("./forma/Forma"));
 
-/** A queda das colunas anda a 60% da velocidade original: de 2,4 a 10,8 células por segundo. */
-const RITMO_BASE = 0.6;
+/** A queda das colunas anda a 40% da velocidade original: de 1,6 a 7,2 células por segundo. */
+const RITMO_BASE = 0.4;
 
 const PALAVRAS = {
   nome: [22, 0, 17, 11, 4, 24], // WARLEY
@@ -229,7 +229,6 @@ export default function Experiencia() {
   const parada = useRef(false);
   const sujo = useRef(4);
   useEffect(() => {
-    hud.cena = "ativa";
     hud.nivel = nivel;
     registrar("info", `cena: ${nivel}`);
   }, [nivel]);
@@ -284,7 +283,7 @@ export default function Experiencia() {
       parada.current = (e as CustomEvent<boolean>).detail || reduzido;
       marcar();
     };
-    addEventListener("nave:chuva", aoPausar);
+    addEventListener("sinal:chuva", aoPausar);
     const obs = new MutationObserver(() => {
       sujo.current = reduzido ? 4 : 60;
     });
@@ -297,7 +296,7 @@ export default function Experiencia() {
       tamanho.disconnect();
       removeEventListener("scroll", marcar);
       removeEventListener("resize", remedir);
-      removeEventListener("nave:chuva", aoPausar);
+      removeEventListener("sinal:chuva", aoPausar);
       obs.disconnect();
     };
   }, [nivel]);

@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import { reduzido } from "./estado";
+import { registrarRolador } from "./rolagem";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,17 +19,12 @@ export function ligarRelogio() {
   // O Lenis já respeita o scroll-padding do CSS: nenhum deslocamento extra para a barra fixa.
   lenis = new Lenis({ autoRaf: false, lerp: 0.12, anchors: { duration: 1.2 } });
   lenis.on("scroll", ScrollTrigger.update);
+  registrarRolador(lenis);
   gsap.ticker.add(pulso);
   return () => {
     gsap.ticker.remove(pulso);
+    registrarRolador(null);
     lenis?.destroy();
     lenis = null;
   };
 }
-
-export const rolarPara = (alvo: string | HTMLElement) => {
-  const el = typeof alvo === "string" ? document.querySelector<HTMLElement>(alvo) : alvo;
-  if (!el) return;
-  if (lenis) lenis.scrollTo(el, { duration: 1.2 });
-  else el.scrollIntoView();
-};

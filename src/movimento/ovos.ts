@@ -6,7 +6,7 @@ const KONAMI = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "Ar
 
 function assinatura() {
   const c = getComputedStyle(document.documentElement);
-  const cor = c.getPropertyValue("--acento") || "currentColor";
+  const cor = c.getPropertyValue("--sinal") || "currentColor";
   console.log("%cWarley Ferraz Almeida", `font: 600 20px serif; color: ${cor}`);
   console.log("Site estático, sem servidor de aplicação. O currículo direto está em /cv.");
   console.log("Há nove selos escondidos à vista de todos. Você não precisa atacar nada: abra o terminal (Ctrl+K) e digite selos.");
@@ -42,12 +42,12 @@ export function montarOvos() {
   const aoSelo = (e: Event) => {
     if ((e as CustomEvent<{ total: number }>).detail?.total === 9) premio();
   };
-  addEventListener("nave:selo", aoSelo);
+  addEventListener("sinal:selo", aoSelo);
   if (ctfCompleto()) estadoCena.coelho = true;
 
   return () => {
     removeEventListener("keydown", tecla);
-    removeEventListener("nave:selo", aoSelo);
+    removeEventListener("sinal:selo", aoSelo);
     window.clearTimeout(temporizador);
   };
 }

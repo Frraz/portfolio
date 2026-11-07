@@ -32,7 +32,7 @@ export function registrarSelo(indice: number) {
   try {
     localStorage.setItem(CHAVE, JSON.stringify(lista));
   } catch {}
-  dispatchEvent(new CustomEvent("nave:selo", { detail: { indice, total: lista.length } }));
+  dispatchEvent(new CustomEvent("sinal:selo", { detail: { indice, total: lista.length } }));
   return { novo: true, total: lista.length };
 }
 

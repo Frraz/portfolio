@@ -61,7 +61,7 @@ Herdadas da base do currículo. Valem para qualquer texto de projeto:
 | Sem dados de clientes | Nomes, marcas, CPF e capturas com dados reais ficam de fora |
 | Demonstração | Precisa usar dados fictícios. Conferir antes de publicar o link |
 | Repositórios | A base diz: no GitHub, cite só o perfil. Se o titular quiser links individuais, a regra muda primeiro lá |
-| Apoio de IA | Tudo precisa ser explicável em entrevista |
+| Explicável | Tudo o que o projeto afirma precisa ser explicável em entrevista |
 | Ferzion | Projeto descontinuado. O nome existe só no domínio |
 | Testes | "820 testes" são funções encontradas, e não cobertura |
 

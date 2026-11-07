@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import { metadadosPagina } from "@/site";
 import { Rodape } from "@/secoes/Rodape";
 import { conteudo } from "@/conteudo";
 
 const c = conteudo("pt-BR");
-export const metadata: Metadata = { title: c.seo.seguranca.titulo, description: c.seo.seguranca.descricao, alternates: { canonical: "/seguranca" } };
+export const metadata: Metadata = metadadosPagina({ titulo: c.seo.seguranca.titulo, descricao: c.seo.seguranca.descricao, caminho: "/seguranca" });
 
 export default function Seguranca() {
   const s = c.seguranca;
@@ -15,7 +16,7 @@ export default function Seguranca() {
         <h1>{s.titulo}</h1>
         <p className="medida" style={{ marginTop: "1rem" }}>
           {s.abertura} {s.relatar}{" "}
-          <a className="link-ouro" href="/.well-known/security.txt">
+          <a className="link-destaque" href="/.well-known/security.txt">
             security.txt
           </a>
         </p>

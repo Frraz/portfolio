@@ -51,13 +51,84 @@ Cada elemento tem um único motor. Tabela completa em [docs/06](docs/06-motion-e
 - Nada de logos, personagens ou identidades de terceiros (Matrix, Kali, fabricantes, plataformas).
 - Vermelho é rampa de luz, não acento isolado. Monoespaçada só em dado real. Brilho só em luz da cena. Vidro só na barra de navegação, por pedido do titular.
 - Sem etiqueta acima de título, número ao lado do título, cards iguais, gradiente em texto, seta em botão, ponto médio entre dados.
-- Quando as skills discordarem, siga a ordem de [docs/14](docs/14-skills-e-stack.md#quando-as-skills-discordam).
+- Quando as skills discordarem, siga a ordem abaixo e a de [docs/14](docs/14-stack.md#quando-as-orientações-discordam).
 
 ## Como trabalhar
 
-1. Leia os documentos da fase e carregue as skills indicadas em [docs/12](docs/12-roteiro.md). Marque o progresso no [ROADMAP](ROADMAP.md).
+1. Leia os documentos da fase em [docs/12](docs/12-roteiro.md) e carregue as skills da fase (tabela "Skills por fase", abaixo). Marque o progresso no [ROADMAP](ROADMAP.md).
 2. Se mudar uma decisão, atualize o documento e `docs/decisoes.md`.
 3. Antes de dizer que terminou: `pnpm verificar && pnpm build && pnpm test && pnpm test:e2e`.
 4. Em mudança visual, veja capturas em 390, 768 e 1440 px, sem confiar só em métricas.
 5. Relate o que foi testado e o que não foi. Item em `/seguranca` só depois de testado em produção.
 6. Versões de pacotes e APIs mudam: confira a documentação atual antes de usar. Versões de 05/11/2026 estão em [docs/08](docs/08-arquitetura-tecnica.md#stack).
+
+## Repositório sem menção a IA
+
+Pedido do titular em 07/11/2026: nada no repositório nem no site diz que ele foi feito com IA. Este arquivo, `AGENTS.md`, `.claude/` e `skills-lock.json` ficam só no disco, listados em `.git/info/exclude` (nunca no `.gitignore`, que é versionado): `CLAUDE.md`, `AGENTS.md`, `.claude/`, `skills-lock.json`, `.taste-skill/`, `.impeccable/`. Nunca escreva essa lista em arquivo versionado. Em documentos, use forma impessoal ("o build faz", "o titular faz") e cite práticas, não skills ("auditoria de SEO", "revisão de animação"). O verificador de conteúdo barra "Claude", "Anthropic", "ChatGPT", "apoio de IA" e a cidade do titular na saída do build.
+
+## Skills (só local)
+
+### Skills instaladas
+
+Instaladas em `.claude/skills/` em 05/11/2026, salvo UI UX Pro Max, instalada como plugin do usuário. Versões de terceiros ficam em `skills-lock.json`.
+
+| # | Skill | Pasta ou nome | Origem | Fases | Uso |
+|---|---|---|---|---|---|
+| 1 | Frontend Design (Anthropic) | `frontend-design` | Cópia do Bibliotheon | 2, 4, 5 | Direção de arte, revisão contra marcas de IA |
+| 2 | UI UX Pro Max | `ui-ux-pro-max:*` | Plugin 2.13.0 | 3, 4 | Tokens, paletas, UX, tipografia |
+| 3 | Impeccable | `impeccable` | Cópia do Bibliotheon | 3, 4, 8 | `critique`, `audit`, `polish`, `typeset`, `overdrive` |
+| 4 | Animate (Emil Kowalski) | `emil-*` | Cópia do Bibliotheon | 6, 8 | Microinterações e revisão de animação |
+| 5 | GSAP ScrollTrigger | `gsap-*` | Cópia do Bibliotheon | 6 | Scrollytelling, timeline, performance |
+| 6 | React Three Fiber | `react-three-fiber` | `freshtechbro/claudedesignskills` | 4, 6 | Cena em React |
+| + | `threejs-webgl` (bônus) | `threejs-webgl` | Idem | 4, 6 | Shaders, materiais, otimização |
+| 7 | Copywriting (Corey Haines) | `copywriting` | `coreyhaines31/marketingskills` | 1, 7 | Texto e checagem de marcas de IA |
+| 8 | SEO Audit (Corey Haines) | `seo-audit` | Idem | 7, 8 | Estratégia e auditoria |
+| 9 | React Best Practices (Vercel) | `vercel-react-best-practices` | `vercel-labs/agent-skills` | 5, 8 | Arquitetura e revisão |
+| 10 | Web Design Guidelines (Vercel) | `web-design-guidelines` | Idem | 8 | Auditoria final; busca as regras atuais |
+
+**Complementos**
+
+| Skill | Uso |
+|---|---|
+| `taste-skill` | Argumento da página, teste do concorrente, coisa viva e olhar crítico |
+| `anthropic-skills:algorithmic-art` | Estudos de chuva e rendilhado |
+| `anthropic-skills:canvas-design` | Moodboards e imagens estáticas |
+| `anthropic-skills:theme-factory` | Variação dos temas |
+| `dataviz` | Linha do tempo e lancetas, caso virem gráfico |
+| `ui-ux-pro-max:design-system`, `:brand`, `:ui-styling` | Estrutura de tokens e Base UI/shadcn |
+| `security-review`, `code-review`, `simplify` | Revisões de código |
+
+#### Revisão das skills de terceiros
+
+Feita em 05/11/2026, como recomenda o `skills-stacks.md`.
+
+| Skill | Resultado |
+|---|---|
+| `copywriting`, `vercel-*`, `web-design-guidelines` | Sem padrões perigosos. O avaliador do instalador as classificou como baixo risco |
+| `seo-audit` | Classificada como "Med Risk" pelo Snyk no instalador. Na leitura, há instruções de auditoria e referências, sem scripts. Ela mesma pede que o conteúdo de páginas buscadas seja tratado como dado não confiável |
+| `react-three-fiber`, `threejs-webgl` | **Só `SKILL.md` e `references/` foram copiados.** Scripts, starters e agentes do plugin ficaram de fora |
+| `impeccable`, `taste-skill` | Vieram do Bibliotheon e têm scripts, **autorizados pelo titular em 05/11/2026**. O `impeccable context` baixa um binário na primeira execução, e `taste-skill/scripts/assets.mjs` acessa a rede |
+
+**Ao atualizar:** repetir a revisão. As skills rodam com as permissões do agente.
+
+#### Quando as skills discordam
+
+A ordem é a mesma do `skills-stacks.md`: a identidade definida para o projeto vence recomendações genéricas.
+
+1. Pedido do titular em [00-briefing.md](00-briefing.md) e veracidade em [01](01-veracidade-e-fontes.md).
+2. Acessibilidade e segurança em [11](11-qualidade.md) e [09](09-seguranca-e-privacidade.md).
+3. Direção criativa em [04](04-direcao-criativa.md) e tokens em [05](05-design-system.md).
+4. Recomendações das skills.
+
+
+#### Skills por fase
+
+| Fase | Skills |
+|---|---|
+| R5 Cena completa e storyboard | GSAP (ScrollTrigger, Timeline, Plugins), Animate |
+| R6 Recursos | Animate, GSAP, `emil-break-ui` |
+| R7 Textos e compartilhamento / Fase 7 | Copywriting, SEO Audit |
+| R8 Refinamento / Fase 8 | Impeccable `audit`/`polish`, Web Design Guidelines, React Best Practices, `emil-review-animations` |
+| Preparação para produção | `seo-audit`, `vercel-react-best-practices`, `emil-animation-performance`, `gsap-performance` |
+| Fase 9 Idiomas | Copywriting |
+| Fase 10 Blindagem | `security-review`, Impeccable `harden` |

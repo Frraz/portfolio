@@ -27,6 +27,12 @@ describe("verificador de conteúdo", () => {
   it.each(variantesTelefone("5511987654321"))("barra telefone no formato %s", (v) => {
     expect(buscarProblemas(`contato ${v}`, "t", op).some((p) => p.includes("telefone"))).toBe(true);
   });
+  it.each([["Warley, Rondon do Pará"], ["feito com apoio do Claude Code"], ["construído com apoio de IA"]])("barra o que fica fora do site: %s", (texto) => {
+    expect(buscarProblemas(texto, "x.html", { ...op, estrito: false }).length).toBeGreaterThan(0);
+  });
+  it("barra o IP do servidor quando ele é informado", () => {
+    expect(buscarProblemas("ssh deploy@203.0.113.7", "t", { ...op, ip: "203.0.113.7" }).some((p) => p.includes("IP"))).toBe(true);
+  });
   it("fora do modo estrito ainda barra telefone em bundle", () => {
     expect(buscarProblemas("a=5511987654321", "x.js", { ...op, estrito: false }).length).toBeGreaterThan(0);
   });

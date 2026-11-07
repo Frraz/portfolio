@@ -23,7 +23,8 @@ const config: NextConfig = {
   images: { unoptimized: true },
   experimental: { globalNotFound: true },
   env: {
-    SITE_URL: process.env.SITE_URL ?? "http://localhost:3000",
+    // Sem SITE_URL, vale o domínio real: nenhuma URL canônica sai apontando para localhost.
+    SITE_URL: process.env.SITE_URL || "https://warley.ferzion.com.br",
     WHATSAPP_ATIVO: numero ? "sim" : "",
     WHATSAPP_E: embaralhado,
     BUILD_HASH: versao,

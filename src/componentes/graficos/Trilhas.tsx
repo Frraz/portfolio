@@ -24,16 +24,20 @@ export function Trilhas({ secao }: { secao: string }) {
           <rect width={TRILHAS_LARGURA} height={TRILHAS_ALTURA} fill={`url(#${degrade})`} />
         </mask>
       </defs>
-      <g mask={`url(#${mascara})`} fill="none" stroke="currentColor">
-        <path className="trilhas-cobre" d={t.d} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
+      {/* Traço que não escala com o SVG: as linhas ficam finas como cobre de placa em qualquer largura de tela. */}
+      <g mask={`url(#${mascara})`} fill="none" stroke="currentColor" strokeWidth="1" vectorEffect="non-scaling-stroke">
+        <path className="trilhas-cobre" d={t.d} strokeLinejoin="round" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
         {t.corpos.map(([x, y, w, h], i) => (
-          <rect key={i} className="trilhas-corpo" x={x} y={y} width={w} height={h} strokeWidth="1.5" />
+          <rect key={i} className="trilhas-corpo" x={x} y={y} width={w} height={h} vectorEffect="non-scaling-stroke" />
         ))}
         {t.pads.map(([x, y, w, h], i) => (
           <rect key={i} x={x} y={y} width={w} height={h} fill="currentColor" stroke="none" />
         ))}
         {t.vias.map(([x, y], i) => (
-          <circle key={i} cx={x} cy={y} r="4" strokeWidth="2" />
+          <circle key={i} cx={x} cy={y} r="2.5" vectorEffect="non-scaling-stroke" />
+        ))}
+        {t.marcas.map(([x, y], i) => (
+          <circle key={i} cx={x} cy={y} r="1.5" fill="currentColor" stroke="none" />
         ))}
       </g>
     </svg>

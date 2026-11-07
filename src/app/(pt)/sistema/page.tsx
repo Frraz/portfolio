@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { metadadosPagina } from "@/site";
 import { Rodape } from "@/secoes/Rodape";
 import { conteudo } from "@/conteudo";
 import { hexdump } from "@/conteudo/derivados";
@@ -8,7 +9,7 @@ import { TEMAS, type Papel } from "@/temas/temas";
 import { contraste } from "@/temas/cor";
 
 const c = conteudo("pt-BR");
-export const metadata: Metadata = { title: c.seo.sistema.titulo, description: c.seo.sistema.descricao, alternates: { canonical: "/sistema" } };
+export const metadata: Metadata = metadadosPagina({ titulo: c.seo.sistema.titulo, descricao: c.seo.sistema.descricao, caminho: "/sistema" });
 
 const NOMES: Record<string, string> = { rubro: c.ui.temaRubro, claro: c.ui.temaClaro, fosforo: c.ui.temaFosforo };
 const kebab = (p: string) => p.replace(/([A-Z0-9])/g, "-$1").toLowerCase();

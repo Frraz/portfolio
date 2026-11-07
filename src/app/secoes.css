@@ -107,6 +107,28 @@
       transparent 82%
     );
   }
+  /* Continuação do véu abaixo do hero: na borda de baixo, o degradê radial ainda tem 86% à esquerda. Cortado ali,
+     ele virava uma faixa escura na passagem para Sobre. Esta camada repete a mesma intensidade da borda (as paradas
+     do radial multiplicadas por 1,4, a largura da elipse) e some ao longo de 35vh. */
+  .hero-veu::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    height: 35vh;
+    pointer-events: none;
+    background: linear-gradient(
+      to right,
+      color-mix(in oklch, var(--fundo) 86%, transparent) 0%,
+      color-mix(in oklch, var(--fundo) 74%, transparent) 30.8%,
+      color-mix(in oklch, var(--fundo) 52%, transparent) 58.8%,
+      color-mix(in oklch, var(--fundo) 24%, transparent) 86.8%,
+      transparent 114.8%
+    );
+    -webkit-mask-image: linear-gradient(to bottom, #000, transparent);
+    mask-image: linear-gradient(to bottom, #000, transparent);
+  }
   /* O teto em vw garante "Warley Ferraz" numa linha só até em 360 px, já na largura final (docs/05). */
   .hero h1 {
     font-size: min(var(--t-nome), 11.2vw);
@@ -165,6 +187,9 @@
         transparent 72%
       );
     }
+    .hero-veu::after {
+      background: color-mix(in oklch, var(--fundo) 88%, transparent);
+    }
   }
 
   /* Sobre */
@@ -199,7 +224,7 @@
   @media (min-width: 1000px) {
     .sobre-ficha {
       position: sticky;
-      top: calc(var(--altura-barra) + var(--faixa) + 1.5rem);
+      top: calc(var(--altura-barra) + 1.5rem);
     }
   }
   .sobre-ficha dl {

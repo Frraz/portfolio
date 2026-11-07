@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { metadadosPagina } from "@/site";
 import Link from "next/link";
 import { RevelarWhatsapp } from "@/componentes/AcoesContato";
 import { Rodape } from "@/secoes/Rodape";
@@ -7,7 +8,7 @@ import { conteudo } from "@/conteudo";
 import { periodo, formatarMesAno } from "@/formatos";
 
 const c = conteudo("pt-BR");
-export const metadata: Metadata = { title: c.seo.cv.titulo, description: c.seo.cv.descricao, alternates: { canonical: "/cv" } };
+export const metadata: Metadata = metadadosPagina({ titulo: c.seo.cv.titulo, descricao: c.seo.cv.descricao, caminho: "/cv" });
 
 export default function Curriculo() {
   const exp = [...c.trajetoria.experiencias].reverse();
@@ -23,13 +24,13 @@ export default function Curriculo() {
           {c.inicio.local}
         </p>
         <p style={{ marginTop: "0.75rem", display: "flex", flexWrap: "wrap", gap: "0.25rem 1.25rem", alignItems: "center" }}>
-          <a className="link-ouro" href={`mailto:${c.pessoa.email}`} translate="no">
+          <a className="link-destaque" href={`mailto:${c.pessoa.email}`} translate="no">
             {c.pessoa.email}
           </a>
-          <a className="link-ouro" href={c.pessoa.linkedin} translate="no">
+          <a className="link-destaque" href={c.pessoa.linkedin} translate="no">
             LinkedIn
           </a>
-          <a className="link-ouro" href={c.pessoa.github} translate="no">
+          <a className="link-destaque" href={c.pessoa.github} translate="no">
             GitHub
           </a>
           <RevelarWhatsapp texto={c.contato.mostrarWhatsapp} />

@@ -17,7 +17,7 @@ export function Inicio({ c }: { c: ConteudoSite }) {
         <Link transitionTypes={["rota"]} className="botao" href="/cv" data-magnetico>
           {c.inicio.acaoPrincipal}
         </Link>
-        <a className="link-ouro" href="#contato" data-magnetico>
+        <a className="link-destaque" href="#contato" data-magnetico>
           {c.inicio.acaoSecundaria}
         </a>
       </div>

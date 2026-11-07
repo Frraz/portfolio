@@ -31,22 +31,19 @@ Como o site é construído. Versões consultadas no npm em 05/11/2026. Na instal
 | Interface | `react`, `react-dom` | 19.3.1 | R3F exige `<19.4` |
 | Linguagem | `typescript` | 5 | `strict`. A versão 7 ainda não é suportada pelo `typescript-eslint` |
 | CSS | `tailwindcss` | 4.3.4 | Tokens com `@theme` |
-| Componentes | `@base-ui/react`, `shadcn` | 1.9.0, 4.23.0 | Sem visual padrão |
+| Componentes | `@base-ui/react` | 1.9.0 | Menus e Índice, sem visual padrão |
 | Validação | `zod` | 4.6.7 | Todo conteúdo |
 | Timelines | `gsap`, `@gsap/react` | 3.15.1, 2.1.2 | Licença padrão "no charge", uso comercial permitido enquanto o usuário final não pagar pelo acesso. Plugins inclusos no pacote |
 | Microinterações | `motion` | 14.9.1 | Só componentes de interface |
 | Rolagem | `lenis` | 1.3.27 | Ligado ao ticker do GSAP |
 | 3D | `three` | 0.187.0 | Com `@types/three` |
 | React 3D | `@react-three/fiber` | 9.8.2 | `frameloop="never"` |
-| Utilitários | `@react-three/drei` | 10.7.9 | Importações pontuais |
 | Pós-processamento | `@react-three/postprocessing`, `postprocessing` | 3.2.2, 6.39.6 | Só WebGL |
-| Vetores animados | `lottie-web` (build `lottie_light`) | 5.13.0 | MIT. Sem `eval` nem WASM. JSON gerado por script |
-| Ícones | `lucide-react` + SVGs próprios | 1.68.0 | Importações pontuais |
-| Fontes | `@fontsource-variable/mona-sans`, `@fontsource-variable/martian-mono` | 5.3.0 | Só em desenvolvimento: `copiar-fontes.ts` gera o subconjunto WOFF2 auto-hospedado. OFL 1.1. Substituem Grenze Gotisch, Literata, Jacquard 24 e Monomakh ([decisão 60](decisoes.md)) |
+| Ícones | `lucide-react` + SVGs próprios | 1.68.0 | Lucide só nos menus, que carregam depois. Barra e contato usam `src/componentes/Icones.tsx` |
+| Fontes | `@fontsource-variable/mona-sans`, `@fontsource-variable/jetbrains-mono` | 5.3.0 | Só em desenvolvimento: `copiar-fontes.ts` gera o subconjunto WOFF2 auto-hospedado em `src/fontes/`. OFL 1.1. Martian Mono e Noto Sans JP ficam só no gerador do atlas da chuva |
 | CMS (**para o final**) | `sanity`, `@sanity/client` | 6.22.0, 8.14.1 | Não instalado. Decisão do titular |
 | Analytics (**para o final**) | `posthog-js` | 1.446.0 | Não instalado. Decisão do titular |
 | Erros (**para o final**) | `@sentry/browser` | 11.10.0 | Não instalado. Decisão do titular |
-| Catálogo | `storybook`, `@storybook/nextjs-vite` | 10.6.5 | Só em desenvolvimento |
 | E2E | `@playwright/test`, `@axe-core/playwright` | 1.64.1, 4.14.0 | |
 | Unidade | `vitest` | 5.1.0 | |
 | Auditoria de web | `@lhci/cli` | 0.16.0 | No CI |
@@ -56,52 +53,53 @@ Como o site é construído. Versões consultadas no npm em 05/11/2026. Na instal
 
 ```text
 portfolio/
-├── README.md, CLAUDE.md, skills-lock.json
+├── README.md, ROADMAP.md
 ├── docs/
-├── .claude/skills/          # As 10 skills e complementos
 ├── src/
 │   ├── app/
 │   │   ├── (pt)/            # pt-BR, sem prefixo. Cada idioma terá sua raiz
 │   │   │   ├── layout.tsx, page.tsx
-│   │   │   ├── cv/, seguranca/, sistema/, offline/
+│   │   │   └── cv/, seguranca/, sistema/, offline/
 │   │   ├── global-not-found.tsx
-│   │   ├── globais.css, fontes.ts
+│   │   └── globais.css, secoes.css, fontes.ts
+│   ├── site.ts              # Endereço público e metadados por página (canônico, OG, Twitter)
 │   ├── conteudo/
 │   │   ├── esquema.ts       # Zod
 │   │   ├── derivados.ts     # Hexdump, fingerprints, tempo decorrido, calculados no build
+│   │   ├── verificacao.ts   # Regras do verificador de conteúdo
 │   │   ├── pt-BR.ts         # Fonte da verdade, idioma principal
-│   │   ├── en.ts, es.ts, de.ts, fr.ts
 │   │   ├── gerado/          # Certificados, gerados do catálogo
 │   │   └── index.ts         # Leitura por idioma
-│   ├── secoes/              # Inicio, Sobre, Agora, ..., Contato, Obras
-│   ├── componentes/         # ui/ (Base UI), moldura/ (HUD, régua, boot log), graficos/ (trilhas, hexdump)
+│   ├── secoes/              # Inicio, Sobre, Agora, ..., Contato, Rodape
+│   ├── componentes/         # Barra, menus, ícones, moldura/ (cantos e boot log), graficos/ (trilhas, hexdump)
 │   ├── gl/
 │   │   ├── Palco.tsx, CarregadorCena.tsx, Experiencia.tsx
-│   │   ├── chuva/           # shader.ts, mascara.ts (travamento), atlas-info.ts
-│   │   ├── forma/           # Forma.tsx (alvo 3D lido como máscara) e partilha.ts (estado entre a chuva e a forma)
-│   │   ├── caminho.ts       # Caminho da câmera por seção
+│   │   ├── chuva/           # shader, máscara de travamento, dados do atlas
+│   │   ├── forma/           # Formas 3D lidas como máscara pela chuva
 │   │   ├── trilha.ts        # Rolagem lida a cada quadro
 │   │   └── qualidade.ts     # Níveis e controlador
-│   ├── movimento/           # Relógio, storyboard, estado compartilhado, easter eggs
-│   ├── terminal/, ctf/, som/
-│   └── temas/               # Tokens e os temas
+│   ├── movimento/           # Relógio, rolagem programática, storyboard, estado, registro da sessão, easter eggs
+│   ├── terminal/, ctf/
+│   ├── fontes/              # WOFF2 auto-hospedados
+│   └── temas/               # Os três temas e o CSS gerado
 ├── public/
-│   ├── gl/                  # Atlas e gl/flags/ (Lottie)
-│   ├── fontes/, og/
-│   ├── curriculo-warley-ferraz-almeida.pdf
-│   └── .well-known/security.txt
+│   ├── gl/atlas.png         # Atlas de glifos da chuva
+│   ├── og/                  # Imagem de compartilhamento
+│   ├── icone.svg, icone-192.png, icone-512.png, apple-touch-icon.png
+│   └── tema.js              # Aplica o tema antes da pintura
 ├── scripts/
 │   ├── verificar-conteudo.ts, verificar-contraste.ts
-│   ├── gerar-temas.ts, gerar-atlas.ts, gerar-certificados.py, copiar-fontes.ts
-│   ├── servir.ts, capturas.ts   # Servidor que imita o nginx; capturas para revisão
-│   ├── gerar-flags.ts, gerar-lottie.ts, gerar-trilhas.ts, gerar-nome3d.ts, sw-modelo.js, cena-fotos.ts
-│   ├── gerar-og.ts, gerar-pdf.ts  # Fase 7
-│   ├── pos-build.ts         # CSP, security.txt, robots, sitemap, SBOM, gzip
+│   ├── gerar-temas.ts, gerar-atlas.ts, gerar-certificados.py, copiar-fontes.ts, gerar-selos.ts
+│   ├── gerar-trilhas.ts, trilhas/placa.ts   # Placas de circuito com grade de ocupação
+│   ├── gerar-og.ts          # Imagem de compartilhamento e ícones
+│   ├── servir.ts, capturas.ts, cena-fotos.ts   # Servidor que imita o nginx; capturas para revisão
+│   ├── sw-modelo.js
+│   └── pos-build.ts         # CSP, security.txt, robots, sitemap, manifesto, humans, SBOM, gzip
 ├── deploy/
 │   ├── Dockerfile, docker-compose.prod.yml
-│   ├── nginx-container.conf, nginx-host.conf
+│   ├── nginx-container.conf, cabecalhos.conf, nginx-host.conf
 │   └── atualizar.sh
-├── .storybook/, tests/
+├── tests/                   # unidade/ (Vitest) e e2e/ (Playwright)
 └── next.config.ts
 ```
 
@@ -193,7 +191,7 @@ Editar no Studio → script de download → Zod + verificação → src/conteudo
 - **Studio:** pacote separado em `sanity/`, publicado no endereço `*.sanity.studio`. As dependências dele não entram no bundle.
 - **Esquemas:** espelham os esquemas Zod.
 - **Dataset:** o conteúdo é público de qualquer forma; token de leitura não é necessário.
-- **Sem conta:** o titular edita `src/conteudo/` à mão ou por uma sessão de agente, e nada mais muda.
+- **Sem conta:** o titular edita `src/conteudo/` à mão, e nada mais muda.
 - **Falha:** com Sanity fora do ar, o site continua, e os builds usam os arquivos do repositório.
 
 ## Build
@@ -208,7 +206,7 @@ Editar no Studio → script de download → Zod + verificação → src/conteudo
 | 6 | `pos-build` | CSP por rota, SBOM, gzip estático |
 | 7 | `verificar-conteudo` (saída) | Examina HTML, JS, JSON e PDF gerados |
 
-**Gerados à parte e versionados no Git:** atlas, certificados, imagens OG e PDF. Dependem de Playwright, então rodam em `pnpm assets` na máquina de desenvolvimento, e o build do servidor não os recria. O CI confere a data do conteúdo para avisar se ficaram defasados.
+**Gerados à parte e versionados no Git:** atlas (`pnpm atlas`), trilhas (`pnpm trilhas`), certificados (`pnpm certificados`), imagem de compartilhamento e ícones (`pnpm og`) e PDF. Alguns dependem de Playwright, então rodam na máquina de desenvolvimento, e o build do servidor não os recria.
 
 ## Verificação de conteúdo
 
@@ -220,37 +218,50 @@ Editar no Studio → script de download → Zod + verificação → src/conteudo
 - O telefone em qualquer formato, com e sem DDD, pontuação ou prefixo 55. O verificador lê o número de `WHATSAPP_NUMERO`, para o próprio script não o expor.
 - Nomes de projetos, com `obrasAtivas: false`.
 - PDF em `public/` que não seja o currículo.
+- A cidade do titular e menções às ferramentas usadas para escrever o código, que ficam fora do site.
+- O IP do servidor, quando `IP_SERVIDOR` está no `.env.local`. O IP nunca fica no código.
 - Datas ou credenciais que divirjam de `../curriculo`, quando essa pasta existe na máquina.
 
 Tem testes próprios, com casos que precisam falhar.
 
 ## Desempenho
 
-Plano da skill React Best Practices aplicado a este projeto.
-
-- **HTML estático primeiro:** Server Components em tudo que puder ser estático. Componentes de cliente são ilhas: navegação, filtros, terminal, trocador e Canvas.
-- **Chunks por rota e recurso:** `next/dynamic` com `ssr: false` para cena, terminal, CTF, som, Divisor e Lottie.
-- **Sem barrel files:** importações diretas de Lucide, Drei e GSAP. `optimizePackageImports` onde couber.
-- **Pré-carga por intenção:** o terminal baixa ao passar o mouse ou focar o botão.
-- **Fontes:** subconjunto e `preload` só das duas essenciais.
-- **Imagens:** dimensões explícitas, `loading="lazy"` abaixo da dobra.
-- **Listas longas:** certificados são poucos, então não há virtualização. `content-visibility: auto` nas seções.
+- **HTML estático primeiro:** Server Components em tudo que puder ser estático. Componentes de cliente são ilhas: barra, filtros, contato, terminal e Canvas.
+- **Chunks por recurso:** `next/dynamic` com `ssr: false` para cena, movimento (GSAP, ScrollTrigger e Lenis), dados da moldura, menus (Base UI, Motion e Lucide) e terminal. Cena, movimento e moldura só entram com o navegador ocioso.
+- **Nada pesado no módulo inicial:** a barra rola para o topo por `src/movimento/rolagem.ts`, que não importa Lenis nem GSAP; o Lenis se registra ali quando o relógio liga.
+- **Ícones próprios** na barra e no contato. Lucide fica nos menus, carregados depois.
+- **Fontes:** subconjunto WOFF2; só a Mona Sans tem `preload`.
 - **Estado de rolagem:** refs, para evitar re-render por quadro.
+
+### Desempenho de carregamento
+
+Medido em `out/index.html`, somando o gzip dos scripts que um navegador moderno baixa (os `noModule`, de polyfill, ficam de fora):
+
+| Data | JS inicial | O que mudou |
+|---|---|---|
+| 07/11/2026, antes | 193 KB | GSAP, ScrollTrigger e Lenis entravam pela moldura e pela régua |
+| 07/11/2026, depois | 142 KB | Régua removida, dados da moldura adiados, rolagem sem Lenis no módulo inicial, ícones próprios |
+
+Meta da R8: 130 KB. O que resta é quase todo React, React DOM e o runtime do Next.
+
+**Cache:** ver [10](10-deploy-e-operacao.md#nginx-do-contêiner). Arquivos com hash ficam um ano; HTML revalida a cada visita.
 
 ## Service worker e PWA
 
-Service worker próprio, gerado no pós-build a partir de `scripts/sw-modelo.js`, com a lista de arquivos com hash e a versão do build, sem dependência extra. O manifesto e `icone.svg` saem do mesmo passo.
+Service worker próprio, gerado no pós-build a partir de `scripts/sw-modelo.js`, com a versão do build, sem dependência extra. É registrado depois do `load`, com o navegador ocioso. O **pré-cache leva só a primeira tela**: as páginas `/`, `/cv` e `/offline`, `tema.js` e os scripts, CSS e fontes que o HTML delas referencia. Three.js, a cena e o resto entram no cache quando a visita os pede. Antes, a instalação baixava todo o `_next/static` (3,3 MB) logo na primeira visita.
 
 | Recurso | Estratégia |
 |---|---|
-| `/_next/static/*`, `/gl/*`, fontes | Cache-first |
+| `/_next/static/*`, `/gl/*`, fontes | Cache-first, guardados quando pedidos |
 | HTML | Network-first, com fallback para `/offline` |
 | `/cv` | Pré-carregado, disponível sem rede |
 | Proxies de analytics e erros | Nunca em cache |
 
 **Trava de segurança:** um `sw.js` novo, sem cache, é sempre possível de publicar, com `skipWaiting`, para desfazer um service worker defeituoso. O próprio `sw.js` é servido com `no-cache`.
 
-`manifest.webmanifest` com nome, cores do tema e ícones gerados.
+`manifest.webmanifest`, gerado no pós-build, com nome, cor do tema Rubro e os ícones de `public/` (SVG, 192 e 512 px). Os ícones e a imagem de compartilhamento saem de `pnpm og`.
+
+O cache se chama `sinal-<versão>`. Na ativação, o service worker apaga as versões anteriores, inclusive as da primeira versão do site (`nave-`).
 
 ## Analytics e erros (para o final)
 
@@ -260,16 +271,13 @@ Service worker próprio, gerado no pós-build a partir de `scripts/sw-modelo.js`
 |---|---|
 | `NEXT_PUBLIC_POSTHOG_KEY` | Liga PostHog pelo caminho `/_v/` |
 | `NEXT_PUBLIC_SENTRY_DSN` | Liga Sentry com `tunnel: "/_e"` |
-| `SITE_URL` | Canonical, sitemap e OG. Definida no build |
+| `SITE_URL` | Canonical, sitemap e OG. Definida no build; sem ela, vale `https://warley.ferzion.com.br` |
+| `IP_SERVIDOR` | Opcional, só no `.env.local`: o verificador confere que o IP não aparece na saída |
 | `WHATSAPP_NUMERO` | Número da revelação ao clicar. Fica só no `.env`. Sem ela, o botão não aparece |
 
-**PostHog:** `persistence: "memory"`, `disable_session_recording: true`, `autocapture: false`, IP descartado no projeto. A opção `cookieless_mode` deve ser conferida na documentação da versão instalada. **Eventos:** `cv_aberto`, `pdf_baixado`, `contato_clicado`, `whatsapp_revelado`, `tema_trocado`, `flag_encontrada`, `divisor_concluido`.
+**PostHog:** `persistence: "memory"`, `disable_session_recording: true`, `autocapture: false`, IP descartado no projeto. A opção `cookieless_mode` deve ser conferida na documentação da versão instalada. **Eventos:** `cv_aberto`, `pdf_baixado`, `contato_clicado`, `whatsapp_revelado`, `tema_trocado`, `flag_encontrada`.
 
 **Sentry:** `sendDefaultPii: false`, `tracesSampleRate: 0`, `replaysSessionSampleRate: 0`. Carregado depois de ocioso, sem entrar no bundle inicial.
-
-## Storybook
-
-Só em desenvolvimento e fora do `out/`. Cobre componentes de `componentes/ui`, moldura, elementos gráficos e seções em versão estática. É usado para regressão visual em Playwright. O `/sistema` público usa os tokens reais do site, e a dependência não vai para produção.
 
 ## Internacionalização
 

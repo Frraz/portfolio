@@ -35,7 +35,7 @@ export function Certificados({ c }: { c: ConteudoSite }) {
                 <td className="dado" data-rotulo={k.colunas.carga}>{cert.carga ?? ""}</td>
                 <td data-rotulo={k.colunas.validacao}>
                   {cert.validacaoUrl ? (
-                    <a className="link-ouro" href={cert.validacaoUrl} target="_blank" rel="noopener noreferrer">
+                    <a className="link-destaque" href={cert.validacaoUrl} target="_blank" rel="noopener noreferrer">
                       {k.validar}
                     </a>
                   ) : (

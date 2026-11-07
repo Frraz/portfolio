@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Copy, MessageCircle } from "lucide-react";
+import { IconeCopiar, IconeMensagem } from "./Icones";
 
 type Textos = { copiar: string; copiado: string; copiarFalha: string; mostrarWhatsapp: string };
 
@@ -18,7 +18,7 @@ export function CopiarEmail({ email, textos }: { email: string; textos: Textos }
   return (
     <>
       <button type="button" className="botao-quieto sem-js-oculto" onClick={copiar}>
-        <Copy size={16} strokeWidth={1.5} aria-hidden="true" />
+        <IconeCopiar />
         {textos.copiar}
       </button>
       <span aria-live="polite" className="legenda">
@@ -56,7 +56,7 @@ export function RevelarWhatsapp({ texto }: { texto: string }) {
   if (numero) {
     return (
       <a ref={link} className="botao-quieto" href={`https://wa.me/${numero.cru}`} target="_blank" rel="noopener noreferrer" aria-live="polite">
-        <MessageCircle size={16} strokeWidth={1.5} aria-hidden="true" />
+        <IconeMensagem />
         <span ref={texto_} className="dado" style={{ color: "inherit" }}>
           {numero.formatado}
         </span>
@@ -65,7 +65,7 @@ export function RevelarWhatsapp({ texto }: { texto: string }) {
   }
   return (
     <button type="button" className="botao-quieto sem-js-oculto" data-magnetico onClick={revelar}>
-      <MessageCircle size={16} strokeWidth={1.5} aria-hidden="true" />
+      <IconeMensagem />
       {texto}
     </button>
   );

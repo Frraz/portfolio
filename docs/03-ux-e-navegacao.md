@@ -1,6 +1,6 @@
 # 03 — UX e navegação
 
-Como o visitante encontra o que precisa, em qualquer aparelho e condição. Modo da skill Impeccable para a página inicial: Experience. `/cv` e `/seguranca` usam modo Read.
+Como o visitante encontra o que precisa, em qualquer aparelho e condição. A página inicial é uma experiência; `/cv` e `/seguranca` são páginas de leitura.
 
 ## Mapa do site
 
@@ -22,7 +22,7 @@ Reservadas para o futuro: `/obras` e `/obras/[slug]`, descritas em [13-projetos-
 
 ## Seções da página inicial
 
-A ordem vem dos dados, nunca escrita à mão. Ela aparece só na régua da moldura, e não como número ao lado do título ([04](04-direcao-criativa.md#revisão-contra-marcas-de-ia)). Os nomes poéticos de margem saíram com o redesign ([decisão 62](decisoes.md)).
+A ordem vem dos dados, nunca escrita à mão. Ela aparece na ordem da barra e do Índice, e não como número ao lado do título ([04](04-direcao-criativa.md#revisão-contra-padrões-genéricos)). Os nomes poéticos de margem saíram com o redesign ([decisão 62](decisoes.md)).
 
 | Rótulo | Forma da seção | Âncora |
 |---|---|---|
@@ -38,11 +38,11 @@ A ordem vem dos dados, nunca escrita à mão. Ela aparece só na régua da moldu
 
 ## Navegação
 
-**Barra fixa no desktop, em vidro líquido** ([05](05-design-system.md#vidro-só-na-navegação)): nome à esquerda; rótulos das seções ao centro, com a atual em `sinal`; `Currículo`, `Tema`, `Pausar chuva` e `Terminal` à direita. Fica sem fundo durante o hero e ganha `superficie` depois dele. Fica dentro da moldura, abaixo da faixa do identificador e da hora.
+**Barra fixa no desktop, em vidro líquido** ([05](05-design-system.md#vidro-só-na-navegação)): nome à esquerda; rótulos das seções ao centro, com a lente de vidro na atual; à direita, só três ações em ícone: ligar ou pausar a chuva (na página inicial), `Terminal` e `Tema`. Fica no topo da tela, sobre um degradê do fundo. **Clicar no nome** leva à página inicial; já nela, rola até o topo e limpa o hash da URL ([decisão 97](decisoes.md)).
 
-**Telas abaixo de 1180 px** (a barra cabe a partir daí, conferido em 1180, 1200, 1280 e 1440): nome, `Currículo` e `Índice`. O `Índice` abre uma tela inteira com a lista das seções, os temas, a chuva, o som, o registro da sessão e o terminal.
+**Telas abaixo de 1180 px** (a barra cabe a partir daí, conferido em 1180, 1200, 1280 e 1440): nome e `Índice`. O `Índice` abre uma tela inteira com a lista das seções, os temas, a chuva e o terminal. O currículo continua no hero ("Ver currículo"), no rodapé e no comando `cv` do terminal.
 
-**Moldura e régua:** a [moldura de instrumento](05-design-system.md#moldura-de-instrumento-hud) mostra dados reais nos cantos. A régua na borda direita é o indicador de progresso: desce com a rolagem, e clicar em um traço de seção leva até ela. Duplica uma navegação real.
+**Moldura e rolagem:** a [moldura de instrumento](05-design-system.md#moldura-de-instrumento-hud) marca os quatro cantos e mostra dados reais nos dois de baixo. A barra de rolagem é a do navegador, fina e em tinta de baixa opacidade, sem disputar atenção ([decisão 99](decisoes.md)).
 
 **Atalhos de teclado**
 
@@ -76,7 +76,7 @@ Sem sequestro de rolagem. Lenis suaviza, mas a roda, o trackpad, o teclado e o t
 ### Júri, 5 a 10 minutos
 
 1. Rola a experiência inteira no desktop.
-2. Troca de tema, liga o som, abre o terminal e o registro da sessão.
+2. Troca de tema, pausa a chuva, abre o terminal e o registro da sessão.
 3. Abre no celular.
 4. Vê `/sistema` e `/seguranca`.
 
@@ -106,7 +106,7 @@ Sem tela de carregamento. Se a cena demorar, o pôster continua, e o visitante j
 |---|---|
 | ≥ 1280 px | Moldura completa nos quatro cantos, cena completa, forma da seção à direita |
 | 768 a 1279 px | Moldura completa; forma da seção abaixo do texto; fixações mais curtas |
-| < 768 px | Coluna única; moldura com dois cantos; `Índice`; cena de nível baixo por padrão; traceroute vertical; degraus em coluna única; formas da chuva só no hero; hexdump em faixa |
+| < 768 px | Coluna única; moldura só com as marcas em L; `Índice`; cena de nível baixo por padrão; traceroute vertical; degraus em coluna única; formas da chuva só no hero; hexdump em faixa |
 | Paisagem baixa | Sem seções fixadas |
 | Toque | Efeitos de hover têm alternativa e nunca condicionam a leitura |
 
@@ -122,7 +122,6 @@ Testar em 360, 390, 768, 1024, 1440 e 2560 px, além de zoom de 200%.
 | Copiar e-mail | Sucesso | `E-mail copiado`, com `aria-live="polite"` |
 | Copiar e-mail | Falha | `Não foi possível copiar. O e-mail é warley.ferraz.wf@gmail.com.` |
 | Cena | Contexto WebGL perdido | Volta ao pôster e tenta recriar uma vez |
-| Som | Áudio bloqueado | Botão desliga e mostra `Som indisponível neste navegador` |
 | Terminal | Sem JavaScript | Oculto, sem atalho exibido |
 | PDF | Baixar | Link direto, sem aviso |
 
@@ -132,11 +131,10 @@ Detalhes de teste em [11-qualidade.md](11-qualidade.md#acessibilidade).
 
 - HTML semântico: um `h1` por rota, ordem correta de títulos, `main`, `nav`, listas reais.
 - Tudo o que o WebGL mostra existe em texto.
-- A moldura, a régua e os dados decorativos não atrapalham: o que duplica informação fica com `aria-hidden`, e o rótulo claro é o nome acessível.
+- A moldura e os dados decorativos não atrapalham: o que duplica informação fica com `aria-hidden`, e o rótulo claro é o nome acessível.
 - `lang="pt-BR"`; termos em inglês com `lang="en"` quando forem frases.
 - O nome e os títulos ficam sempre em texto real, inclusive durante a decodificação e a mudança de largura, nunca em imagem ou só no canvas.
 - Animações automáticas com mais de 5 segundos têm controle de pausa: a chuva tem botão `Pausar chuva` na barra.
-- Som nunca começa sozinho.
 
 ## Conteúdo sem depender da aparência
 
@@ -146,10 +144,9 @@ A página continua compreensível se o CSS falhar. Teste obrigatório: desligar 
 
 | Dado | Onde | Padrão |
 |---|---|---|
-| Tema | `localStorage: tema` | Rubro, ou Claro se `prefers-color-scheme: light`. Fósforo só depois de liberado |
-| Som | `localStorage: som` | Desligado |
+| Tema | `localStorage: tema` | Rubro, ou Claro se `prefers-color-scheme: light`. Fósforo só com os nove selos (`public/tema.js` lê a lista de selos) |
 | Chuva pausada | `localStorage: chuva` | Ligada, salvo movimento reduzido |
-| Flags do CTF e Fósforo liberado | `localStorage: flags` | Vazio |
+| Selos do CTF (liberam o Fósforo) | `localStorage: selos` | Vazio |
 | Registro da sessão | Memória da aba | Vazio. Some ao fechar |
 | Filtros | URL | Sem filtro |
 | Idioma | URL | pt-BR |

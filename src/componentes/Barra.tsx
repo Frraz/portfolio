@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import dynamic from "next/dynamic";
-import { Pause, Play } from "lucide-react";
+import { registrar } from "@/movimento/registro";
+import { rolarPara } from "@/movimento/rolagem";
+import { IconePausar, IconeTocar } from "./Icones";
 import { SeloToast } from "./SeloToast";
 
 type Secao = { id: string; rotulo: string; numero: number };
@@ -22,7 +24,6 @@ export function Barra({ nome, secoes, ui }: Props) {
   const [pausada, setPausada] = useState(false);
   const [terminal, setTerminal] = useState(false);
   const [terminalUsado, setTerminalUsado] = useState(false);
-  const [somLigado, setSomLigado] = useState(false);
   const prefixo = naInicial ? "" : "/";
 
   const abrirTerminal = () => {
@@ -44,17 +45,25 @@ export function Barra({ nome, secoes, ui }: Props) {
       }
     };
     addEventListener("keydown", tecla);
-    const aoSom = (e: Event) => setSomLigado((e as CustomEvent<boolean>).detail);
-    addEventListener("nave:som", aoSom);
-    // Service worker: só na compilação de produção. Sem ele, o site funciona igual.
+    // Passos reais de carregamento desta visita, para o boot log e o registro da sessão.
+    const nav = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
+    if (nav) registrar("info", ui.bootHtml, nav.responseEnd);
+    document.fonts.ready.then(() => registrar("info", ui.bootFontes));
+    // Service worker: só na compilação de produção, depois do carregamento e com o navegador ocioso.
+    // Sem ele, o site funciona igual.
+    const registrarSw = () => {
+      const ocioso = window.requestIdleCallback ?? ((f: () => void) => window.setTimeout(f, 1500));
+      ocioso(() => navigator.serviceWorker.register("/sw.js").catch(() => {}));
+    };
     if (process.env.NODE_ENV === "production" && "serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/sw.js").catch(() => {});
+      if (document.readyState === "complete") registrarSw();
+      else addEventListener("load", registrarSw, { once: true });
     }
     return () => {
       removeEventListener("keydown", tecla);
-      removeEventListener("nave:som", aoSom);
+      removeEventListener("load", registrarSw);
     };
-  }, []);
+  }, [ui]);
 
   useEffect(() => {
     try {
@@ -101,17 +110,20 @@ export function Barra({ nome, secoes, ui }: Props) {
     try {
       localStorage.setItem("chuva", nova ? "pausada" : "ligada");
     } catch {}
-    dispatchEvent(new CustomEvent("nave:chuva", { detail: nova }));
+    dispatchEvent(new CustomEvent("sinal:chuva", { detail: nova }));
   };
 
-  const alternarSomBarra = async () => {
-    const { alternarSom } = await import("@/som/controle");
-    await alternarSom(!somLigado);
+  // Na página inicial, o nome volta ao topo. Um link para a própria rota não rola no Next (vira atualização).
+  const aoNome = (e: MouseEvent<HTMLAnchorElement>) => {
+    if (!naInicial || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+    e.preventDefault();
+    if (location.hash) history.replaceState(history.state, "", location.pathname + location.search);
+    rolarPara(0);
   };
 
   return (
     <header className="barra sem-impressao">
-      <Link transitionTypes={["rota"]} href="/" className="barra-nome">
+      <Link transitionTypes={["rota"]} href="/" className="barra-nome" onClick={aoNome}>
         {nome}
       </Link>
       <nav aria-label={ui.navegacao}>
@@ -127,16 +139,13 @@ export function Barra({ nome, secoes, ui }: Props) {
             ))}
         </ul>
       </nav>
-      <div className="barra-acoes vidro">
-        <Link transitionTypes={["rota"]} className="botao-quieto" href="/cv">
-          {ui.curriculo}
-        </Link>
+      <div className="barra-acoes vidro sem-js-oculto">
         {naInicial ? (
           <button type="button" className="botao-quieto sem-js-oculto so-largo" aria-pressed={pausada} aria-label={pausada ? ui.ligarChuva : ui.pausarChuva} title={pausada ? ui.ligarChuva : ui.pausarChuva} onClick={() => alternarChuva()}>
-            {pausada ? <Play size={16} strokeWidth={1.5} aria-hidden="true" /> : <Pause size={16} strokeWidth={1.5} aria-hidden="true" />}
+            {pausada ? <IconeTocar /> : <IconePausar />}
           </button>
         ) : null}
-        <BarraMenus secoes={secoes} ui={ui} prefixo={prefixo} naInicial={naInicial} pausada={pausada} alternarChuva={() => alternarChuva()} somLigado={somLigado} alternarSomBarra={alternarSomBarra} abrirTerminal={abrirTerminal} />
+        <BarraMenus secoes={secoes} ui={ui} prefixo={prefixo} naInicial={naInicial} pausada={pausada} alternarChuva={() => alternarChuva()} abrirTerminal={abrirTerminal} />
       </div>
       {terminalUsado ? <Terminal aberto={terminal} aoFechar={() => setTerminal(false)} alternarChuva={alternarChuva} /> : null}
       <SeloToast />

@@ -1,6 +1,6 @@
 # 01 — Veracidade e fontes
 
-Regras para qualquer texto público do site, incluindo terminal, CTF, metadados, imagens de compartilhamento e PDF. Elas herdam as regras de `../curriculo/CLAUDE.md`.
+Regras para qualquer texto público do site, incluindo terminal, CTF, metadados, imagens de compartilhamento e PDF. Elas herdam as regras da base do currículo, em `../curriculo`.
 
 ## Regra principal
 
