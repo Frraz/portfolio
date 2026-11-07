@@ -217,7 +217,6 @@
   }
   .sobre-ficha .hexdump {
     font-size: 0.6875rem;
-    opacity: 0.75;
   }
   .sobre-blocos {
     display: grid;
@@ -758,7 +757,6 @@
     font-size: 0.625rem;
     letter-spacing: 0.4em;
     color: var(--tinta-2);
-    opacity: 0.45;
   }
   .rodape-grade {
     display: grid;

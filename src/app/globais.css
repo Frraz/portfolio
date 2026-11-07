@@ -313,7 +313,7 @@
     inset: calc(var(--faixa) * -1) 0 -1.5rem 0;
     z-index: -1;
     pointer-events: none;
-    background: linear-gradient(to bottom, var(--fundo) 35%, color-mix(in oklch, var(--fundo) 90%, transparent) 62%, transparent);
+    background: linear-gradient(to bottom, var(--fundo) 55%, color-mix(in oklch, var(--fundo) 80%, transparent) 75%, transparent);
     transition: opacity var(--dur-ui) ease;
   }
   .barra-nome {
@@ -381,6 +381,16 @@
     gap: 0.25rem;
     padding: 0 0.3rem;
     min-height: 2.75rem;
+  }
+  /* Em 360 px, nome e ações só cabem juntos com menos respiro (o alvo de toque continua com 44 px de altura). */
+  @media (max-width: 400px) {
+    .barra {
+      gap: 0.5rem;
+      padding-right: 0.75rem;
+    }
+    .barra-acoes .botao-quieto {
+      padding-inline: 0.5rem;
+    }
   }
 
   .botao {
