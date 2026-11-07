@@ -1,6 +1,16 @@
 # Pendências
 
-O que ainda depende do Warley. Atualizada em 05/11/2026, depois das respostas dele.
+O que ainda depende do Warley. Atualizada em 06/11/2026, com o redesign.
+
+## Redesign (06/11/2026)
+
+| Item | Quando | O que fazer |
+|---|---|---|
+| **Aprovar a direção** | Agora, fim da R0 | Ler [04](04-direcao-criativa.md) e [05](05-design-system.md) e aprovar ou pedir ajustes antes do código |
+| **Nome do conceito** | Agora | "Sinal" é provisório. Confirmar ou sugerir outro. Aparece no README, em `/sistema` e no `package.json` |
+| **Ver `/sistema`** | Fim da R1 | Rodar localmente e avaliar cores, fontes e moldura |
+| **Aprovar textos novos** | R7 | Trechos marcados "(a aprovar)" em [02](02-conteudo.md) |
+| **"Interesse desde muito cedo"** | Quando quiser | Você disse que tecnologia foi seu primeiro interesse. Isso não está em `../curriculo`. Se quiser no site, registre lá primeiro, com o que puder (ano, curso de informática de 2019) |
 
 ## Para o lançamento (o titular faz, no momento do deploy)
 

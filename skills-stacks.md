@@ -38,18 +38,6 @@ A intenção é combinar:
 
 As recomendações abaixo formam um fluxo complementar: concepção visual, sistema de design, refinamento, animações, 3D, comunicação, SEO e qualidade de engenharia.
 
-| # | Skill | Especialidade | Link |
-|---|---|---|---|
-| 1 | **Frontend Design — Anthropic** | Direção artística e frontend visual | [GitHub](https://github.com/anthropics/skills/tree/main/skills/frontend-design) |
-| 2 | **UI UX Pro Max — NextLevelBuilder** | UI/UX, design systems, paletas, tipografia | [GitHub](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) |
-| 3 | **Impeccable — Paul Bakaus** | Refinamento e auditoria da interface | [GitHub](https://github.com/pbakaus/impeccable) |
-| 4 | **Animate — Emil Kowalski** | Microinterações e motion design | [Skill](https://github.com/emilkowalski/skills/blob/main/skills/animate/SKILL.md) |
-| 5 | **GSAP ScrollTrigger — Claude Design Skillstack** | Scrollytelling e animações cinematográficas | [Repositório](https://github.com/freshtechbro/claudedesignskills) |
-| 6 | **React Three Fiber — Claude Design Skillstack** | 3D interativo, Three.js e WebGL | [Marketplace](https://github.com/freshtechbro/claudedesignskills/blob/main/MARKETPLACE.md) |
-| 7 | **Copywriting — Corey Haines** | Títulos, propostas de valor e conversão | [GitHub](https://github.com/coreyhaines31/marketingskills/tree/main/skills/copywriting) |
-| 8 | **SEO Audit — Corey Haines** | Auditoria de SEO técnico e conteúdo | [GitHub](https://github.com/coreyhaines31/marketingskills/tree/main/skills/seo-audit) |
-| 9 | **React Best Practices — Vercel** | Arquitetura e performance React/Next.js | [Skills.sh](https://www.skills.sh/vercel-labs/agent-skills/vercel-react-best-practices) |
-| 10 | **Web Design Guidelines — Vercel** | UX, acessibilidade e boas práticas de UI | [Skills.sh](https://www.skills.sh/vercel-labs/agent-skills/web-design-guidelines) |
 
 ### 2.1 Frontend Design — Anthropic
 

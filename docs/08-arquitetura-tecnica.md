@@ -40,9 +40,9 @@ Como o site é construído. Versões consultadas no npm em 05/11/2026. Na instal
 | React 3D | `@react-three/fiber` | 9.8.2 | `frameloop="never"` |
 | Utilitários | `@react-three/drei` | 10.7.9 | Importações pontuais |
 | Pós-processamento | `@react-three/postprocessing`, `postprocessing` | 3.2.2, 6.39.6 | Só WebGL |
-| Assets 3D | Blender, `@gltf-transform/cli`, `gltfjsx` | 4.5.1, 6.5.3 | Só em desenvolvimento |
 | Vetores animados | `lottie-web` (build `lottie_light`) | 5.13.0 | MIT. Sem `eval` nem WASM. JSON gerado por script |
 | Ícones | `lucide-react` + SVGs próprios | 1.68.0 | Importações pontuais |
+| Fontes | `@fontsource-variable/mona-sans`, `@fontsource-variable/martian-mono` | 5.3.0 | Só em desenvolvimento: `copiar-fontes.ts` gera o subconjunto WOFF2 auto-hospedado. OFL 1.1. Substituem Grenze Gotisch, Literata, Jacquard 24 e Monomakh ([decisão 60](decisoes.md)) |
 | CMS (**para o final**) | `sanity`, `@sanity/client` | 6.22.0, 8.14.1 | Não instalado. Decisão do titular |
 | Analytics (**para o final**) | `posthog-js` | 1.446.0 | Não instalado. Decisão do titular |
 | Erros (**para o final**) | `@sentry/browser` | 11.10.0 | Não instalado. Decisão do titular |
@@ -68,23 +68,25 @@ portfolio/
 │   │   ├── globais.css, fontes.ts
 │   ├── conteudo/
 │   │   ├── esquema.ts       # Zod
+│   │   ├── derivados.ts     # Hexdump, fingerprints, tempo decorrido, calculados no build
 │   │   ├── pt-BR.ts         # Fonte da verdade, idioma principal
 │   │   ├── en.ts, es.ts, de.ts, fr.ts
 │   │   ├── gerado/          # Certificados, gerados do catálogo
 │   │   └── index.ts         # Leitura por idioma
 │   ├── secoes/              # Inicio, Sobre, Agora, ..., Contato, Obras
-│   ├── componentes/         # ui/ (Base UI), ornamentos/
+│   ├── componentes/         # ui/ (Base UI), moldura/ (HUD, régua, boot log), graficos/ (trilhas, hexdump)
 │   ├── gl/
 │   │   ├── Palco.tsx, CarregadorCena.tsx, Experiencia.tsx
-│   │   ├── chuva/           # Shader da chuva e da rosácea
-│   │   ├── nave/            # Nave, lancetas, relicário, atmosfera, caminho da câmera
+│   │   ├── chuva/           # shader.ts, mascara.ts (travamento), atlas-info.ts
+│   │   ├── forma/           # Forma.tsx (alvo 3D lido como máscara) e partilha.ts (estado entre a chuva e a forma)
+│   │   ├── caminho.ts       # Caminho da câmera por seção
 │   │   ├── trilha.ts        # Rolagem lida a cada quadro
 │   │   └── qualidade.ts     # Níveis e controlador
 │   ├── movimento/           # Relógio, storyboard, estado compartilhado, easter eggs
 │   ├── terminal/, ctf/, som/
 │   └── temas/               # Tokens e os temas
 ├── public/
-│   ├── gl/                  # Atlas, modelos e gl/selos/ (Lottie)
+│   ├── gl/                  # Atlas e gl/flags/ (Lottie)
 │   ├── fontes/, og/
 │   ├── curriculo-warley-ferraz-almeida.pdf
 │   └── .well-known/security.txt
@@ -92,10 +94,9 @@ portfolio/
 │   ├── verificar-conteudo.ts, verificar-contraste.ts
 │   ├── gerar-temas.ts, gerar-atlas.ts, gerar-certificados.py, copiar-fontes.ts
 │   ├── servir.ts, capturas.ts   # Servidor que imita o nginx; capturas para revisão
-│   ├── gerar-selos.ts, gerar-lottie.ts, sw-modelo.js, cena-fotos.ts
+│   ├── gerar-flags.ts, gerar-lottie.ts, gerar-trilhas.ts, gerar-nome3d.ts, sw-modelo.js, cena-fotos.ts
 │   ├── gerar-og.ts, gerar-pdf.ts  # Fase 7
 │   ├── pos-build.ts         # CSP, security.txt, robots, sitemap, SBOM, gzip
-│   └── blender/             # comum.py, nave.py, lancetas.py, relicario.py, construir.sh
 ├── deploy/
 │   ├── Dockerfile, docker-compose.prod.yml
 │   ├── nginx-container.conf, nginx-host.conf
@@ -207,7 +208,7 @@ Editar no Studio → script de download → Zod + verificação → src/conteudo
 | 6 | `pos-build` | CSP por rota, SBOM, gzip estático |
 | 7 | `verificar-conteudo` (saída) | Examina HTML, JS, JSON e PDF gerados |
 
-**Gerados à parte e versionados no Git:** atlas, certificados, GLB, imagens OG e PDF. Dependem de Blender e Playwright, então rodam em `pnpm assets` na máquina de desenvolvimento, e o build do servidor não os recria. O CI confere a data do conteúdo para avisar se ficaram defasados.
+**Gerados à parte e versionados no Git:** atlas, certificados, imagens OG e PDF. Dependem de Playwright, então rodam em `pnpm assets` na máquina de desenvolvimento, e o build do servidor não os recria. O CI confere a data do conteúdo para avisar se ficaram defasados.
 
 ## Verificação de conteúdo
 
@@ -262,13 +263,13 @@ Service worker próprio, gerado no pós-build a partir de `scripts/sw-modelo.js`
 | `SITE_URL` | Canonical, sitemap e OG. Definida no build |
 | `WHATSAPP_NUMERO` | Número da revelação ao clicar. Fica só no `.env`. Sem ela, o botão não aparece |
 
-**PostHog:** `persistence: "memory"`, `disable_session_recording: true`, `autocapture: false`, IP descartado no projeto. A opção `cookieless_mode` deve ser conferida na documentação da versão instalada. **Eventos:** `cv_aberto`, `pdf_baixado`, `contato_clicado`, `whatsapp_revelado`, `tema_trocado`, `selo_encontrado`, `divisor_concluido`.
+**PostHog:** `persistence: "memory"`, `disable_session_recording: true`, `autocapture: false`, IP descartado no projeto. A opção `cookieless_mode` deve ser conferida na documentação da versão instalada. **Eventos:** `cv_aberto`, `pdf_baixado`, `contato_clicado`, `whatsapp_revelado`, `tema_trocado`, `flag_encontrada`, `divisor_concluido`.
 
 **Sentry:** `sendDefaultPii: false`, `tracesSampleRate: 0`, `replaysSessionSampleRate: 0`. Carregado depois de ocioso, sem entrar no bundle inicial.
 
 ## Storybook
 
-Só em desenvolvimento e fora do `out/`. Cobre componentes de `componentes/ui`, ornamentos e seções em versão estática. É usado para regressão visual em Playwright. O `/sistema` público usa os tokens reais do site, e a dependência não vai para produção.
+Só em desenvolvimento e fora do `out/`. Cobre componentes de `componentes/ui`, moldura, elementos gráficos e seções em versão estática. É usado para regressão visual em Playwright. O `/sistema` público usa os tokens reais do site, e a dependência não vai para produção.
 
 ## Internacionalização
 

@@ -17,7 +17,7 @@ const cabecalhos = (arquivo: string) => ({
   "x-selo": SELOS[3],
 });
 const PORTA = Number(process.env.PORTA_TESTE ?? 3000);
-const TIPOS: Record<string, string> = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css", ".json": "application/json", ".png": "image/png", ".woff2": "font/woff2", ".txt": "text/plain; charset=utf-8", ".xml": "application/xml", ".svg": "image/svg+xml", ".pdf": "application/pdf", ".avif": "image/avif", ".glb": "model/gltf-binary", ".webmanifest": "application/manifest+json" };
+const TIPOS: Record<string, string> = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css", ".json": "application/json", ".png": "image/png", ".woff2": "font/woff2", ".txt": "text/plain; charset=utf-8", ".xml": "application/xml", ".svg": "image/svg+xml", ".pdf": "application/pdf", ".avif": "image/avif", ".webmanifest": "application/manifest+json" };
 
 createServer((req, res) => {
   const caminho = normalize(decodeURIComponent((req.url ?? "/").split("?")[0]));

@@ -94,7 +94,7 @@ export async function executar(entrada: string, ctx: Contexto): Promise<Resposta
       return (await ctx.temPdf()) ? { linhas: [trocar(k.abrindo, ctx.arquivoPdf)], efeito: { tipo: "baixar", arquivo: ctx.arquivoPdf } } : { linhas: [k.semPdf] };
     case "tema":
       if (!arg) return { linhas: [trocar(k.temas, ctx.temas.join(", "))] };
-      if (arg === "selado" && !ctx.temas.includes("selado")) return { linhas: [k.temaBloqueado] };
+      if (arg === "fosforo" && !ctx.temas.includes("fosforo")) return { linhas: [k.temaBloqueado] };
       if (!ctx.temas.includes(arg)) return { linhas: [trocar(k.temaInvalido, arg)] };
       return { linhas: [trocar(k.temaTrocado, arg)], efeito: { tipo: "tema", id: arg } };
     case "chuva":

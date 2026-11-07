@@ -58,12 +58,14 @@ A ordem é a mesma do `skills-stacks.md`: a identidade definida para o projeto v
 
 | Conflito | Decisão |
 |---|---|
-| Impeccable e Frontend Design rejeitam números de seção | Mantidos, com função narrativa, na margem |
-| `taste-skill` proíbe etiquetas e ornamentos | Etiquetas eliminadas. Ornamentos são parte do mundo gótico pedido pelo titular |
-| Frontend Design e Impeccable alertam contra preto com verde neon | Mantido por pedido expresso, com o verde tratado como luz e o ouro como acento de interface |
-| Impeccable rejeita vidro decorativo | Vidro só como painel de vitral |
+| `taste-skill` proíbe monoespaçada fora de código, réguas, cruzes de mira, grade, linhas finas e brilho | O pedido do titular por elementos de tecnologia vem primeiro. Esses elementos só entram quando **medem ou mostram um dado real** ([princípio](04-direcao-criativa.md#princípio-inegociável-todo-enfeite-técnico-mostra-um-dado-real)), como permite a Frontend Design ("visual structure is information"). Mono só em dado real. Brilho só em luz emitida pela cena. Sem grade decorativa ([decisão 57](decisoes.md)) |
+| `taste-skill` proíbe numeração de índice | Sem número ao lado do título. A posição vive na régua. Só o traceroute numera, porque os saltos são uma sequência real |
+| Frontend Design aponta preto com um acento vermelho como marca de IA | O vermelho é pedido do titular. Vira uma rampa tonal inteira de luz, e não um acento isolado ([04](04-direcao-criativa.md#luz-vermelha-de-operação)) |
+| `taste-skill` proíbe vidro e desfoque | Aceito, com uma exceção pedida pelo titular: vidro líquido só na navegação ([decisão 82](decisoes.md)) |
+| `taste-skill` pede no máximo duas famílias | Aceito: Mona Sans e JetBrains Mono (decisão 87) |
+| Skills pedem pouco movimento; o titular quer "bastantes elementos e recursos" | Riqueza na camada de instrumento e um momento autoral por seção. Nunca dois momentos grandes na mesma tela |
 | Web Interface Guidelines pedem Title Case e evitar primeira pessoa | Não se aplicam a um portfólio pessoal em português |
-| `taste-skill` tira direção de um sorteio de layouts | Só como inspiração de composição. A direção já foi escolhida pelo titular |
+| `taste-skill` tira direção de um sorteio de layouts | Só como inspiração de composição. A direção do redesign está em [04](04-direcao-criativa.md) |
 | Skills pedem "só animar quando necessário"; o titular quer tudo | Inventário máximo, com um momento autoral por seção |
 
 ## Cobertura da stack
@@ -82,10 +84,10 @@ Cada item do `skills-stacks.md`, seção 3.2.
 | Three.js + React Three Fiber | Entra | [06](06-motion-e-webgl.md#arquitetura-da-cena) |
 | Drei | Entra | [08](08-arquitetura-tecnica.md#stack) |
 | React Postprocessing | Entra | [06](06-motion-e-webgl.md#pós-processamento) |
-| Blender | Entra, por script | [06](06-motion-e-webgl.md#pipeline-de-assets) |
+| Blender | **Fora desde 07/11/2026:** só servia aos modelos da cena B, descartada ([decisão 81](decisoes.md)) | [decisões](decisoes.md) |
 | Spline | **Fora:** alternativa ao Blender, segundo a própria lista | [decisoes](decisoes.md) |
 | Rive ou Lottie | Lottie. Rive fica de fora, pois exige um editor visual que o agente não opera | [decisoes](decisoes.md) |
-| Lucide + SVGs | Entra | [05](05-design-system.md#ornamentos) |
+| Lucide + SVGs | Entra | [05](05-design-system.md#elementos-gráficos) |
 | Sanity | **Para o final**, por decisão do titular: externo ao portfólio | [08](08-arquitetura-tecnica.md#sanity-para-o-final) |
 | PostHog | **Para o final**, por decisão do titular | [08](08-arquitetura-tecnica.md#analytics-e-erros-para-o-final) |
 | Sentry | **Para o final**, por decisão do titular | [08](08-arquitetura-tecnica.md#analytics-e-erros-para-o-final) |
@@ -100,20 +102,21 @@ Itens do `skills-stacks.md` (seção 6) e do `skills-stacks2.md` (seção 4).
 
 | Recurso | Aplicação |
 |---|---|
-| Hero 3D cinematográfico, PBR, câmera, cursor | Rosácea e nave |
+| Hero 3D cinematográfico, PBR, câmera, cursor | Cena "Tudo é código": formas 3D desenhadas pela chuva |
 | Fallback para aparelhos modestos | [Níveis de qualidade](06-motion-e-webgl.md#níveis-de-qualidade) |
-| Glassmorphism refinado | [Vidro de vitral](05-design-system.md#transparências-vidro-de-vitral) |
+| Glassmorphism refinado | **Fora no redesign** ([decisão 64](decisoes.md)): superfícies opacas em degraus de tom |
 | Scrollytelling, textos revelados, seções fixadas | [Storyboard](06-motion-e-webgl.md#storyboard-da-rolagem) |
-| Shaders, fundos dinâmicos, partículas | Chuva e Atmosfera |
-| Aurora e gradientes fluidos | Névoa e raios coloridos do vitral, que são sua versão neste mundo |
-| Tipografia variável e escalas fluidas | [Tipografia](05-design-system.md#tipografia) |
+| Shaders, fundos dinâmicos, partículas | Chuva, travamento de glifos, pulsos de fibra |
+| Aurora e gradientes fluidos | Bloom da cabeça da chuva e dos LEDs, que são sua versão neste mundo |
+| Tipografia variável e escalas fluidas | [Tipografia](05-design-system.md#tipografia): eixo de largura da Mona Sans animado no nome |
 | Microinterações com física de mola | [Microinterações](06-motion-e-webgl.md#microinterações) |
 | Transições de página | [Transições de rota](06-motion-e-webgl.md#transições-de-rota) |
-| Ícones animados e detalhes vetoriais | Lottie e DrawSVG |
+| Ícones animados e detalhes vetoriais | Lottie das flags, DrawSVG da fibra, traceroute e handshake, sem MorphSVG desde a saída dos anéis |
 | Hover magnético pontual | 3 botões |
-| Cursores contextuais | Cursor-vela |
-| Sticky storytelling, seções editoriais, assimetria | Trajetória, Sobre |
-| Dark/light como sistema completo | Temas, com Pergaminho |
+| Elementos de hardware, Kali, binário, cyber e SOC (pedido de 06/11/2026) | Trilhas de placa, terminal, hexdump, faixa binária, registro da sessão ([07](07-recursos-interativos.md)) |
+| Cursores contextuais | Fora: o efeito de cursor na chuva foi removido a pedido do titular |
+| Sticky storytelling, seções editoriais, assimetria | Início, Agora, conteúdo à esquerda e forma à direita |
+| Dark/light como sistema completo | Rubro, Claro e Fósforo |
 | Responsivo, com atenção ao celular | [Responsividade](03-ux-e-navegacao.md#responsividade) |
 
 ## Requisitos de qualidade dos documentos do titular
@@ -143,7 +146,7 @@ pnpm add gsap @gsap/react motion lenis lottie-web
 
 # 3D
 pnpm add three @react-three/fiber @react-three/drei @react-three/postprocessing postprocessing detect-gpu
-pnpm add -D @types/three @gltf-transform/cli gltfjsx
+pnpm add -D @types/three gltfjsx
 
 # Interface e conteúdo
 pnpm add @base-ui/react lucide-react zod
@@ -155,4 +158,3 @@ pnpm add -D vitest @playwright/test @axe-core/playwright @lhci/cli storybook @st
 
 `--disable-git` porque o Git é do titular. Sanity, PostHog e Sentry não são instalados agora. Os documentos já estão nesta pasta, e o `create-next-app` pode recusar uma pasta não vazia. Nesse caso, gerar em pasta temporária e copiar. Conferir a compatibilidade de `react` com `@react-three/fiber` (hoje `<19.4`) antes de qualquer atualização.
 
-**Blender:** o tarball oficial de blender.org dispensa `sudo`, e os scripts rodam em modo `--background`.

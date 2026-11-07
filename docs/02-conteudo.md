@@ -10,7 +10,8 @@ Texto final do site, em pt-BR e em primeira pessoa. É a matéria-prima de `src/
 
 - Toda frase passa em três perguntas: dá para imaginar? Dá para provar verdadeira ou falsa? Outra pessoa poderia escrever igual?
 - Sem as marcas de texto de IA da skill Copywriting: revelação por contraste, listas de negação, oração final colada por vírgula, pergunta retórica com resposta, revelação com dois-pontos.
-- Rótulos são simples. O nome poético fica na margem e nunca substitui o rótulo.
+- Rótulos são simples. Os nomes poéticos de margem saíram com o redesign de 06/11/2026.
+- **Redesign:** os fatos não mudaram. Trechos marcados com **(a aprovar)** foram reescritos porque dependiam do design antigo e esperam a leitura do titular.
 - Códigos de origem estão em [01-veracidade-e-fontes.md](01-veracidade-e-fontes.md#fontes).
 
 ## Argumento da página
@@ -24,11 +25,11 @@ Cada seção existe porque sustenta uma afirmação.
 | Agora | Faço trabalho técnico real em um NOC | Atividades e ferramentas da Linknet |
 | Trajetória | Cheguei à TI trabalhando, sem atalho | Dez experiências com datas |
 | Formação | Estudo com método e continuidade | Dois cursos concluídos e um em andamento |
-| Competências | Separo o que uso do que estudo | Quatro fileiras por evidência |
+| Competências | Separo o que uso do que estudo | Quatro degraus por evidência |
 | Certificados | Tudo aqui pode ser conferido | Links oficiais de validação |
 | Contato | Falar comigo é simples | E-mail, LinkedIn, GitHub e WhatsApp |
 
-## Início (Portal)
+## Início
 
 **Origem:** BM Contatos, Linknet, Formação.
 
@@ -46,7 +47,7 @@ Cada seção existe porque sustenta uma afirmação.
 
 **Canvas:** decorativo, com `aria-hidden`. Nenhuma informação vive só nele.
 
-## Sobre (Noviço)
+## Sobre
 
 **Origem:** BM Resumo e Objetivos; OB Como se apresentar; TP Sobre.
 
@@ -66,9 +67,11 @@ Nunca trabalhei em cargo de segurança, SOC ou pentest. O que sei de segurança 
 
 Função técnica em redes, NOC, infraestrutura Linux, DevOps, DevSecOps ou segurança, de preferência remota.
 
-**Momento em tela branca:** apenas a letra W em Grenze Gotisch, sem frase e com `aria-hidden`. No tema Pergaminho, a tela fica preta. O conteúdo textual continua no fluxo.
+**Hexdump:** ao lado do texto, o UTF-8 real dos parágrafos acima, gerado no build e com `aria-hidden`. Não é texto novo ([05](05-design-system.md#elementos-gráficos)).
 
-## Agora (Vigília)
+**Dado calculado (a aprovar):** `Estudo formal desde 2022`, derivado do início da UNIASSELVI (02/2022). Aparece na ficha de Sobre, junto de cargo e local.
+
+## Agora
 
 **Origem:** BM Linknet.
 
@@ -91,15 +94,15 @@ Função técnica em redes, NOC, infraestrutura Linux, DevOps, DevSecOps ou segu
 
 **Ferramentas:** Zabbix, Grafana, IXC Provedor, plataformas ACS, OLTs, switches, roteadores, ONUs e ONTs.
 
-**Bloco sobre luz e vidro**
+**Bloco sobre a fibra**
 
-Uma rede GPON leva luz por fibra de vidro. O sinal sai de uma OLT, passa por divisores e chega à ONU de cada casa. Uma rosácea faz um percurso parecido: a luz entra pelo centro e se divide pelo rendilhado de pedra.
+**(a aprovar)** Uma rede GPON leva luz por fibra de vidro. O sinal sai de uma OLT, passa por divisores e chega à ONU de cada casa. Toque na OLT abaixo para ver a luz se dividir.
 
 **Legenda do diagrama:** Desenho ilustrativo. Sem dados de nenhuma rede real.
 
 **Espaço reservado:** se o titular quiser informar fabricantes e protocolos que usa, eles entram nesta seção ([pendências](pendencias.md#opcionais-sem-prazo)). Até lá, nada é estimado.
 
-## Trajetória (Peregrinação)
+## Trajetória
 
 **Origem:** BM Experiência profissional. Só atividades confirmadas; "Declaração antiga" fica de fora.
 
@@ -128,7 +131,7 @@ Ordem cronológica na página inicial e inversa em `/cv`.
 - Atividades comerciais e panfletagem da IBL Net ficam de fora, como a base permite em textos de TI.
 - As passagens por TI têm mais destaque visual que varejo e administrativo, sem esconder nenhuma data.
 
-## Formação (Noviciado)
+## Formação
 
 **Origem:** BM Formação; DI.
 
@@ -142,23 +145,25 @@ Ordem cronológica na página inicial e inversa em `/cv`.
 
 **Idiomas:** Português fluente. Inglês básico, com leitura de documentação técnica.
 
-**Legenda da lanceta da FIAP:** a luz da janela mostra o tempo decorrido do curso, calculado por data, e não aproveitamento.
+**Legenda do bloco da FIAP (a aprovar):** o preenchimento mostra o tempo decorrido do curso, calculado por data, e não aproveitamento.
+
+**Blocos de carga horária:** a área de cada curso é proporcional à carga real (2.600 h e 420 h). A FIAP, sem carga total na base, aparece como bloco de tempo.
 
 **Estudo em andamento:** continuo o programa Google Cybersecurity Certificate, com quatro cursos concluídos (CA). O programa completo ainda não foi concluído.
 
-## Competências (Iconóstase)
+## Competências
 
 **Origem:** BM Competências, pela coluna de evidência. A base não valida níveis, então nada aqui tem nota ou barra.
 
 **H2:** Competências
 
-**Introdução:** Separei o que sei pela origem de cada conhecimento. A primeira fileira é o que uso no trabalho. As seguintes pesam menos, nesta ordem.
+**Introdução (a aprovar):** Separei o que sei pela origem de cada conhecimento. O anel central é o que uso no trabalho. Os de fora pesam menos, nesta ordem.
 
-### Fileira 1: uso no trabalho
+### Anel 1: uso no trabalho
 
 GPON e FTTH. ONUs e ONTs. Consulta a OLTs, switches e roteadores. Configuração remota de roteadores e dispositivos de clientes. Plataformas ACS. IXC Provedor. Zabbix e Grafana, em uso operacional. Diagnóstico de conectividade. Gestão de incidentes. Coordenação operacional de equipes de campo.
 
-### Fileira 2: prática em projetos próprios
+### Anel 2: prática em projetos próprios
 
 | Área | Competências |
 |---|---|
@@ -169,11 +174,11 @@ GPON e FTTH. ONUs e ONTs. Consulta a OLTs, switches e roteadores. Configuração
 
 **Nota:** a existência desses controles em um projeto não certifica ausência de vulnerabilidades, e os projetos em si ainda não estão publicados aqui.
 
-### Fileira 3: formação
+### Anel 3: formação
 
 Fundamentos de segurança, gestão de riscos e segurança de redes. LGPD. Camadas, protocolos, endereçamento IP, ping e traceroute. VLANs, sub-redes, switches e roteadores em redes locais. Wireshark e análise de tráfego, em curso introdutório. Scripts de monitoramento e análise de logs em Linux. Fundamentos de DevOps, virtualização e cloud.
 
-### Fileira 4: laboratórios e estudo
+### Anel 4: laboratórios e estudo
 
 Kali Linux, Nmap, Wireshark e Burp Suite, usados em laboratórios. Prática em Hack The Box, TryHackMe, PortSwigger Academy e outros CTFs. Reconhecimento e fundamentos de teste de intrusão. Programa Google Cybersecurity Certificate, em andamento.
 
@@ -181,7 +186,7 @@ Kali Linux, Nmap, Wireshark e Burp Suite, usados em laboratórios. Prática em H
 
 **Filtros:** Redes, Linux, DevOps, Segurança e Programação. O filtro fica na URL (`?area=seguranca`).
 
-## Certificados (Relicário)
+## Certificados
 
 **Origem:** CA. A tabela abaixo é gerada por script a partir do catálogo.
 
@@ -249,7 +254,7 @@ Kali Linux, Nmap, Wireshark e Burp Suite, usados em laboratórios. Prática em H
 | Introdução à Experiência Santander 2025 | DIO / Santander | 10/06/2025 | 1 h | WJK1GNLU | Outros |
 | Trilha #BIP | Academia do Universitário | Emissão em 20/12/2022 | 6 h | 05hetidbnm | Outros |
 
-## Contato (Chamado)
+## Contato
 
 **Origem:** BM Contatos; TI.
 
@@ -278,11 +283,11 @@ Versão direta, em HTML semântico, sem WebGL, pronta para impressão. Usa os me
 
 **Resumo:** Analista de Redes N2 em NOC de provedor de internet, com monitoramento em Zabbix e Grafana, diagnóstico de incidentes e redes GPON/FTTH. Implanto e mantenho sistemas próprios em VPS Linux, com Docker, Nginx, HTTPS, firewall, backup e deploy automatizado. Graduado em Análise e Desenvolvimento de Sistemas, pós-graduado em Engenharia DevOps e estudante de Segurança Cibernética na FIAP. Sem experiência profissional anterior em cargo de segurança.
 
-**Ordem:** experiência em TI, formação, competências por fileira, cursos de prioridade A, experiências anteriores e idiomas.
+**Ordem:** experiência em TI, formação, competências por tipo de evidência, cursos de prioridade A, experiências anteriores e idiomas.
 
 **PDF:** gerado a partir desta rota, com uma coluna, sem foto nem tabelas e sem seção de projetos. **O PDF público não traz telefone**, pois um número em arquivo aberto anularia a revelação ao clicar. Traz e-mail, LinkedIn, GitHub e a linha `WhatsApp disponível em warley.ferzion.com.br`. Para candidaturas, o titular continua enviando os PDFs de `../curriculo/curriculos/`, com telefone. A rota `/cv` usa o mesmo botão de revelação da seção Contato.
 
-## `/seguranca` (Cânone)
+## `/seguranca`
 
 **H1:** Segurança deste site
 
@@ -301,7 +306,7 @@ Versão direta, em HTML semântico, sem WebGL, pronta para impressão. Usa os me
 
 **Bloco "O que não posso garantir":** Estes controles reduzem riscos e não provam ausência de falhas. O site ainda não passou por auditoria independente.
 
-**Bloco "Minhas regras":** escritas à mão no estilo de caderno, sujeitas à aprovação do titular.
+**Bloco "Minhas regras":** apresentadas como regras de engajamento, sujeitas à aprovação do titular.
 
 1. Só testo o que tenho autorização escrita para testar.
 2. Antes de começar, defino escopo, prazo e como parar.
@@ -316,9 +321,9 @@ Versão direta, em HTML semântico, sem WebGL, pronta para impressão. Usa os me
 
 **H1:** Sistema de design
 
-**Abertura:** Tudo o que compõe este site: cores, tipos, ornamentos e movimento. Está aqui porque um design system também é trabalho a mostrar, e foi construído com apoio de IA.
+**Abertura (a aprovar):** Tudo o que compõe este site: cores, tipos, moldura, elementos gráficos e movimento. Está aqui porque um design system também é trabalho a mostrar, e foi construído com apoio de IA.
 
-Conteúdo: tokens vivos dos cinco temas, escala tipográfica, ornamentos e componentes.
+Conteúdo: tokens vivos dos três temas, escala tipográfica, moldura, elementos gráficos e componentes.
 
 ## Rodapé
 
@@ -347,6 +352,30 @@ Links: Currículo, Segurança, Sistema de design, Privacidade.
 |---|---|---|
 | `/cv` | Currículo de Warley Ferraz Almeida | Experiência em redes e NOC, formação em DevOps e Segurança Cibernética, competências e certificados. PDF disponível. |
 | `/seguranca` | Segurança deste site, por Warley Ferraz Almeida | Os controles aplicados neste portfólio, como conferir cada um e o que eles não garantem. |
-| `/sistema` | Sistema de design da Nave Digital | Cores, tipografia, ornamentos e movimento do portfólio de Warley Ferraz Almeida. |
+| `/sistema` | Sistema de design, por Warley Ferraz Almeida | Cores, tipografia, moldura e movimento do portfólio de Warley Ferraz Almeida. |
 
 **JSON-LD `Person`:** nome, `jobTitle`, `worksFor` (Linknet Telecomunicações), `alumniOf` (UNIASSELVI, Faculdade Focus), `address` com localidade e estado, `url`, `sameAs` (LinkedIn e GitHub). Sem telefone.
+
+## Textos novos do redesign (a aprovar)
+
+Textos de interface criados pelos recursos novos de [07](07-recursos-interativos.md). Todos descrevem o próprio site e nenhum afirma fato novo sobre o titular.
+
+| Onde | Texto |
+|---|---|
+| Registro da sessão, título | Eventos desta visita |
+| Registro da sessão, aviso | Só no seu navegador. Nada é enviado. |
+| Registro da sessão, vazio | Nenhum evento ainda. |
+| Botão da moldura | Eventos |
+| Trocador, Fósforo bloqueado | Fósforo (bloqueado). Encontre no terminal. |
+| Terminal, `matrix` | tema Fósforo liberado. Digite matrix de novo para voltar. |
+| Terminal, `ping` | este terminal não sai do seu navegador. |
+| Terminal, `nmap` e similares | só com autorização escrita. Veja /seguranca. |
+| CTF, regra | Todas as flags estão à vista no navegador. Você não precisa varrer nem atacar o servidor para jogar. |
+| Formação, FIAP | tempo decorrido, não aproveitamento |
+| Contato, fim do handshake | Conexão pronta. Escolha um canal. |
+| Sobre, ficha | Cargo, Local, Estudo formal (`02/2022, 4 anos e 9 meses`) e No cargo há (`3 meses`). Datas e tempos vêm de `src/conteudo/` e do primeiro curso, calculados no build |
+| Certificados, colunas | Curso, Emissor, Conclusão, Carga, Validação e SHA-256 do registro |
+| Certificados, legenda | O SHA-256 identifica o registro deste site, calculado no build. Não é o código do certificado. |
+| Rodapé, build | `build <commit> <data>`, com a faixa de bits do mesmo hash |
+| Formação, andamento | `38% do tempo decorrido`, calculado da data de hoje no navegador (o HTML traz o valor do build) |
+| Agora, simulação | Uma luz por ONU. Anúncio: `ONU 3 de 8 acesa`. Fim: `As oito ONUs estão acesas.` |

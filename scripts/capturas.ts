@@ -3,12 +3,12 @@ import { mkdirSync } from "node:fs";
 import { chromium } from "@playwright/test";
 
 const pasta = process.argv[2] ?? "test-results/capturas";
-const tema = process.argv[3] ?? "ouro";
+const tema = process.argv[3] ?? "rubro";
 const BASE = process.env.BASE ?? "http://localhost:3000";
 const ESPERA = Number(process.env.ESPERA ?? 1500);
 mkdirSync(pasta, { recursive: true });
 const nav = await chromium.launch({ args: ["--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist"] });
-for (const [nome, w, h] of [["celular", 390, 844], ["desktop", 1440, 900]] as const) {
+for (const [nome, w, h] of [["celular", 390, 844], ["tablet", 768, 1024], ["desktop", 1440, 900]] as const) {
   const ctx = await nav.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: 1, colorScheme: "dark" });
   await ctx.addInitScript((t) => {
     localStorage.setItem("tema", t);

@@ -17,17 +17,111 @@ Detalhe de cada fase e seus critérios de pronto. **O acompanhamento do que est�
 | 11 | Lançamento | — | Git, certificado e deploy |
 | 12 | Externos, se quiser | — | Decidir sobre Sanity, PostHog, Sentry e Uptime |
 
+## Redesign
+
+Pedido do titular em 06/11/2026 ([briefing](00-briefing.md#pedido-de-redesign-06112026)): refazer do zero tudo o que é design. **As fases R0 a R8 substituem as fases 2, 3, 4 e 6 originais no que é visual**, e reaproveitam o que elas construíram em dados, relógio, níveis de qualidade, CSP, deploy e testes. Depois do R8, seguem as fases 7 a 12 originais.
+
+Cada fase termina com `pnpm verificar && pnpm build && pnpm test && pnpm test:e2e`, capturas em 390, 768 e 1440 px olhadas de verdade, e ROADMAP e documentos atualizados no mesmo passo.
+
+| Fase | Nome | Principais skills | Bloqueio do titular |
+|---|---|---|---|
+| R0 | Documentação do redesign | Frontend Design, `taste-skill`, UI UX Pro Max | Ler e aprovar `04` e `05` |
+| R1 | Design system em código | UI UX Pro Max (`design-system`), Impeccable `critique`, Frontend Design | Ver `/sistema` local |
+| R2 | Base da cena compartilhada | `threejs-webgl`, R3F, GSAP Performance | — |
+| R3 | Protótipos A e B | `threejs-webgl`, R3F, Impeccable, `taste-skill` | **Escolher a cena** |
+| R4 | Seções no DOM | Frontend Design, `taste-skill`, Impeccable, React Best Practices | — |
+| R5 | Cena completa e storyboard | GSAP (ScrollTrigger, Timeline, Plugins), Animate | — |
+| R6 | Recursos | Animate, GSAP, `emil-break-ui` | — |
+| R7 | Textos e compartilhamento | Copywriting, SEO Audit | Aprovar os textos marcados "(a aprovar)" em `02` |
+| R8 | Refinamento | Impeccable `audit`/`polish`, Web Design Guidelines, React Best Practices, `emil-review-animations` | Teste em aparelho real |
+
+### R0: Documentação do redesign
+
+**Entregas:** [04](04-direcao-criativa.md) e [05](05-design-system.md) reescritos; [06](06-motion-e-webgl.md) e [07](07-recursos-interativos.md) com cena, storyboard e recursos novos; ajustes em [00](00-briefing.md), [02](02-conteudo.md), [03](03-ux-e-navegacao.md), [08](08-arquitetura-tecnica.md), [09](09-seguranca-e-privacidade.md), [11](11-qualidade.md), [13](13-projetos-futuros.md), [14](14-skills-e-stack.md), decisões, pendências, README, ROADMAP e `CLAUDE.md`.
+
+**Pronto quando:** o titular aprova `04` e `05`.
+
+### R1: Design system em código
+
+1. Valores novos em `scripts/gerar-temas.ts` → `src/temas/temas.ts`, com os três temas e os papéis novos (`sinal`, `forma`, `forma-fundo`, `superficie-2`). `verificar-contraste` com os pares de [05](05-design-system.md#contraste-calculado-wcag-22). `public/tema.js` com os nomes novos e o bloqueio do Fósforo.
+2. Fontes: remover Grenze Gotisch, Literata, Jacquard 24 e Monomakh. Adicionar Mona Sans e Martian Mono em `scripts/copiar-fontes.ts` e `src/app/fontes.ts`. Conferir `ã ç é ß ñ œ` nas capturas.
+3. `globais.css` e `@theme` com os tokens novos, incluindo os de movimento.
+4. `scripts/gerar-trilhas.ts` e `src/conteudo/derivados.ts` (hexdump, fingerprints, tempo decorrido), com testes.
+5. Componentes de base e `Moldura`, `Regua`, `BootLog`, com todos os estados, no Storybook.
+6. `/sistema` reescrito. Rodar `impeccable critique` sobre ele.
+
+**Pronto quando:** `/sistema` exibe tudo nos três temas, o contraste passa e o titular vê localmente.
+
+### R2: Base da cena compartilhada
+
+1. Atlas novo em `gerar-atlas.ts` ([glifos](06-motion-e-webgl.md#atlas-de-glifos)), com checagem de palavras.
+2. Shader da chuva com a paleta nova, travamento por máscara e rolagem. Manter o teste "a chuva anima de verdade".
+3. Moldura alimentada por dados reais: hora UTC−3, rolagem, seção, FPS e nível vindos de `qualidade.ts`.
+4. Registro da sessão com os eventos de carregamento.
+5. Recalcular os limites de luminância por tema e atualizar `cena.spec.ts`.
+
+**Pronto quando:** a chuva roda nos três temas e nos níveis de qualidade, sob a CSP real, e a moldura só mostra dados reais.
+
+### R3: Protótipos A e B (concluída)
+
+As duas cenas foram prototipadas, e o titular escolheu "Tudo é código" em 07/11/2026. A cena B (modelos 3D), o Blender, o seletor de avaliação e o comando `cena` foram removidos ([decisão 81](decisoes.md)).
+
+### R4: Seções no DOM
+
+1. Reescrever `src/secoes/*` com as formas de [04](04-direcao-criativa.md#tom-visual-por-seção): ficha com hexdump, topologia, traceroute, blocos, anéis, tabela de certificados e handshake.
+2. Reescrever `Barra`, Índice, `/cv`, `/seguranca`, 404 e offline.
+3. Remover `Margem.tsx`, `src/ornamentos.ts`, `src/componentes/ornamentos/`, o campo `margem` do esquema e do conteúdo, e o que restar do conceito antigo.
+4. Loop de captura da `taste-skill` em 390, 768 e 1440 px.
+
+**Pronto quando:** o site inteiro funciona sem WebGL e sem JavaScript, e as capturas passam na revisão.
+
+### R5: Cena completa e storyboard
+
+1. Caminho da câmera e forma de cada seção na cena escolhida.
+2. Cada linha do [storyboard](06-motion-e-webgl.md#storyboard-da-rolagem), uma seção por vez.
+3. Decodificação de títulos, largura do nome, microinterações e transições de rota.
+4. Movimento reduzido validado em cada passo.
+
+**Pronto quando:** todas as linhas do storyboard funcionam nos níveis de qualidade, dentro dos orçamentos.
+
+### R6: Recursos
+
+1. Terminal com os comandos novos e o prompt novo.
+2. CTF: `selos` → `flags` (`src/ctf/flags.ts`, `gerar-flags.ts`, cabeçalho `X-Flag`), Lottie novas, liberação do Fósforo.
+3. ~~Simulação GPON com o visual novo.~~ Removida em 07/11/2026 ([decisão 90](decisoes.md)).
+4. Registro da sessão completo e boot log.
+5. Som com o timbre novo. Easter eggs.
+
+**Pronto quando:** todos os recursos de [07](07-recursos-interativos.md) funcionam, com teclado, leitor de tela e movimento reduzido.
+
+### R7: Textos e compartilhamento
+
+1. Revisar com Copywriting os textos marcados "(a aprovar)" em [02](02-conteudo.md) e obter a aprovação do titular.
+2. Imagens OG novas, `humans.txt` e manifesto com as cores novas.
+3. `verificar-conteudo`: barrar termos do conceito antigo no texto público e conferir os dados derivados.
+
+### R8: Refinamento
+
+1. `impeccable audit` e `polish`, `web-design-guidelines`, `vercel-react-best-practices`, `emil-review-animations`, `emil-break-ui`.
+2. JS inicial em até 130 KB.
+3. Lista manual de acessibilidade e [teste sem palavras](11-qualidade.md#teste-sem-palavras).
+4. Rubrica de qualidade.
+
+**Pronto quando:** os [critérios de pronto](11-qualidade.md#critérios-de-pronto-para-lançar) passam, exceto os que dependem das fases 7 a 12.
+
+## Fases originais
+
+Mantidas como histórico. **As fases 2, 3, 4 e 6 foram substituídas pelo redesign no que é visual.** As fases 7 a 12 continuam valendo depois do R8.
+
 ## Fase 1: Discovery (concluída)
 
 **Entregas:** [00](00-briefing.md), [01](01-veracidade-e-fontes.md), [02](02-conteudo.md), [03](03-ux-e-navegacao.md).
 
-## Fase 2: Direção criativa (concluída)
+## Fase 2: Direção criativa (substituída)
 
-**Entregas:** três conceitos apresentados, Nave Digital escolhida e [04](04-direcao-criativa.md).
+Nave Digital foi escolhida e depois descartada pelo titular em 06/11/2026. Ver [R0](#r0-documentação-do-redesign).
 
-**Pendente:** leitura do titular sobre nomes poéticos e regras do sagrado.
-
-## Fase 3: Design system
+## Fase 3: Design system (substituída no visual pela R1)
 
 **Tarefas**
 
@@ -41,7 +135,7 @@ Detalhe de cada fase e seus critérios de pronto. **O acompanhamento do que est�
 
 **Pronto quando:** `/sistema` exibe tudo nos 5 temas, a letra gótica passa no teste de leitura e o contraste automático passa.
 
-## Fase 4: Prototipagem e prova de fogo
+## Fase 4: Prototipagem e prova de fogo (substituída no visual pelas R2 e R3)
 
 O maior risco técnico vem primeiro.
 
@@ -71,7 +165,7 @@ O maior risco técnico vem primeiro.
 
 **Pronto quando:** o site inteiro funciona **sem WebGL e sem JavaScript**, passa no verificador de conteúdo e pode ser lido em celular. A partir daqui, uma versão completa e sem efeitos já pode ser publicada se o titular quiser.
 
-## Fase 6: Motion e 3D
+## Fase 6: Motion e 3D (substituída no visual pelas R5 e R6)
 
 **Tarefas**
 

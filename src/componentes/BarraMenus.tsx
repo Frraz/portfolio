@@ -9,7 +9,7 @@ import { ctfCompleto } from "@/ctf/progresso";
 import { TEMAS, type Tema } from "@/temas/temas";
 import { trocarTema } from "@/temas/trocar";
 
-const NOME_TEMA: Record<Tema["id"], string> = { ouro: "temaOuro", fosforo: "temaFosforo", rubro: "temaRubro", purpura: "temaPurpura", pergaminho: "temaPergaminho", selado: "temaSelado" };
+const NOME_TEMA: Record<Tema["id"], string> = { rubro: "temaRubro", claro: "temaClaro", fosforo: "temaFosforo" };
 const MOLA = { type: "spring", stiffness: 420, damping: 32, mass: 0.7 } as const;
 
 type Props = {

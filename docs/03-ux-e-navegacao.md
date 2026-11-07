@@ -8,7 +8,7 @@ Como o visitante encontra o que precisa, em qualquer aparelho e condição. Modo
 |---|---|---|---|
 | `/` | Experiência completa com as seções | Sim | Sim |
 | `/cv` | Currículo direto e imprimível | Não | Sim |
-| `/seguranca` | Controles reais do site, regras e privacidade | Leve (selo) | Sim |
+| `/seguranca` | Controles reais do site, regras e privacidade | Leve (chuva lenta) | Sim |
 | `/sistema` | Design system público | Amostras | Sim |
 | `/404` | Página não encontrada | Chuva lenta | Não |
 | `/offline` | Página sem conexão, servida pelo service worker | Não | Não |
@@ -22,27 +22,27 @@ Reservadas para o futuro: `/obras` e `/obras/[slug]`, descritas em [13-projetos-
 
 ## Seções da página inicial
 
-A numeração é derivada da ordem dos dados, nunca escrita à mão. Ao ativar "Obras", Contato passa de 7 para 8 sozinho.
+A ordem vem dos dados, nunca escrita à mão. Ela aparece só na régua da moldura, e não como número ao lado do título ([04](04-direcao-criativa.md#revisão-contra-marcas-de-ia)). Os nomes poéticos de margem saíram com o redesign ([decisão 62](decisoes.md)).
 
-| # | Rótulo | Margem | Âncora |
-|---|---|---|---|
-| 0 | Início | Portal | `#inicio` |
-| 1 | Sobre | Noviço | `#sobre` |
-| 2 | Agora | Vigília | `#agora` |
-| 3 | Trajetória | Peregrinação | `#trajetoria` |
-| 4 | Formação | Noviciado | `#formacao` |
-| 5 | Competências | Iconóstase | `#competencias` |
-| 6 | Certificados | Relicário | `#certificados` |
-| — | Projetos | Obras | `#obras`, oculta |
-| 7 | Contato | Chamado | `#contato` |
+| Rótulo | Forma da seção | Âncora |
+|---|---|---|
+| Início | Nome, cargo e ações | `#inicio` |
+| Sobre | Ficha com hexdump | `#sobre` |
+| Agora | Atividades e ferramentas | `#agora` |
+| Trajetória | Traceroute | `#trajetoria` |
+| Formação | Blocos de carga horária | `#formacao` |
+| Competências | Degraus de evidência | `#competencias` |
+| Certificados | Registro em tabela | `#certificados` |
+| Projetos | A definir na ativação | `#obras`, oculta |
+| Contato | Handshake e ações | `#contato` |
 
 ## Navegação
 
-**Barra fixa no desktop:** nome à esquerda; rótulos das seções e seção atual ao centro; `Currículo`, tema e terminal à direita. Fica mínima durante o hero e só ganha fundo depois dele.
+**Barra fixa no desktop, em vidro líquido** ([05](05-design-system.md#vidro-só-na-navegação)): nome à esquerda; rótulos das seções ao centro, com a atual em `sinal`; `Currículo`, `Tema`, `Pausar chuva` e `Terminal` à direita. Fica sem fundo durante o hero e ganha `superficie` depois dele. Fica dentro da moldura, abaixo da faixa do identificador e da hora.
 
-**Telas abaixo de 1180 px:** nome, `Currículo` e `Índice`. O `Índice` abre uma tela inteira com a lista numerada, os temas e o controle da chuva.
+**Telas abaixo de 1180 px** (a barra cabe a partir daí, conferido em 1180, 1200, 1280 e 1440): nome, `Currículo` e `Índice`. O `Índice` abre uma tela inteira com a lista das seções, os temas, a chuva, o som, o registro da sessão e o terminal.
 
-**Indicador de progresso:** um fio de fibra vertical na lateral, que acende conforme a rolagem. Clicar em um nó leva à seção. É puramente visual e duplica uma navegação real.
+**Moldura e régua:** a [moldura de instrumento](05-design-system.md#moldura-de-instrumento-hud) mostra dados reais nos cantos. A régua na borda direita é o indicador de progresso: desce com a rolagem, e clicar em um traço de seção leva até ela. Duplica uma navegação real.
 
 **Atalhos de teclado**
 
@@ -71,12 +71,12 @@ Sem sequestro de rolagem. Lenis suaviza, mas a roda, o trackpad, o teclado e o t
 2. Filtra Competências por Segurança ou Redes.
 3. Abre a validação de um certificado.
 4. Vai a `/seguranca`, confere os cabeçalhos e o `security.txt`.
-5. Abre o terminal ou o código-fonte e talvez encontre um selo.
+5. Abre o terminal ou o código-fonte e talvez encontre uma flag.
 
 ### Júri, 5 a 10 minutos
 
 1. Rola a experiência inteira no desktop.
-2. Troca de tema, liga o som e testa o cursor.
+2. Troca de tema, liga o som, abre o terminal e o registro da sessão.
 3. Abre no celular.
 4. Vê `/sistema` e `/seguranca`.
 
@@ -86,17 +86,17 @@ Recebe a composição final de cada seção, sem parallax, chuva em quadro parad
 
 ### Visitante sem WebGL ou sem JavaScript
 
-Recebe imagem estática nas seções com cena. Sem JavaScript, tudo continua legível, com filtros mostrando todos os itens. O número de WhatsApp fica indisponível, e e-mail e LinkedIn funcionam.
+Recebe o pôster estático nas seções com cena. As formas das seções (traceroute, régua de formação, degraus) são SVG e HTML, e continuam lá. Sem JavaScript, tudo continua legível, com filtros mostrando todos os itens. O número de WhatsApp fica indisponível, e e-mail e LinkedIn funcionam.
 
 ## Hero: ordem de carregamento
 
 | Momento | O que acontece | Meta |
 |---|---|---|
-| Primeiro byte | HTML com H1, cargo, ações e pôster em CSS | |
-| Fontes | Grenze e Literata com preload | Sem deslocamento de layout |
+| Primeiro byte | HTML com H1, cargo, ações, moldura e pôster em CSS | |
+| Fontes | Mona Sans com preload; JetBrains Mono depois | Sem deslocamento de layout |
 | Pintura principal | O H1 é o elemento do LCP | ≤ 2,5 s no celular intermediário |
 | Ocioso | Baixa a cena no fundo, depois da primeira pintura | Sem bloquear o INP |
-| Cena pronta | A chuva aparece sobre o pôster, com transição de 600 ms | Sem mudança de layout |
+| Cena pronta | A chuva aparece sobre o pôster, com transição de 600 ms, e trava no nome. O boot log registra cada passo | Sem mudança de layout |
 
 Sem tela de carregamento. Se a cena demorar, o pôster continua, e o visitante já pode rolar.
 
@@ -104,11 +104,11 @@ Sem tela de carregamento. Se a cena demorar, o pôster continua, e o visitante j
 
 | Largura | Mudanças |
 |---|---|
-| ≥ 1280 px | Margem de manuscrito completa, cena completa |
-| 768 a 1279 px | Margem reduzida; fixações mais curtas |
-| < 768 px | Coluna única; número ao lado do título; `Índice`; cena de nível baixo por padrão; Trajetória vertical; Competências em acordeão por fileira |
+| ≥ 1280 px | Moldura completa nos quatro cantos, cena completa, forma da seção à direita |
+| 768 a 1279 px | Moldura completa; forma da seção abaixo do texto; fixações mais curtas |
+| < 768 px | Coluna única; moldura com dois cantos; `Índice`; cena de nível baixo por padrão; traceroute vertical; degraus em coluna única; formas da chuva só no hero; hexdump em faixa |
 | Paisagem baixa | Sem seções fixadas |
-| Toque | Cursor-vela vira brilho no toque e nunca condiciona a leitura. Efeitos de hover têm alternativa |
+| Toque | Efeitos de hover têm alternativa e nunca condicionam a leitura |
 
 Testar em 360, 390, 768, 1024, 1440 e 2560 px, além de zoom de 200%.
 
@@ -132,9 +132,9 @@ Detalhes de teste em [11-qualidade.md](11-qualidade.md#acessibilidade).
 
 - HTML semântico: um `h1` por rota, ordem correta de títulos, `main`, `nav`, listas reais.
 - Tudo o que o WebGL mostra existe em texto.
-- Nomes poéticos e numeração não atrapalham: rótulo claro é o nome acessível.
+- A moldura, a régua e os dados decorativos não atrapalham: o que duplica informação fica com `aria-hidden`, e o rótulo claro é o nome acessível.
 - `lang="pt-BR"`; termos em inglês com `lang="en"` quando forem frases.
-- A letra gótica fica sempre em texto real, não em imagem.
+- O nome e os títulos ficam sempre em texto real, inclusive durante a decodificação e a mudança de largura, nunca em imagem ou só no canvas.
 - Animações automáticas com mais de 5 segundos têm controle de pausa: a chuva tem botão `Pausar chuva` na barra.
 - Som nunca começa sozinho.
 
@@ -146,11 +146,12 @@ A página continua compreensível se o CSS falhar. Teste obrigatório: desligar 
 
 | Dado | Onde | Padrão |
 |---|---|---|
-| Tema | `localStorage: tema` | Ouro, ou Pergaminho se `prefers-color-scheme: light` |
+| Tema | `localStorage: tema` | Rubro, ou Claro se `prefers-color-scheme: light`. Fósforo só depois de liberado |
 | Som | `localStorage: som` | Desligado |
 | Chuva pausada | `localStorage: chuva` | Ligada, salvo movimento reduzido |
-| Selos do CTF | `localStorage: selos` | Vazio |
+| Flags do CTF e Fósforo liberado | `localStorage: flags` | Vazio |
+| Registro da sessão | Memória da aba | Vazio. Some ao fechar |
 | Filtros | URL | Sem filtro |
 | Idioma | URL | pt-BR |
 
-Nada disso vai para um servidor. O uso de `localStorage` é restrito a preferências e selos, sem identificar o visitante.
+Nada disso vai para um servidor. O uso de `localStorage` é restrito a preferências e flags, sem identificar o visitante.

@@ -3,6 +3,8 @@ import { ViewTransition, type ReactNode } from "react";
 import "../globais.css";
 import { classesFontes } from "../fontes";
 import { Barra } from "@/componentes/Barra";
+import { Moldura } from "@/componentes/moldura/Moldura";
+import { Regua } from "@/componentes/moldura/Regua";
 import { conteudo, secoesAtivas } from "@/conteudo";
 import { TEMAS } from "@/temas/temas";
 
@@ -33,6 +35,8 @@ export default function Layout({ children }: { children: ReactNode }) {
         <a className="pular" href="#conteudo">
           {c.ui.pularConteudo}
         </a>
+        <Moldura secoes={secoes} ui={c.ui} />
+        <Regua secoes={secoes} rotulo={c.ui.regua} />
         <Barra nome={c.pessoa.nome} secoes={secoes} ui={c.ui} />
         {/* Só a troca de rota anima. Sem isto, cada chunk carregado depois dispararia uma transição e engoliria cliques. */}
         <ViewTransition default="none" update={{ rota: "auto", default: "none" }}>

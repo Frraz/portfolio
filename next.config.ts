@@ -1,4 +1,14 @@
+import { execSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import type { NextConfig } from "next";
+
+// Identificador do build para o rodapé: o commit atual (só leitura) ou, sem Git, um hash do instante do build.
+const agora = new Date();
+let versao = "";
+try {
+  versao = execSync("git rev-parse --short=12 HEAD", { stdio: ["ignore", "pipe", "ignore"] }).toString().trim();
+} catch {}
+if (!versao) versao = createHash("sha256").update(agora.toISOString()).digest("hex").slice(0, 12);
 
 // O número nunca fica em texto puro no bundle: é embaralhado aqui e só o chunk da revelação o conhece.
 const numero = process.env.WHATSAPP_NUMERO ?? "";
@@ -16,6 +26,8 @@ const config: NextConfig = {
     SITE_URL: process.env.SITE_URL ?? "http://localhost:3000",
     WHATSAPP_ATIVO: numero ? "sim" : "",
     WHATSAPP_E: embaralhado,
+    BUILD_HASH: versao,
+    BUILD_DATA: agora.toISOString().slice(0, 10),
   },
 };
 export default config;

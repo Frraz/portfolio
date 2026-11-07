@@ -8,24 +8,39 @@ import { chromium } from "@playwright/test";
 
 const b64 = (p: string) => readFileSync(`node_modules/${p}`).toString("base64");
 const FONTES = {
-  mono: b64("@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2"),
+  mono: b64("@fontsource-variable/martian-mono/files/martian-mono-latin-wdth-normal.woff2"),
   jp: b64("@fontsource/noto-sans-jp/files/noto-sans-jp-119-400-normal.woff2"),
-  grego: b64("@fontsource-variable/literata/files/literata-greek-wght-normal.woff2"),
-  glag: b64("@fontsource/noto-sans-glagolitic/files/noto-sans-glagolitic-glagolitic-400-normal.woff2"),
 };
 
-// Ordem fixa. Latinas no início porque a chuva soletra palavras curtas.
+// Ordem fixa (docs/06, "Atlas de glifos"). Latinas no início porque a chuva soletra palavras curtas.
+// Hexadecimal usa os dígitos e A–F que já estão aqui; binário usa 0 e 1.
 const LATINAS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 const DIGITOS = "0123456789".split("");
-const KATAKANA = Array.from({ length: 46 }, (_, i) => String.fromCodePoint(0x30a2 + i));
-const GREGO = "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθλμξπσφψω".split("");
-const GLAGOLITICO = Array.from({ length: 38 }, (_, i) => String.fromCodePoint(0x2c00 + i));
+// Katakana em conjunto próprio: 40 caracteres em ordem do gojūon, sem espelhar e sem copiar a seleção do filme.
+const KATAKANA = Array.from({ length: 40 }, (_, i) => String.fromCodePoint(0x30a2 + i));
+// Símbolos de código, todos ASCII: presentes em qualquer subconjunto latino.
+const SIMBOLOS = "/\\{}[]<>=+-*#&|^~;:_()".split("");
+// Traços de caixa, desenhados à mão no canvas (n, s, e, w): contorno das formas travadas.
+const CAIXA: { nome: string; dir: string }[] = [
+  { nome: "─", dir: "ew" },
+  { nome: "│", dir: "ns" },
+  { nome: "┌", dir: "se" },
+  { nome: "┐", dir: "sw" },
+  { nome: "└", dir: "ne" },
+  { nome: "┘", dir: "nw" },
+  { nome: "├", dir: "nse" },
+  { nome: "┤", dir: "nsw" },
+  { nome: "┬", dir: "sew" },
+  { nome: "┴", dir: "new" },
+  { nome: "┼", dir: "nsew" },
+];
 
-const grupos: { fonte: string; glifos: string[] }[] = [
+type Grupo = { fonte: string; glifos: string[]; caixa?: string[] };
+const grupos: Grupo[] = [
   { fonte: "mono", glifos: [...LATINAS, ...DIGITOS] },
   { fonte: "jp", glifos: KATAKANA },
-  { fonte: "grego", glifos: GREGO },
-  { fonte: "glag", glifos: GLAGOLITICO },
+  { fonte: "mono", glifos: SIMBOLOS },
+  { fonte: "caixa", glifos: CAIXA.map((c) => c.nome), caixa: CAIXA.map((c) => c.dir) },
 ];
 const COLUNAS = 16;
 const CELULA = 64;
@@ -101,13 +116,24 @@ const png: string = await pagina.evaluate(
         cf.fillStyle = "#000";
         cf.fillRect(0, 0, lado, lado);
         cf.fillStyle = "#fff";
-        cf.textAlign = "center";
-        cf.textBaseline = "alphabetic";
-        cf.font = `${lado * 0.68}px ${grupo.fonte}`;
-        const m = cf.measureText(g);
-        const asc = m.actualBoundingBoxAscent;
-        const des = m.actualBoundingBoxDescent;
-        cf.fillText(g, lado / 2, lado / 2 + (asc - des) / 2);
+        if (grupo.fonte === "caixa") {
+          // Traço do centro até a borda de cada lado: células vizinhas se encontram sem emenda.
+          const dir = grupo.caixa![grupo.glifos.indexOf(g)];
+          const e = lado * 0.11;
+          const c = lado / 2;
+          if (dir.includes("n")) cf.fillRect(c - e / 2, 0, e, c + e / 2);
+          if (dir.includes("s")) cf.fillRect(c - e / 2, c - e / 2, e, c + e / 2);
+          if (dir.includes("w")) cf.fillRect(0, c - e / 2, c + e / 2, e);
+          if (dir.includes("e")) cf.fillRect(c - e / 2, c - e / 2, c + e / 2, e);
+        } else {
+          cf.textAlign = "center";
+          cf.textBaseline = "alphabetic";
+          cf.font = `${lado * 0.68}px ${grupo.fonte}`;
+          const m = cf.measureText(g);
+          const asc = m.actualBoundingBoxAscent;
+          const des = m.actualBoundingBoxDescent;
+          cf.fillText(g, lado / 2, lado / 2 + (asc - des) / 2);
+        }
         const px = cf.getImageData(0, 0, lado, lado).data;
         const fora = new Float64Array(lado * lado);
         const dentro = new Float64Array(lado * lado);
@@ -143,10 +169,22 @@ await navegador.close();
 mkdirSync("public/gl", { recursive: true });
 mkdirSync("src/gl/chuva", { recursive: true });
 writeFileSync("public/gl/atlas.png", Buffer.from(png.split(",")[1], "base64"));
+const inicio = (i: number) => grupos.slice(0, i).reduce((t, g) => t + g.glifos.length, 0);
 writeFileSync(
   "src/gl/chuva/atlas-info.ts",
   `// Gerado por scripts/gerar-atlas.ts. Não edite à mão.
-export const ATLAS = { colunas: ${COLUNAS}, linhas: ${LINHAS}, total: ${total}, latinas: ${LATINAS.length} } as const;
+export const ATLAS = {
+  colunas: ${COLUNAS},
+  linhas: ${LINHAS},
+  total: ${total},
+  latinas: ${LATINAS.length},
+  digitos: ${LATINAS.length},
+  katakana: ${inicio(1)},
+  katakanaN: ${KATAKANA.length},
+  simbolos: ${inicio(2)},
+  simbolosN: ${SIMBOLOS.length},
+  caixa: ${inicio(3)},
+} as const;
 `,
 );
 console.log(`Atlas: ${total} glifos, ${COLUNAS}x${LINHAS}`);

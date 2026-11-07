@@ -25,7 +25,7 @@ function aplicar(grupo: string, valor: string) {
 /** Reordenação com Motion: cada item parte de onde estava. O filtro funciona igual sem ela. */
 async function reordenar(alvo: Element, antes: Map<Element, DOMRect>) {
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  const visiveis = [...alvo.querySelectorAll<HTMLElement>('[data-areas]:not([data-oculto="sim"])')].filter((el) => el.offsetParent !== null).slice(0, 40);
+  const visiveis = [...alvo.querySelectorAll<HTMLElement>('[data-areas]:not([data-oculto="sim"])')].filter((el) => el.offsetParent !== null && el.nodeName !== "path").slice(0, 40);
   const depois = visiveis.map((el) => [el, el.getBoundingClientRect()] as const);
   const { animate } = await import("motion");
   for (const [el, r] of depois) {

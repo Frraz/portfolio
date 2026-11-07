@@ -14,7 +14,7 @@ vi.stubGlobal("localStorage", { getItem: (k: string) => memoria.get(k) ?? null, 
 vi.stubGlobal("dispatchEvent", () => true);
 vi.stubGlobal("CustomEvent", class { constructor(public type: string, public init?: unknown) {} });
 
-const ctx: Contexto = { c, temas: ["ouro", "fosforo", "pergaminho"], cabecalhos: async () => new Headers({ "content-security-policy": "default-src 'none'; script-src 'self'", "x-selo": "X" }), temPdf: async () => false, arquivoPdf: "/x.pdf" };
+const ctx: Contexto = { c, temas: ["rubro", "claro"], cabecalhos: async () => new Headers({ "content-security-policy": "default-src 'none'; script-src 'self'", "x-selo": "X" }), temPdf: async () => false, arquivoPdf: "/x.pdf" };
 
 describe("terminal", () => {
   beforeEach(() => memoria.clear());
@@ -48,9 +48,9 @@ describe("terminal", () => {
     expect((await executar("competencias banana", ctx)).linhas[0]).toContain("área desconhecida");
     expect((await executar("competencias seguranca", ctx)).linhas.join(" ")).toContain("Burp Suite");
   });
-  it("tema selado só abre com os nove selos", async () => {
-    expect((await executar("tema selado", ctx)).linhas).toEqual([c.terminal.temaBloqueado]);
-    expect((await executar("tema selado", { ...ctx, temas: [...ctx.temas, "selado"] })).efeito).toEqual({ tipo: "tema", id: "selado" });
+  it("tema fósforo só abre depois de liberado", async () => {
+    expect((await executar("tema fosforo", ctx)).linhas).toEqual([c.terminal.temaBloqueado]);
+    expect((await executar("tema fosforo", { ...ctx, temas: [...ctx.temas, "fosforo"] })).efeito).toEqual({ tipo: "tema", id: "fosforo" });
   });
   it("completa nomes únicos", () => {
     expect(completar("cab")).toBe("cabecalhos");

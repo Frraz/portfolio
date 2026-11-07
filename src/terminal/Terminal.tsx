@@ -39,7 +39,7 @@ export default function Terminal({ aberto, aoFechar, alternarChuva }: { aberto: 
   const posicao = useRef(-1);
   const proximo = useRef(1);
   const saida = useRef<HTMLDivElement>(null);
-  const contexto = useMemo<Contexto>(() => ({ c, temas: [], cabecalhos: lerCabecalhos, temPdf, arquivoPdf: `/${PDF_PUBLICO}` }), []);
+  const contexto = useMemo<Contexto>(() => ({ c, temas: [], cabecalhos: lerCabecalhos, temPdf, arquivoPdf: `/${PDF_PUBLICO}`}), []);
 
   useEffect(() => {
     saida.current?.scrollTo({ top: saida.current.scrollHeight });
@@ -85,7 +85,7 @@ export default function Terminal({ aberto, aoFechar, alternarChuva }: { aberto: 
     setValor("");
     if (entrada.trim()) historico.current.unshift(entrada);
     posicao.current = -1;
-    const temas = [...IDS_TEMAS.filter((t) => t !== "selado"), ...(ctfCompleto() ? ["selado"] : [])];
+    const temas = [...IDS_TEMAS.filter((t) => t !== "fosforo"), ...(ctfCompleto() ? ["fosforo"] : [])];
     const r = await executar(entrada, { ...contexto, temas });
     setLinhas((atual) => [
       ...atual,

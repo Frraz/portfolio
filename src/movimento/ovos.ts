@@ -44,19 +44,10 @@ export function montarOvos() {
   };
   addEventListener("nave:selo", aoSelo);
   if (ctfCompleto()) estadoCena.coelho = true;
-  // O relicário mostra quantos selos o filtro atual deixa à vista: o número é real.
-  const aoFiltro = (e: Event) => {
-    const d = (e as CustomEvent<{ grupo: string; visiveis: number }>).detail;
-    if (d?.grupo !== "certificado") return;
-    estadoCena.selosAtivos = d.visiveis;
-    estadoCena.sujo = 60;
-  };
-  addEventListener("nave:filtro", aoFiltro);
 
   return () => {
     removeEventListener("keydown", tecla);
     removeEventListener("nave:selo", aoSelo);
-    removeEventListener("nave:filtro", aoFiltro);
     window.clearTimeout(temporizador);
   };
 }

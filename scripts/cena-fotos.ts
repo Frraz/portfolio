@@ -6,7 +6,7 @@ import { mkdirSync } from "node:fs";
 import { chromium } from "@playwright/test";
 
 const pasta = process.argv[2] ?? "test-results/cena";
-const tema = process.argv[3] ?? "ouro";
+const tema = process.argv[3] ?? "rubro";
 const w = Number(process.argv[4] ?? 1200);
 const h = Number(process.argv[5] ?? 700);
 const ids = (process.env.SECOES ?? "sobre,inicial,agora,trajetoria,formacao,competencias,certificados,contato").split(",").filter(Boolean);

@@ -6,9 +6,30 @@ O que o titular pediu, para quem o site existe e como saberemos que deu certo. E
 
 Um portfólio em `https://warley.ferzion.com.br` que seja referência de design em 2027 e diga a verdade sobre um profissional de redes que está começando em cibersegurança.
 
-## O pedido do titular
+## Pedido de redesign (06/11/2026)
 
-Resumo fiel da conversa de 05/11/2026.
+O titular publicou a primeira versão em 05/11/2026, avaliou e não gostou do design: "achei muito tosco", "ficou horrível". Pediu para **refazer do zero tudo o que é design** e **esquecer completamente as referências** passadas antes. Ficam os dados, a stack, as tecnologias e o uso das skills. Este pedido prevalece sobre as seções mais antigas deste documento no que diz respeito a design.
+
+| Requisito | Palavras ou sentido do pedido |
+|---|---|
+| Escopo | "Refazer completamente o design system, o projeto de design, tudo relacionado ao design." Manter "apenas os dados, as stacks, as tecnologias usadas" |
+| Referências | "Esquecer completamente as referências." As poucas que ficam: **Matrix** e cores **vermelho, vermelho-escuro** |
+| Identidade | Parecer de "alguém de tecnologia, de cibersegurança, de redes e de infraestrutura". Profissional de tecnologia, ainda iniciante, que estuda formalmente há mais de quatro anos e se interessa por tecnologia desde muito cedo |
+| Ambição | "Um portfólio foda de um profissional de tecnologia do mais alto nível da atualidade", "completamente atual", usado ao longo de 2027, que "surpreenda" e seja "referência de design" |
+| Leitura sem palavras | "Uma pessoa olhe e fale: rapaz, essa pessoa aqui é boa com tecnologia. Não precisa nem ler nenhuma palavra para deduzir isso" |
+| Riqueza | "Muitos elementos", "design rico, profissional, moderno", "cada mínimo detalhe, cada pixel" pensado |
+| Recursos | Tendências de 2027, as stacks mais potentes, as skills. Mantém terminal, CTF, simulação GPON e som, e acrescenta elementos de **hardware, Kali, binário, cyber e SOC**: "vamos colocar bastantes elementos e recursos" |
+| Cena 3D | Prototipou as duas direções ("Tudo é código" e "Objetos 3D reais"). **Escolheu "Tudo é código" em 07/11/2026** e pediu para remover a outra |
+| Temas | Rubro como padrão, Claro e Fósforo, este escondido |
+| Ajustes de 07/11/2026 | Tirar o "W" solto depois de Sobre, o efeito de cursor na chuva e a Formação em janelas de igreja. Chuva mais lenta. Vidro líquido do iOS na barra de navegação |
+
+**Resultado:** conceito **Sinal** em [04](04-direcao-criativa.md), design system em [05](05-design-system.md), plano em [12](12-roteiro.md#redesign) e decisões a partir da [56](decisoes.md).
+
+**Fatos ditos nesta conversa e a base:** "estudo formal há mais de quatro anos" é confirmado pela base (UNIASSELVI desde 02/2022) e pode ser exibido calculado. "Interesse por tecnologia desde muito cedo" ainda não está em `../curriculo`: só entra no site depois de o titular registrar lá ([pendências](pendencias.md)).
+
+## O pedido original do titular
+
+Resumo fiel da conversa de 05/11/2026. **No que se refere a design, foi substituído pelo [pedido de redesign](#pedido-de-redesign-06112026).**
 
 | Requisito | Palavras ou sentido do pedido |
 |---|---|
@@ -16,8 +37,8 @@ Resumo fiel da conversa de 05/11/2026.
 | Recursos | "Todos os recursos que pudermos usar", "literalmente tudo o que tenho direito", "as melhores stacks, as melhores skills" |
 | Conteúdo | Reflete o estado profissional e acadêmico atual. Iniciante em cibersegurança, com visão realista |
 | Visual × experiência | A falta de experiência limita o texto e nunca o design. Muitos elementos de cibersegurança são bem-vindos |
-| Chuva Matrix | "Muito bem feita", sem ser a base de tudo |
-| Cores | Aberto a sugestões, pode variar entre paletas. O titular ajusta depois |
+| Chuva Matrix | "Muito bem feita", sem ser a base de tudo. No redesign, a chuva vira o material da cena, e as formas de cada seção nascem dela |
+| Cores | Aberto a sugestões na primeira versão. No redesign: vermelho e vermelho-escuro |
 | Projetos de desenvolvimento | Fora por enquanto. Estrutura pronta para adicionar projetos com demo no futuro |
 | Publicação | No ar assim que estiver pronto |
 | Ordem de trabalho | Primeiro toda a documentação, depois o desenvolvimento |
@@ -27,8 +48,8 @@ Resumo fiel da conversa de 05/11/2026.
 
 | Tema | Decisão |
 |---|---|
-| Conceito | **Nave Digital**. Codex Rubro e Iconóstase de Ouro viram temas alternáveis |
-| Iconografia cristã | Arquitetura, vitrais, ouro, caligrafia eclesiástica e cruz ortodoxa usada com respeito. Sem figuras sagradas |
+| Conceito | ~~Nave Digital~~, substituído em 06/11/2026 pelo conceito Sinal |
+| Iconografia cristã | ~~Arquitetura, vitrais, ouro e cruz~~. Saiu com o redesign: o site novo não usa iconografia religiosa |
 | Limites | Sem símbolos invertidos, paródia do sagrado, nonagrama, pentagrama, logos ou personagens de terceiros |
 | Telefone | Revelado ao clicar, fora do HTML estático |
 | Stack | Tudo da lista entra, salvo alternativas excludentes ou conflito com instrução do titular |
@@ -58,7 +79,7 @@ Resumo fiel da conversa de 05/11/2026.
 
 ### Referências de estilo
 
-Registradas em [referenciasdeestilo.md](../referenciasdeestilo.md): gótico cristão, ortodoxo, Matrix e chuva Matrix, cyberpunk, Mr. Robot, Alena Belijakova (Bunnyland), red team, Slipknot e a estética cristã de Death Note. A tradução de cada uma está em [04-direcao-criativa.md](04-direcao-criativa.md). O titular avisou que não precisam ser seguidas ao pé da letra.
+**Substituídas em 06/11/2026.** As referências da primeira versão estão em [referenciasdeestilo.md](../referenciasdeestilo.md), arquivo do titular mantido só como histórico: gótico cristão, ortodoxo, Matrix, cyberpunk, Mr. Robot, Bunnyland, red team, Slipknot e Death Note. Do conjunto, ficou apenas Matrix. As referências atuais e sua tradução estão em [04](04-direcao-criativa.md#referências).
 
 ### O prompt original
 
@@ -90,6 +111,7 @@ Texto usado pelo titular no ChatGPT para gerar [skills-stacks.md](../skills-stac
 | Critério | Medida |
 |---|---|
 | Entendimento | Em teste com 5 pessoas fora da área, todas dizem cargo e área em até 10 segundos |
+| Leitura sem palavras | Com o texto borrado, 4 de 5 pessoas dizem que é um profissional de tecnologia em 5 segundos ([teste](11-qualidade.md#teste-sem-palavras)) |
 | Veracidade | Cada fato de [02-conteudo.md](02-conteudo.md) tem origem em [01-veracidade-e-fontes.md](01-veracidade-e-fontes.md) e passa pela verificação automática |
 | Design | Autoavaliação na rubrica de [11-qualidade.md](11-qualidade.md) com média 8 ou mais em cada eixo, feita por quem não construiu a tela |
 | Desempenho | LCP ≤ 2,5 s, INP ≤ 200 ms, CLS ≤ 0,1 em celular intermediário |

@@ -10,7 +10,7 @@ Segue o padrão já usado no servidor, descrito em `../bibliotheon/docs/06-deplo
 | DNS | Registro A → `147.93.15.214`, resolvendo em 05/11/2026 |
 | Acesso | `ssh deploy@147.93.15.214`, usuário no grupo `docker`, sem `sudo` sem senha |
 | Sistema compartilhado | **Sim**, com vários sistemas, incluindo de clientes |
-| Certificado | **Ainda não existe** para este domínio. O acesso HTTPS falha na verificação |
+| Certificado | Emitido em 05/11/2026 pelo Certbot, válido até 03/02/2027, com renovação automática. Falta confirmar com `sudo certbot renew --dry-run` |
 
 ### Regras do servidor
 
@@ -26,7 +26,7 @@ Vêm de `/var/www/docker-instances/README.md`, citadas em `../byakugan/DEPLOY.md
 
 | Recurso | Valor |
 |---|---|
-| Porta loopback | **8030 (candidata)**. Portas registradas como ocupadas: 3000, 8001–8007, 8010–8013, 8020, 8080, 8110, 8120, 9000. Confirmar antes: `ss -ltn | grep 8030` |
+| Porta loopback | **8030**, em uso por este site desde 05/11/2026 |
 | Compose | `deploy/docker-compose.prod.yml` |
 | Vhost | `/etc/nginx/sites-available/portfolio` |
 | Memória | 96 MB em execução. Conferir `free -h` antes do primeiro build |
@@ -139,7 +139,7 @@ server {
 }
 ```
 
-**Avisos conhecidos:** o nginx 1.24 usa `http2` no `listen` (a diretiva `http2 on` veio depois). Os avisos `protocol options redefined`, já registrados pelo Bibliotheon, vêm de outros sites e são inofensivos. Conferir se este site não introduz outros.
+**Avisos conhecidos:** o nginx 1.24 usa `http2` no `listen` (a diretiva `http2 on` veio depois). Os avisos `protocol options redefined` são inofensivos: aparecem para vários sites do servidor, e este também gera um, em `[::]:443`, igual aos demais.
 
 ## Primeiro deploy
 

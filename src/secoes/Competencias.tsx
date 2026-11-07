@@ -2,34 +2,32 @@ import type { ConteudoSite } from "@/conteudo/esquema";
 import { Filtro } from "@/componentes/Filtro";
 import { Secao } from "./Secao";
 
-type Props = { c: ConteudoSite; numero: number; margem: string };
-
-export function Competencias({ c, numero, margem }: Props) {
+/**
+ * Degraus de evidência: uma fileira por origem do conhecimento, da mais forte para a mais fraca.
+ * O peso aparece só na tipografia (tamanho e tom caem a cada degrau), sem nível ou porcentagem.
+ */
+export function Competencias({ c }: { c: ConteudoSite }) {
   const k = c.competencias;
   return (
-    <Secao id="competencias" numero={numero} margem={margem} titulo={k.titulo}>
-      <p className="medida">{k.introducao}</p>
+    <Secao id="competencias" titulo={k.titulo}>
+      <p className="medida introducao">{k.introducao}</p>
       <Filtro grupo="area" rotulo={k.titulo} opcoes={k.filtros} />
-      <div data-grupo-filtro="area">
-        {k.grupos.map((g) => (
-          <section key={g.evidencia} className="fileira" data-fileira data-evidencia={g.evidencia} aria-label={g.titulo}>
-            <div>
-              <h3>{g.titulo}</h3>
-              <p className="legenda">{g.explicacao}</p>
+      <div className="degraus" data-grupo-filtro="area">
+        {k.grupos.map((g, i) => (
+          <section key={g.evidencia} className="degrau" data-fileira data-evidencia={g.evidencia} data-nivel={i} aria-labelledby={`degrau-${g.evidencia}`}>
+            <div className="degrau-cabeca">
+              <h3 id={`degrau-${g.evidencia}`}>{g.titulo}</h3>
+              <p className="degrau-explicacao">{g.explicacao}</p>
             </div>
-            <div>
-              <ul className="fileira-itens">
-                {g.itens.map((i) => (
-                  <li key={i.nome} data-areas={i.areas.join(" ")}>
-                    {i.nome}
+            <div className="degrau-corpo">
+              <ul className="degrau-itens">
+                {g.itens.map((item) => (
+                  <li key={item.nome} data-areas={item.areas.join(" ")}>
+                    {item.nome}
                   </li>
                 ))}
               </ul>
-              {"nota" in g && g.nota ? (
-                <p className="legenda" style={{ marginTop: "1rem" }}>
-                  {g.nota}
-                </p>
-              ) : null}
+              {"nota" in g && g.nota ? <p className="degrau-nota">{g.nota}</p> : null}
             </div>
           </section>
         ))}

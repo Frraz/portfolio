@@ -59,7 +59,7 @@ export const Projeto = z.object({
 export const IDS_SECOES = ["inicio", "sobre", "agora", "trajetoria", "formacao", "competencias", "certificados", "obras", "contato"] as const;
 export const IdSecao = z.enum(IDS_SECOES);
 
-const Secao = z.object({ id: IdSecao, rotulo: z.string(), margem: z.string() });
+const Secao = z.object({ id: IdSecao, rotulo: z.string() });
 
 export const Conteudo = z.object({
   idioma: z.string(),
@@ -75,6 +75,7 @@ export const Conteudo = z.object({
     aindaNaoTenho: z.string(),
     procuroTitulo: z.string(),
     procuro: z.string(),
+    ficha: z.object({ cargo: z.string(), local: z.string(), estudo: z.string(), noCargo: z.string(), ano: z.string(), anos: z.string(), mes: z.string(), meses: z.string(), e: z.string() }),
   }),
   agora: z.object({
     titulo: z.string(),
@@ -84,16 +85,13 @@ export const Conteudo = z.object({
     atividades: z.array(z.string()).min(1),
     ferramentasTitulo: z.string(),
     ferramentas: z.array(z.string()),
-    luzTitulo: z.string(),
-    luz: z.string(),
-    legendaDiagrama: z.string(),
-    divisor: z.object({ grupo: z.string(), instrucao: z.string(), olt: z.string(), divisor: z.string(), onu: z.string(), painel: z.string(), completa: z.string(), reiniciar: z.string() }),
   }),
   trajetoria: z.object({ titulo: z.string(), introducao: z.string(), experiencias: z.array(Experiencia).length(10) }),
   formacao: z.object({
     titulo: z.string(),
     cursos: z.array(Curso).length(3),
-    legendaLanceta: z.string(),
+    legendaBloco: z.string(),
+    tempoDecorrido: z.string(),
     estudoTitulo: z.string(),
     estudo: z.string(),
     idiomasTitulo: z.string(),
@@ -110,6 +108,8 @@ export const Conteudo = z.object({
     verMenos: z.string(),
     validar: z.string(),
     semValidacao: z.string(),
+    colunas: z.record(z.string(), z.string()),
+    legendaRegistro: z.string(),
     filtros: z.record(z.string(), z.string()),
     itens: z.array(Certificado).length(36),
   }),
@@ -123,6 +123,7 @@ export const Conteudo = z.object({
     copiarFalha: z.string(),
     mostrarWhatsapp: z.string(),
     baixarPdf: z.string(),
+    canais: z.object({ rotulo: z.string(), linkedin: z.string(), github: z.string(), whatsapp: z.string() }),
   }),
   cv: z.object({ subtitulo: z.string(), objetivoTitulo: z.string(), objetivo: z.string(), resumoTitulo: z.string(), resumo: z.string(), experienciaTi: z.string(), anteriores: z.string(), cursosTitulo: z.string(), baixar: z.string(), imprimir: z.string(), voltar: z.string() }),
   seguranca: z.object({
@@ -138,7 +139,7 @@ export const Conteudo = z.object({
     privacidadeTitulo: z.string(),
     privacidade: z.string(),
   }),
-  sistema: z.object({ titulo: z.string(), abertura: z.string() }),
+  sistema: z.object({ titulo: z.string(), abertura: z.string(), rotulos: z.record(z.string(), z.string()) }),
   terminal: z.object({
     titulo: z.string(),
     rotuloEntrada: z.string(),
@@ -183,7 +184,7 @@ export const Conteudo = z.object({
     dicas: z.array(z.object({ dica: z.string(), link: z.string() })).length(9),
     maca: z.string(),
   }),
-  rodape: z.object({ assinatura: z.string(), creditos: z.string() }),
+  rodape: z.object({ assinatura: z.string(), creditos: z.string(), build: z.string(), paginas: z.string() }),
   estados: z.object({ naoEncontradaTitulo: z.string(), naoEncontrada: z.string(), voltar: z.string(), offlineTitulo: z.string(), offline: z.string() }),
   seo: z.object({
     inicio: z.object({ titulo: z.string(), descricao: z.string() }),

@@ -14,6 +14,14 @@ export function contraste(a: string, b: string) {
   const [x, y] = [luminancia(a), luminancia(b)].sort((p, q) => q - p);
   return (x + 0.05) / (y + 0.05);
 }
+/**
+ * Teto de luminância da cena atrás do texto, por tema (docs/06): mantém `tinta-2` em 4,5:1 e deixa 5% de folga
+ * para o bloom. Só faz sentido em tema escuro; no claro vale o piso, e o teto fica no valor antigo.
+ */
+export function tetoDeLuz(tinta2: string, escuro: boolean) {
+  if (!escuro) return 0.05;
+  return ((luminancia(tinta2) + 0.05) / 4.5 - 0.05) * 0.95;
+}
 export function mistura(topo: string, base: string, alfa: number) {
   const t = paraRgb(topo);
   const b = paraRgb(base);

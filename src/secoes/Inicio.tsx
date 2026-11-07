@@ -1,9 +1,9 @@
 import Link from "next/link";
 import type { ConteudoSite } from "@/conteudo/esquema";
+import { BootLog } from "@/componentes/moldura/BootLog";
 
 export function Inicio({ c }: { c: ConteudoSite }) {
   return (
-    <div className="hero-trilho">
     <section id="inicio" className="hero" aria-labelledby="inicio-titulo">
       <div className="hero-veu" aria-hidden="true" />
       <h1 id="inicio-titulo">
@@ -22,7 +22,7 @@ export function Inicio({ c }: { c: ConteudoSite }) {
         </a>
       </div>
       <p className="hero-local">{c.inicio.local}</p>
+      <BootLog />
     </section>
-    </div>
   );
 }

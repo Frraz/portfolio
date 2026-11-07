@@ -1,0 +1,817 @@
+/* Seções do site no conceito Sinal (docs/04 e docs/05). Cores e fontes só por tokens. */
+
+:root {
+  /* Respiro lateral: o conteúdo fica fora da faixa da moldura e da régua. */
+  --pad-e: calc(var(--moldura) + clamp(1rem, 4vw, 4rem));
+  --pad-d: calc(var(--moldura) + clamp(2.25rem, 5vw, 5rem));
+}
+
+@layer components {
+  .secao {
+    position: relative;
+    isolation: isolate;
+    padding: clamp(5rem, 10vw, 9rem) var(--pad-d) clamp(3rem, 7vw, 6rem) var(--pad-e);
+  }
+  .secao-corpo {
+    max-width: 1280px;
+    margin-inline: auto;
+  }
+  .titulo-secao {
+    font-size: var(--t-h2);
+    margin-bottom: clamp(1.75rem, 3vw, 3rem);
+  }
+  .medida {
+    max-width: 68ch;
+  }
+  /* Introdução de seção: um degrau abaixo do título e do conteúdo, para a página respirar. */
+  .introducao {
+    color: var(--tinta-2);
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+  }
+  .legenda {
+    font-size: var(--t-legenda);
+    color: var(--tinta-2);
+  }
+  .bloco-titulo {
+    font-size: clamp(1.05rem, 0.98rem + 0.3vw, 1.25rem);
+    font-weight: var(--peso-sub);
+    color: var(--tinta-2);
+    margin: 2.5rem 0 1rem;
+  }
+  /* Seções com forma desenhada pela chuva: em tela larga, o texto deixa a direita livre. */
+  @media (min-width: 1100px) {
+    .secao[data-forma="sim"] .secao-corpo > :not(.titulo-secao) {
+      max-width: 54%;
+    }
+  }
+
+  /* Filtros por área, na URL */
+  .filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin: 1.5rem 0 2.5rem;
+  }
+  .filtro {
+    min-height: 2.75rem;
+    padding: 0.4rem 0.9rem;
+    background: transparent;
+    color: var(--tinta-2);
+    border: 1px solid color-mix(in oklch, var(--tinta-2) 40%, transparent);
+    border-radius: 2px;
+    cursor: pointer;
+    font-size: var(--t-legenda);
+    transition: color var(--dur-hover) ease, border-color var(--dur-hover) ease, background-color var(--dur-hover) ease, transform var(--dur-toque) ease-out;
+  }
+  .filtro:hover {
+    color: var(--tinta);
+    border-color: var(--sinal);
+  }
+  .filtro:active {
+    transform: scale(0.97);
+  }
+  .filtro[aria-pressed="true"] {
+    background: var(--sinal);
+    border-color: var(--sinal);
+    color: var(--fundo);
+  }
+  :root:not(.js) .filtros {
+    display: none;
+  }
+  [data-grupo-filtro="area"] {
+    position: relative;
+  }
+
+  /* Início */
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 var(--pad-d) clamp(2.5rem, 8vh, 5rem) var(--pad-e);
+  }
+  /* A luz que protege a leitura do texto sobre a chuva do hero. Degradê longo, com várias paradas, para não ter
+     borda: a primeira versão tinha 94% de opacidade e virava um retângulo escuro atrás do cargo. */
+  .hero-veu {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(
+      140% 75% at 0% 100%,
+      color-mix(in oklch, var(--fundo) 86%, transparent) 0%,
+      color-mix(in oklch, var(--fundo) 74%, transparent) 22%,
+      color-mix(in oklch, var(--fundo) 52%, transparent) 42%,
+      color-mix(in oklch, var(--fundo) 24%, transparent) 62%,
+      transparent 82%
+    );
+  }
+  /* O teto em vw garante "Warley Ferraz" numa linha só até em 360 px, já na largura final (docs/05). */
+  .hero h1 {
+    font-size: min(var(--t-nome), 11.2vw);
+    font-stretch: var(--larg-nome);
+    font-weight: var(--peso-nome);
+    letter-spacing: -0.03em;
+    line-height: 0.92;
+  }
+  .hero h1 span {
+    display: block;
+    white-space: nowrap;
+  }
+  /* O nome nasce condensado e se expande uma vez, quando a cena chega (storyboard). Sem JavaScript, já nasce na largura final. */
+  @media (prefers-reduced-motion: no-preference) {
+    :root.js .hero h1 {
+      font-stretch: 75%;
+    }
+  }
+  /* A sombra escura acompanha as letras, e não um bloco: a chuva continua visível entre as linhas. */
+  .hero-sub,
+  .hero-apoio,
+  .hero-local {
+    text-shadow: 0 0 1.25rem var(--fundo), 0 0 0.5rem var(--fundo);
+  }
+  .hero-sub {
+    margin-top: 1.5rem;
+    font-size: var(--t-lead);
+    line-height: 1.3;
+    font-weight: 450;
+    max-width: 32ch;
+  }
+  .hero-apoio {
+    margin-top: 0.75rem;
+    max-width: 46ch;
+    color: var(--tinta-2);
+  }
+  .hero-acoes {
+    margin-top: 1.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.25rem;
+  }
+  .hero-local {
+    margin-top: 1rem;
+    font-size: var(--t-legenda);
+    color: var(--tinta-2);
+  }
+  @media (max-width: 767px) {
+    .hero-veu {
+      background: linear-gradient(
+        to top,
+        color-mix(in oklch, var(--fundo) 88%, transparent) 0%,
+        color-mix(in oklch, var(--fundo) 70%, transparent) 30%,
+        color-mix(in oklch, var(--fundo) 40%, transparent) 50%,
+        transparent 72%
+      );
+    }
+  }
+
+  /* Sobre */
+  .sobre-topo {
+    display: grid;
+    gap: 2.5rem 4rem;
+  }
+  @media (min-width: 1000px) {
+    .sobre-topo {
+      grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+    }
+  }
+  .sobre-lead {
+    font-size: var(--t-lead);
+    line-height: 1.38;
+    font-weight: 450;
+    margin-bottom: 1.5rem;
+  }
+  .sobre-texto p:not(.sobre-lead) {
+    color: var(--tinta-2);
+  }
+  .sobre-texto p + p {
+    margin-top: 1rem;
+  }
+  /* Ficha: sem caixa cheia. Um fio à esquerda marca a coluna; rótulos em tom secundário, valores em tinta. */
+  .sobre-ficha {
+    align-self: start;
+    padding: 0.25rem 0 0.25rem 1.5rem;
+    border-left: var(--borda);
+    overflow: hidden;
+  }
+  @media (min-width: 1000px) {
+    .sobre-ficha {
+      position: sticky;
+      top: calc(var(--altura-barra) + var(--faixa) + 1.5rem);
+    }
+  }
+  .sobre-ficha dl {
+    margin: 0 0 1.75rem;
+    display: grid;
+    gap: 1.1rem;
+  }
+  .sobre-ficha dt {
+    font-size: var(--t-legenda);
+    color: var(--tinta-2);
+  }
+  .sobre-ficha dd {
+    margin: 0.1rem 0 0;
+    font-weight: 560;
+  }
+  .sobre-ficha .hexdump {
+    font-size: 0.6875rem;
+    opacity: 0.75;
+  }
+  .sobre-blocos {
+    display: grid;
+    gap: 2rem 4rem;
+    margin-top: clamp(3rem, 6vw, 5rem);
+    padding-top: 2rem;
+    border-top: var(--borda);
+  }
+  @media (min-width: 720px) {
+    .sobre-blocos {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .sobre-blocos h3 {
+    font-size: var(--t-h3);
+    margin-bottom: 0.75rem;
+  }
+  .sobre-blocos p {
+    color: var(--tinta-2);
+    max-width: 52ch;
+  }
+
+  /* Agora */
+  .agora-cabeca {
+    margin-bottom: 2rem;
+  }
+  .agora-cargo {
+    font-size: var(--t-h3);
+  }
+  .agora-empresa {
+    margin-top: 0.3rem;
+    font-weight: 500;
+  }
+  .agora-periodo {
+    margin-top: 0.15rem;
+    font-size: var(--t-legenda);
+    color: var(--tinta-2);
+  }
+  .lista-trabalho {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.85rem;
+  }
+  .lista-trabalho li {
+    position: relative;
+    padding-left: 1.5rem;
+    color: var(--tinta-2);
+  }
+  /* Marcador: um traço curto em tom de forma, e não um quadrado aceso em cada linha. */
+  .lista-trabalho li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.8em;
+    width: 0.65rem;
+    height: 1px;
+    background: var(--sinal);
+  }
+  .ferramentas {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .ferramentas li {
+    font-size: var(--t-legenda);
+    padding: 0.3rem 0.75rem;
+    border: var(--borda);
+    border-radius: var(--raio-1);
+    color: var(--tinta);
+  }
+
+  /* Trajetória: traceroute. Cada emprego é um salto, e o último é o NOC. */
+  .traceroute {
+    --trilho: 3.2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+  }
+  .salto {
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--trilho) minmax(0, 1fr);
+    column-gap: 2rem;
+    padding-bottom: 2.25rem;
+  }
+  .salto-n {
+    text-align: right;
+    padding-top: 0.3rem;
+    color: var(--tinta-2);
+  }
+  /* Trilho: o fio mede a sequência real dos dez saltos. */
+  .salto::before {
+    content: "";
+    position: absolute;
+    left: calc(var(--trilho) + 1rem - 1px);
+    top: 0.85rem;
+    bottom: -0.4rem;
+    width: 1px;
+    background: color-mix(in oklch, var(--forma) 55%, transparent);
+  }
+  .salto:last-child::before {
+    display: none;
+  }
+  .salto::after {
+    content: "";
+    position: absolute;
+    left: calc(var(--trilho) + 1rem - 5px);
+    top: 0.5rem;
+    width: 10px;
+    height: 10px;
+    background: var(--fundo);
+    border: 1px solid var(--forma);
+    transition: background-color var(--dur-ui) ease, border-color var(--dur-ui) ease;
+  }
+  .salto[data-ti="sim"]::after,
+  .salto[data-aceso="sim"]::after {
+    border-color: var(--sinal);
+  }
+  .salto[data-ti="sim"]::after,
+  .salto[data-destino="sim"]::after {
+    background: var(--sinal);
+  }
+  .salto-corpo {
+    padding-left: 1.5rem;
+  }
+  .salto h3 {
+    font-size: clamp(1.1rem, 1rem + 0.45vw, 1.35rem);
+    font-weight: 500;
+    color: var(--tinta-2);
+  }
+  .salto[data-ti="sim"] h3 {
+    color: var(--tinta);
+    font-size: var(--t-h3);
+    font-weight: var(--peso-sub);
+  }
+  .salto[data-destino="sim"] h3 {
+    color: var(--sinal);
+  }
+  .salto-empresa {
+    margin-top: 0.2rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 0.75rem;
+  }
+  .salto-descricao {
+    margin-top: 0.4rem;
+    max-width: 62ch;
+    color: var(--tinta-2);
+  }
+  .salto:not([data-ti="sim"]) .salto-descricao {
+    font-size: var(--t-legenda);
+  }
+  /* O pacote percorre o traceroute com a rolagem (storyboard). */
+  .traceroute::after {
+    content: "";
+    position: absolute;
+    left: calc(var(--trilho) + 1rem - 6px);
+    top: calc(var(--pacote, 0) * (100% - 1rem));
+    width: 12px;
+    height: 12px;
+    background: var(--sinal);
+    pointer-events: none;
+    display: none;
+  }
+  :root.js .traceroute::after {
+    display: block;
+  }
+  @media (max-width: 599px) {
+    .traceroute {
+      --trilho: 1.6rem;
+    }
+    .salto {
+      column-gap: 0.5rem;
+    }
+    .salto-corpo {
+      padding-left: 1.25rem;
+    }
+  }
+
+  /* Formação: os concluídos numa régua comum de horas reais; o em andamento numa régua de tempo. */
+  .blocos {
+    list-style: none;
+    margin: 0 0 clamp(3rem, 6vw, 4.5rem);
+    padding: 0;
+    border-bottom: var(--borda);
+  }
+  .bloco {
+    display: grid;
+    gap: 1.25rem 3rem;
+    padding: clamp(1.5rem, 3vw, 2.25rem) 0;
+    border-top: var(--borda);
+  }
+  @media (min-width: 900px) {
+    .bloco {
+      grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
+      align-items: start;
+    }
+    .bloco-destaques {
+      grid-column: 2;
+    }
+  }
+  .bloco h3 {
+    font-size: var(--t-h3);
+  }
+  .bloco-instituicao {
+    margin-top: 0.3rem;
+    font-weight: 500;
+  }
+  .bloco-periodo {
+    margin-top: 0.2rem;
+    font-size: var(--t-legenda);
+    color: var(--tinta-2);
+  }
+  .bloco-medida {
+    padding-top: 0.35rem;
+  }
+  /* Trilho: vale a maior carga real. Marcas a cada 500 h (`--marca`, calculado no componente). */
+  .bloco-trilho {
+    position: relative;
+    height: 1.25rem;
+    background:
+      linear-gradient(color-mix(in oklch, var(--forma) 55%, transparent), color-mix(in oklch, var(--forma) 55%, transparent)) left bottom / 100% 1px no-repeat,
+      repeating-linear-gradient(to right, color-mix(in oklch, var(--tinta-2) 45%, transparent) 0 1px, transparent 1px var(--marca, 20%)) left bottom / 100% 6px no-repeat;
+  }
+  .bloco[data-andamento="sim"] .bloco-trilho {
+    background: linear-gradient(color-mix(in oklch, var(--forma) 55%, transparent), color-mix(in oklch, var(--forma) 55%, transparent)) left bottom / 100% 1px no-repeat;
+  }
+  .bloco-barra {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 8px;
+    width: var(--larg);
+    border: 1px solid color-mix(in oklch, var(--forma) 70%, transparent);
+    overflow: hidden;
+  }
+  .bloco[data-andamento="sim"] .bloco-barra {
+    border-style: dashed;
+  }
+  .bloco-enchimento {
+    position: absolute;
+    inset: 0;
+    background: var(--forma);
+    transform-origin: left;
+    transform: scaleX(var(--preenche, 1));
+  }
+  .bloco-pontas {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.4rem;
+  }
+  .bloco-numero {
+    margin-top: 0.85rem;
+    font-size: var(--t-h3);
+    font-weight: 560;
+    font-variant-numeric: tabular-nums;
+    color: var(--tinta);
+  }
+  /* "420 h" nunca quebra entre o número e a unidade. */
+  .bloco-numero,
+  .bloco-pct {
+    white-space: nowrap;
+  }
+  .bloco-situacao {
+    font-size: var(--t-legenda);
+    font-weight: 400;
+    color: var(--tinta-2);
+  }
+  .bloco-destaques {
+    color: var(--tinta-2);
+    font-size: var(--t-legenda);
+    max-width: 68ch;
+    margin: 0;
+  }
+  .formacao-rodape {
+    display: grid;
+    gap: 2rem 4rem;
+  }
+  @media (min-width: 900px) {
+    .formacao-rodape {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .formacao-rodape .bloco-titulo {
+    margin-top: 0;
+  }
+  .formacao-rodape p {
+    color: var(--tinta-2);
+  }
+
+  /* Competências: degraus de evidência. O peso cai na tipografia, de cima para baixo. */
+  .degraus {
+    border-bottom: var(--borda);
+  }
+  .degrau {
+    display: grid;
+    gap: 1rem 3rem;
+    padding: clamp(1.5rem, 3vw, 2.25rem) 0;
+    border-top: var(--borda);
+  }
+  @media (min-width: 900px) {
+    .degrau {
+      grid-template-columns: minmax(0, 17rem) minmax(0, 1fr);
+    }
+  }
+  .degrau h3 {
+    font-size: var(--t-h3);
+  }
+  .degrau-explicacao,
+  .degrau-nota {
+    margin-top: 0.4rem;
+    font-size: var(--t-legenda);
+    color: var(--tinta-2);
+    max-width: 40ch;
+  }
+  .degrau-nota {
+    margin-top: 1rem;
+    max-width: 62ch;
+  }
+  .degrau-itens {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.75rem;
+  }
+  .degrau[data-nivel="0"] .degrau-itens {
+    font-size: var(--t-lead);
+    line-height: 1.35;
+    gap: 0.6rem 2rem;
+  }
+  .degrau[data-nivel="2"] .degrau-itens li,
+  .degrau[data-nivel="3"] .degrau-itens li {
+    color: var(--tinta-2);
+  }
+  .degrau[data-nivel="3"] .degrau-itens {
+    font-size: var(--t-legenda);
+    gap: 0.4rem 1.5rem;
+  }
+  .degrau[data-nivel="2"] h3,
+  .degrau[data-nivel="3"] h3 {
+    color: var(--tinta-2);
+  }
+  .degrau-itens li[data-oculto="sim"] {
+    display: none;
+  }
+  .degrau[data-vazia="sim"] {
+    display: none;
+  }
+
+  /* Certificados: registro em tabela */
+  .registro-caixa {
+    overflow-x: auto;
+    margin-top: 1.5rem;
+  }
+  .registro {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--t-legenda);
+  }
+  .registro th,
+  .registro td {
+    text-align: left;
+    padding: 0.75rem 0.75rem;
+    border-bottom: var(--borda);
+    vertical-align: top;
+  }
+  .registro thead th {
+    color: var(--tinta-2);
+    font-weight: 600;
+    background: var(--fundo);
+    white-space: nowrap;
+  }
+  .registro tbody th {
+    font-weight: 600;
+    color: var(--tinta);
+    min-width: 16rem;
+    max-width: 28rem;
+  }
+  .registro tbody tr:hover > * {
+    background: var(--superficie-2);
+  }
+  .registro-hash {
+    color: var(--sinal);
+    white-space: nowrap;
+  }
+  .registro [data-oculto="sim"] {
+    display: none;
+  }
+  :root.js .registro [data-prioridade="C"]:not([data-mostrar="sim"]) {
+    display: none;
+  }
+  .registro-legenda {
+    margin-top: 1rem;
+    max-width: 68ch;
+  }
+  /* Celular: cada linha vira um bloco, com o rótulo da coluna antes do valor. */
+  @media (max-width: 859px) {
+    .registro thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+    }
+    .registro,
+    .registro tbody,
+    .registro tr,
+    .registro th,
+    .registro td {
+      display: block;
+    }
+    .registro tr {
+      padding: 1rem 0;
+      border-bottom: var(--borda);
+    }
+    .registro th,
+    .registro td {
+      border: 0;
+      padding: 0.15rem 0;
+    }
+    .registro tbody th {
+      max-width: none;
+      min-width: 0;
+      font-size: var(--t-corpo);
+    }
+    .registro td[data-rotulo]::before {
+      content: attr(data-rotulo) ": ";
+      color: var(--tinta-2);
+      font-family: var(--font-texto);
+    }
+  }
+
+  /* Contato */
+  .contato-email {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+  }
+  .chamado-email {
+    font-size: clamp(1.25rem, 0.8rem + 2.2vw, 2.5rem);
+    font-weight: var(--peso-sub);
+    letter-spacing: -0.02em;
+    color: var(--tinta);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in oklch, var(--sinal) 55%, transparent);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
+    overflow-wrap: anywhere;
+    transition: color var(--dur-hover) ease, text-decoration-color var(--dur-hover) ease;
+  }
+  .chamado-email:hover {
+    color: var(--sinal);
+    text-decoration-color: var(--sinal);
+  }
+  .contato-email .botao-quieto {
+    color: var(--tinta-2);
+  }
+  .contato-email .botao-quieto:hover {
+    color: var(--sinal);
+  }
+  /* Canais: uma linha por canal, com fio entre elas. O rótulo fica em tom secundário e o endereço em tinta. */
+  .canais {
+    list-style: none;
+    padding: 0;
+    margin: clamp(2rem, 4vw, 3rem) 0 0;
+    max-width: 40rem;
+    border-bottom: var(--borda);
+  }
+  .canais > li {
+    border-top: var(--borda);
+  }
+  .canal {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+    align-items: center;
+    gap: 1rem;
+    min-height: 3.5rem;
+    padding: 0.5rem 0;
+    text-decoration: none;
+    color: var(--tinta);
+  }
+  .canal-rotulo {
+    font-size: var(--t-legenda);
+    color: var(--tinta-2);
+  }
+  .canal-valor {
+    overflow-wrap: anywhere;
+    transition: color var(--dur-hover) ease, transform var(--dur-ui) var(--ease-saida);
+  }
+  a.canal:hover .canal-valor,
+  a.canal:focus-visible .canal-valor {
+    color: var(--sinal);
+    transform: translateX(0.25rem);
+  }
+  a.canal:active .canal-valor {
+    transform: translateX(0.125rem) scale(0.99);
+  }
+  .canal-acao .botao-quieto {
+    justify-content: flex-start;
+    padding-inline: 0;
+    font-size: var(--t-corpo);
+  }
+  @media (max-width: 479px) {
+    .canal {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.1rem;
+      padding: 0.75rem 0;
+    }
+  }
+  .contato-pdf {
+    margin-top: 2rem;
+  }
+
+  /* Rodapé: assinatura e créditos à esquerda, páginas à direita, versão do build numa linha só. */
+  .rodape {
+    padding: 0 var(--pad-d) calc(var(--moldura) + 3rem) var(--pad-e);
+    font-size: var(--t-legenda);
+    color: var(--tinta-2);
+  }
+  /* Os 64 bits do hash do build, como um fio: só textura, com o dado real no lugar. */
+  .faixa-bits {
+    margin: 0 0 clamp(2rem, 4vw, 3rem);
+    padding-top: 1rem;
+    border-top: var(--borda);
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 0.625rem;
+    letter-spacing: 0.4em;
+    color: var(--tinta-2);
+    opacity: 0.45;
+  }
+  .rodape-grade {
+    display: grid;
+    gap: 2rem 4rem;
+    max-width: 1280px;
+    margin-inline: auto;
+  }
+  @media (min-width: 900px) {
+    .rodape-grade {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: start;
+    }
+  }
+  .rodape-grade > * {
+    min-width: 0;
+  }
+  .rodape-nome {
+    font-size: var(--t-h3);
+    font-weight: var(--peso-sub);
+    letter-spacing: -0.012em;
+    line-height: 1.2;
+    color: var(--tinta);
+  }
+  .rodape-creditos {
+    margin-top: 0.75rem;
+    max-width: 56ch;
+  }
+  .rodape-build {
+    margin-top: 1.25rem;
+    color: var(--tinta-2);
+  }
+  .rodape-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.15rem;
+  }
+  .rodape-links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    color: var(--tinta);
+    text-decoration: none;
+    transition: color var(--dur-hover) ease;
+  }
+  .rodape-links a:hover {
+    color: var(--sinal);
+  }
+  @media (max-width: 899px) {
+    .rodape-links {
+      grid-template-columns: repeat(2, minmax(0, max-content));
+      column-gap: 2rem;
+    }
+  }
+}

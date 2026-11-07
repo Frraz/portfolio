@@ -3,16 +3,15 @@
  * Quem escreve é o motor de cada recurso; a cena só lê.
  */
 export const estadoCena = {
-  /** Rosácea acesa por inteiro: Konami ou tema Selado. */
+  /** Konami: as cabeças de todas as colunas ficam em branco quente por 20 s. */
   aceso: 0,
-  /** Com as oito ONUs acesas, a cor do vitral passa à chuva da seção Agora. */
-  corDivisor: 0,
-  /** Quantos selos o filtro atual mostra: é o que sobe à frente do relicário. */
-  selosAtivos: 21,
   /** Recompensa do CTF: troca a frase da coluna. */
   coelho: false,
   /** Cena pede redesenho mesmo com a chuva pausada. */
   sujo: 0,
 };
+
+/** Dados reais da cena para a moldura de instrumento (docs/05). Quem decide o nível escreve aqui. */
+export const hud: { cena: "carregando" | "ativa" | "estatica"; nivel: string } = { cena: "carregando", nivel: "" };
 
 export const reduzido = () => matchMedia("(prefers-reduced-motion: reduce)").matches;

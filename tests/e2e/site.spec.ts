@@ -51,7 +51,7 @@ test.describe("conteúdo sem JavaScript", () => {
     for (const t of ["Sobre", "Agora", "Trajetória", "Formação", "Competências", "Certificados", "Contato"]) {
       await expect(page.getByRole("heading", { level: 2, name: t })).toBeVisible();
     }
-    await expect(page.locator(".selo:visible")).toHaveCount(36);
+    await expect(page.locator(".registro tbody tr:visible")).toHaveCount(36);
     await expect(page.locator(".filtros").first()).toBeHidden();
     await expect(page.getByRole("button", { name: "Mostrar WhatsApp" })).toHaveCount(0);
   });
@@ -113,9 +113,9 @@ test.describe("interações", () => {
 
   test("certificados: 21 principais, 36 ao expandir", async ({ page }) => {
     await page.goto("/");
-    await expect(page.locator(".selo:visible")).toHaveCount(21);
+    await expect(page.locator(".registro tbody tr:visible")).toHaveCount(21);
     await page.getByRole("button", { name: "Ver todos os 36" }).click();
-    await expect(page.locator(".selo:visible")).toHaveCount(36);
+    await expect(page.locator(".registro tbody tr:visible")).toHaveCount(36);
   });
 
   test("tema é salvo e reaplicado", async ({ page }) => {
@@ -146,7 +146,7 @@ test.describe("interações", () => {
 });
 
 test.describe("acessibilidade", () => {
-  for (const tema of ["ouro", "pergaminho"]) {
+  for (const tema of ["rubro", "claro"]) {
     for (const rota of ["/", "/cv", "/seguranca", "/sistema"]) {
       test(`axe sem violações graves: ${rota} (${tema})`, async ({ page }) => {
         await page.addInitScript((t) => localStorage.setItem("tema", t), tema);

@@ -32,7 +32,7 @@ Definidos no nginx do contêiner, exceto HSTS, no nginx do host.
 | `Permissions-Policy` | `camera=(), microphone=(), geolocation=(), payment=(), usb=()` |
 | `Cross-Origin-Opener-Policy` | `same-origin` |
 | `Cross-Origin-Resource-Policy` | `same-origin` |
-| `X-Selo` | Um dos selos do CTF |
+| `X-Flag` | Uma das flags do CTF. Era `X-Selo` antes do redesign |
 
 **Sobre HSTS:** sem `includeSubDomains`, porque `warley.` é subdomínio de `ferzion.com.br`, e sem `preload`, que exige o domínio raiz. Isso limita a nota em algumas ferramentas e é uma decisão consciente, que `/seguranca` pode explicar.
 
@@ -182,7 +182,7 @@ Policy: https://warley.ferzion.com.br/seguranca
 | Item | Decisão |
 |---|---|
 | Cookies | Nenhum. Sem banner |
-| `localStorage` | Só preferências e selos, sem identificador, e nada enviado |
+| `localStorage` | Só preferências e flags, sem identificador, e nada enviado. O registro da sessão fica só na memória da aba |
 | PostHog | Via proxy, em memória, sem gravação e com IP descartado |
 | Sentry | Sem dados pessoais e sem IP |
 | Logs do nginx | Sem `access_log`, como no padrão do servidor; só erros |

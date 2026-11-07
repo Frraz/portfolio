@@ -1,6 +1,6 @@
 # Instruções para agentes
 
-Portfólio de Warley Ferraz Almeida. Escreva em português do Brasil. Comece pelo [README](README.md) e pelo [ROADMAP](ROADMAP.md), que diz onde estamos. **Atualize o ROADMAP e a documentação no mesmo passo em que mudar o código.**
+Portfólio de Warley Ferraz Almeida, em redesign completo desde 06/11/2026 (conceito Sinal). Escreva em português do Brasil. Comece pelo [README](README.md) e pelo [ROADMAP](ROADMAP.md), que diz onde estamos. **Atualize o ROADMAP e a documentação no mesmo passo em que mudar o código.**
 
 ## Regra principal: veracidade
 
@@ -10,6 +10,7 @@ O visual não tem limites. O texto tem.
 - Segurança e DevOps são formação e projetos, sem cargo. Nunca sugira experiência profissional em SOC, pentest ou red team.
 - Sem níveis de habilidade, métricas, clientes, depoimentos ou dados inventados, inclusive em terminal, CTF e efeitos visuais.
 - Efeito visual nunca vira competência do titular.
+- **Todo enfeite técnico mostra um dado real** (réguas, relógio, FPS, hashes, hexdump, eventos). Sem alerta, IP, varredura ou métrica inventados, e sem dado do VPS ou do visitante ([04](docs/04-direcao-criativa.md#princípio-inegociável-todo-enfeite-técnico-mostra-um-dado-real)).
 - `../curriculo` é somente leitura. Fato novo entra lá primeiro, pelo titular.
 
 ## Privacidade
@@ -18,7 +19,7 @@ O visual não tem limites. O texto tem.
 - O telefone fica fora de HTML, JSON-LD, PDF, sitemap e terminal. Só no chunk de revelação ao clicar ([07](docs/07-recursos-interativos.md#revelação-do-whatsapp)).
 - Não publique IP, porta nem outros sistemas do VPS.
 - Nomes de projetos ficam de fora até `obrasAtivas: true` ([13](docs/13-projetos-futuros.md)). O Byakugan não é citado nem sem nome.
-- O titular prefere não focar em linguagem religiosa: a religiosidade fica no visual. Texto novo usa linguagem neutra.
+- Sem iconografia religiosa no design novo. Texto em linguagem neutra.
 
 ## Limites de ação
 
@@ -46,8 +47,10 @@ Cada elemento tem um único motor. Tabela completa em [docs/06](docs/06-motion-e
 ## Design
 
 - Cores e fontes só por tokens de [docs/05](docs/05-design-system.md). Sem valor literal em componente.
-- Regras do sagrado em [docs/04](docs/04-direcao-criativa.md#regras-do-sagrado): a cruz só nos dois lugares definidos, sem figuras sagradas, sem símbolos invertidos, nada de logos ou personagens de terceiros.
-- Sem etiqueta acima de título, cards iguais, gradiente em texto, seta em botão, monoespaçada decorativa.
+- Referências do redesign: só Matrix e vermelho, mais elementos de hardware, Kali, binário, cyber e SOC. As referências da primeira versão não valem mais ([docs/04](docs/04-direcao-criativa.md#referências)).
+- Nada de logos, personagens ou identidades de terceiros (Matrix, Kali, fabricantes, plataformas).
+- Vermelho é rampa de luz, não acento isolado. Monoespaçada só em dado real. Brilho só em luz da cena. Vidro só na barra de navegação, por pedido do titular.
+- Sem etiqueta acima de título, número ao lado do título, cards iguais, gradiente em texto, seta em botão, ponto médio entre dados.
 - Quando as skills discordarem, siga a ordem de [docs/14](docs/14-skills-e-stack.md#quando-as-skills-discordam).
 
 ## Como trabalhar

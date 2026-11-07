@@ -1,37 +1,77 @@
 @import "tailwindcss";
 @import "../temas/gerado.css";
+@import "./secoes.css";
 
 @theme inline {
   --color-fundo: var(--fundo);
   --color-superficie: var(--superficie);
+  --color-superficie-2: var(--superficie-2);
   --color-tinta: var(--tinta);
   --color-tinta-2: var(--tinta-2);
-  --color-acento: var(--acento);
-  --color-acento-2: var(--acento-2);
+  --color-tinta-dado: var(--tinta-dado);
+  --color-sinal: var(--sinal);
+  --color-forma: var(--forma);
+  --color-forma-fundo: var(--forma-fundo);
   --color-alerta: var(--alerta);
-  --font-titulo: var(--fonte-titulo), "Times New Roman", serif;
-  --font-texto: var(--fonte-texto), "Times New Roman", serif;
+  --font-texto: var(--fonte-texto), system-ui, sans-serif;
   --font-dado: var(--fonte-dado), ui-monospace, monospace;
-  --font-numero: var(--fonte-numero), var(--fonte-titulo), serif;
 }
 
 :root {
-  --t-display: clamp(3.5rem, 2.34rem + 5.16vw, 6rem);
-  --t-h2: clamp(2.75rem, 2.17rem + 2.58vw, 4.75rem);
-  --t-h3: clamp(1.625rem, 1.44rem + 0.81vw, 2.25rem);
-  --t-lead: clamp(1.25rem, 1.14rem + 0.48vw, 1.625rem);
+  /* Escala fluida de docs/05: 360 a 1600 px. */
+  --t-nome: clamp(3.5rem, 1.32rem + 9.68vw, 11rem);
+  --t-h2: clamp(2.5rem, 1.48rem + 4.52vw, 6rem);
+  --t-h3: clamp(1.375rem, 1.23rem + 0.65vw, 1.875rem);
+  --t-lead: clamp(1.1875rem, 1.1rem + 0.4vw, 1.5rem);
   --t-corpo: clamp(1.0625rem, 1.03rem + 0.16vw, 1.1875rem);
   --t-legenda: clamp(0.875rem, 0.86rem + 0.08vw, 0.9375rem);
-  --t-dado: clamp(0.8125rem, 0.8rem + 0.08vw, 0.875rem);
-  --margem: clamp(0px, 8vw, 128px);
-  --vidro-alfa: 0.82;
+  --t-dado: clamp(0.75rem, 0.74rem + 0.08vw, 0.8125rem);
+  /* Larguras e pesos moderados: a Mona Sans esticada a 118–125% e com peso 780 deixava o site quadrado (decisão 88). */
+  --larg-nome: 112%;
+  --larg-titulo: 104%;
+  --larg-subtitulo: 100%;
+  --peso-nome: 740;
+  --peso-titulo: 660;
+  --peso-sub: 600;
   --ease-saida: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-troca: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-sinal: steps(8, end);
   --dur-toque: 90ms;
   --dur-hover: 160ms;
   --dur-ui: 240ms;
-  --sombra-pedra: 0 24px 48px -16px oklch(0% 0 0 / 0.7);
+  --dur-decodifica: 600ms;
+  --dur-cena: 900ms;
+  --borda: 1px solid color-mix(in oklch, var(--forma) 35%, transparent);
+  --borda-ativa: 1px solid var(--sinal);
+  --sombra-flutua: 0 24px 48px -16px oklch(0% 0 0 / 0.7);
+  --raio-0: 0;
+  --raio-1: 2px;
   --altura-barra: 4rem;
+  --moldura: 12px;
+  --faixa: 1.75rem;
+}
+@media (min-width: 768px) {
+  :root {
+    --moldura: 24px;
+  }
+}
+
+/* Aliases provisórios para as seções do conceito antigo. Somem na R4, quando elas forem reescritas.
+   Em `[data-tema]` também, para os cartões de pré-visualização de /sistema resolverem pelo tema deles. */
+:root,
+[data-tema] {
+  --acento: var(--sinal);
+  --acento-2: var(--forma);
+  --borda: 1px solid color-mix(in oklch, var(--forma) 35%, transparent);
+  --borda-ativa: 1px solid var(--sinal);
+}
+:root {
+  --font-titulo: var(--font-texto);
+  --font-numero: var(--font-dado);
+  --t-display: var(--t-nome);
+  --sombra-pedra: var(--sombra-flutua);
+  --vidro-alfa: 0.92;
+  --margem: clamp(0px, 8vw, 128px);
 }
 
 /* Selo 5 do CTF, de propósito à vista: Base64 é codificação, não criptografia. */
@@ -43,40 +83,46 @@
   html {
     background: var(--fundo);
     color: var(--tinta);
-    scroll-padding-top: var(--altura-barra);
+    scroll-padding-top: calc(var(--altura-barra) + var(--faixa));
     -webkit-text-size-adjust: 100%;
-    scrollbar-color: color-mix(in oklch, var(--acento) 55%, transparent) transparent;
+    scrollbar-color: var(--forma) var(--fundo);
     scrollbar-width: thin;
   }
   body {
     font-family: var(--font-texto);
     font-size: var(--t-corpo);
-    font-weight: 420;
+    font-weight: 400;
+    font-stretch: 100%;
+    /* Texto claro sobre fundo escuro pede um pouco mais de entrelinha. */
     line-height: 1.6;
-    font-optical-sizing: auto;
     -webkit-font-smoothing: antialiased;
     touch-action: manipulation;
     overflow-x: clip;
+    caret-color: var(--sinal);
   }
   ::selection {
-    background: var(--acento);
+    background: var(--sinal);
     color: var(--fundo);
   }
   :focus-visible {
-    outline: 2px solid var(--acento);
+    outline: 2px solid var(--sinal);
     outline-offset: 3px;
     border-radius: 1px;
   }
   h1,
   h2 {
-    font-family: var(--font-titulo);
-    font-weight: 600;
-    line-height: 0.95;
+    font-family: var(--font-texto);
+    font-weight: var(--peso-titulo);
+    font-stretch: var(--larg-titulo);
+    line-height: 1;
+    letter-spacing: -0.028em;
     text-wrap: balance;
   }
   h3 {
-    font-weight: 560;
+    font-weight: var(--peso-sub);
+    font-stretch: var(--larg-subtitulo);
     line-height: 1.2;
+    letter-spacing: -0.012em;
     text-wrap: balance;
   }
   p {
@@ -85,6 +131,26 @@
   a {
     text-underline-offset: 0.2em;
     text-decoration-thickness: 1px;
+  }
+  /* Dado real em JetBrains Mono: hora, hash, código, comando. Zero com barra, números tabulares. */
+  .dado,
+  code,
+  kbd,
+  samp,
+  pre {
+    font-family: var(--font-dado);
+    font-size: var(--t-dado);
+    font-variant-numeric: tabular-nums slashed-zero;
+    letter-spacing: 0;
+  }
+  /* Dado solto no texto ganha o tom de dado do tema; componentes podem trocar a cor. */
+  .dado {
+    color: var(--tinta-dado);
+  }
+  /* A moldura e o boot log ficam em tom secundário: são instrumento, não conteúdo. */
+  .moldura .dado,
+  .bootlog .dado {
+    color: inherit;
   }
   @media (pointer: fine) {
     html {
@@ -114,49 +180,6 @@
     overflow: hidden;
     clip-path: inset(50%);
     white-space: nowrap;
-  }
-
-  /* Fio de luz lateral: acompanha a página. */
-  .fibra {
-    position: fixed;
-    left: 0.5rem;
-    top: calc(var(--altura-barra) + 1rem);
-    bottom: 1.5rem;
-    width: 1px;
-    z-index: 30;
-    pointer-events: none;
-    background: color-mix(in oklch, var(--tinta-2) 14%, transparent);
-    display: none;
-  }
-  @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
-    .fibra {
-      display: block;
-    }
-  }
-  .fibra-luz {
-    display: block;
-    width: 100%;
-    height: 100%;
-    transform-origin: top;
-    transform: scaleY(0);
-    background: var(--acento);
-    box-shadow: 0 0 8px var(--acento);
-  }
-
-  /* Vela: aquece o que já é legível. Nunca esconde o cursor. */
-  .vela {
-    position: absolute;
-    left: -18rem;
-    top: -18rem;
-    width: 36rem;
-    height: 36rem;
-    border-radius: 50%;
-    opacity: 0;
-    pointer-events: none;
-    background: radial-gradient(closest-side, color-mix(in oklch, var(--acento) 11%, transparent), transparent);
-  }
-  [data-tema="pergaminho"] .vela {
-    display: none;
   }
 
   /* Coelho e sigilo: só aparecem como recompensa. */
@@ -257,84 +280,58 @@
   .palco[data-pronta="sim"] canvas {
     opacity: 1;
   }
-  .poster-rosacea {
+  .poster-sinal {
     position: absolute;
-    color: color-mix(in oklch, var(--acento) 70%, var(--fundo));
-    --tam: min(92vmin, 62vw, 860px);
-    width: var(--tam);
-    height: var(--tam);
-    right: max(4vw, calc(50vw - var(--tam) * 0.95));
-    top: calc(50svh - var(--tam) * 0.53);
+    inset: 0;
     transition: opacity 700ms var(--ease-saida);
   }
-  .palco[data-pronta="sim"] .poster-rosacea {
+  .palco[data-pronta="sim"] .poster-sinal {
     opacity: 0;
   }
   /* Sem cena (sem JavaScript, sem WebGL ou enquanto ela carrega), o pôster fica só no hero: os textos ganham fundo próprio. */
   main:has(> .palco:not([data-pronta="sim"])) :is(.secao, .rodape) {
     background: var(--fundo);
   }
-  .poster-rosacea svg {
-    width: 100%;
-    height: 100%;
-    stroke-width: 0.7;
-  }
-  .poster-rosacea .v1 { fill: color-mix(in oklch, var(--acento) 22%, transparent); }
-  .poster-rosacea .v2 { fill: color-mix(in oklch, var(--chuva) 18%, transparent); }
-  .poster-rosacea .v3 { fill: color-mix(in oklch, var(--alerta) 18%, transparent); }
-  .poster-rosacea .cruz { stroke-width: 1.4; }
-  @media (max-width: 767px) {
-    .poster-rosacea {
-      --tam: 118vw;
-      right: -9vw;
-      top: 1svh;
-    }
-  }
-
   /* Barra */
   .barra {
     position: fixed;
-    inset: 0 0 auto 0;
+    inset: var(--faixa) 0 auto 0;
     z-index: 40;
     height: var(--altura-barra);
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    padding: 0 clamp(1rem, 3vw, 2.5rem);
+    padding: 0 clamp(1.5rem, 3vw, 2.5rem) 0 clamp(1rem, 3vw, 2.5rem);
     padding-top: env(safe-area-inset-top);
-    transition: background-color var(--dur-ui) ease;
   }
-  .barra[data-fundo="sim"] {
-    /* Sem backdrop-filter: sobre um canvas em movimento, o desfoque seria refeito a cada quadro. */
-    background: color-mix(in oklch, var(--fundo) 93%, transparent);
-  }
-  /* Na travessia a barra é transparente, mas o texto dela não pode depender do que passa atrás. */
+  /* A barra flutua sobre a chuva: o texto do nome não pode depender do que passa atrás. */
+  /* Cobre também a faixa da moldura acima da barra: sem isso, o texto rolado aparece atrás dos cantos de cima. */
   .barra::before {
     content: "";
     position: absolute;
-    inset: 0 0 -1.5rem 0;
+    inset: calc(var(--faixa) * -1) 0 -1.5rem 0;
     z-index: -1;
     pointer-events: none;
-    background: linear-gradient(to bottom, color-mix(in oklch, var(--fundo) 92%, transparent) 62%, transparent);
+    background: linear-gradient(to bottom, var(--fundo) 35%, color-mix(in oklch, var(--fundo) 90%, transparent) 62%, transparent);
     transition: opacity var(--dur-ui) ease;
-  }
-  .barra[data-fundo="sim"]::before {
-    opacity: 0;
   }
   .barra-nome {
     font-family: var(--font-titulo);
-    font-size: clamp(1.2rem, 1rem + 1vw, 1.5rem);
-    font-weight: 600;
+    font-size: clamp(1rem, 0.8rem + 0.6vw, 1.375rem);
+    font-weight: var(--peso-sub);
+    font-stretch: 100%;
+    letter-spacing: -0.015em;
     text-decoration: none;
     white-space: nowrap;
   }
   .barra-links {
     display: none;
-    gap: 0.25rem;
+    gap: 0.1rem;
     list-style: none;
     margin: 0;
-    padding: 0;
+    padding: 0.3rem;
+    position: relative;
   }
   @media (min-width: 1180px) {
     .barra-links {
@@ -362,25 +359,27 @@
     gap: 0.25rem;
   }
   .barra-link {
+    position: relative;
     display: block;
-    padding: 0.5rem 0.65rem;
+    padding: 0.5rem clamp(0.5rem, 0.9vw - 0.1rem, 0.8rem);
     font-size: var(--t-legenda);
     text-decoration: none;
     color: var(--tinta-2);
-    transition: color var(--dur-hover) ease;
+    border-radius: 999px;
+    transition: color var(--dur-hover) ease, transform var(--dur-toque) ease-out;
   }
   .barra-link:hover,
   .barra-link[aria-current="true"] {
     color: var(--tinta);
   }
-  .barra-link[aria-current="true"] {
-    text-decoration: underline;
-    text-decoration-color: var(--acento);
+  .barra-link:active {
+    transform: scale(0.96);
   }
   .barra-acoes {
     display: flex;
     align-items: center;
     gap: 0.25rem;
+    padding: 0 0.3rem;
     min-height: 2.75rem;
   }
 
@@ -447,722 +446,6 @@
   .link-ouro:hover {
     color: var(--acento);
     background-size: 100% 1px, 100% 1px;
-  }
-
-  /* Seções com margem de manuscrito */
-  .secao {
-    position: relative;
-    display: grid;
-    grid-template-columns: var(--margem) minmax(0, 1fr);
-    padding: clamp(5rem, 12vw, 11rem) clamp(1.25rem, 4vw, 4rem) clamp(4rem, 9vw, 8rem) clamp(1.25rem, 2vw, 2rem);
-  }
-  .margem {
-    position: relative;
-    color: var(--tinta-2);
-  }
-  .margem-interna {
-    position: sticky;
-    top: 40svh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-  }
-  .margem-numero {
-    font-family: var(--font-numero);
-    font-size: clamp(2.5rem, 5vw, 5rem);
-    line-height: 1;
-    color: var(--acento);
-  }
-  .margem-nome {
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-    font-style: italic;
-    font-size: var(--t-legenda);
-    letter-spacing: 0.02em;
-  }
-  @media (max-width: 767px) {
-    .secao {
-      grid-template-columns: minmax(0, 1fr);
-    }
-    .margem {
-      margin-bottom: 0.5rem;
-    }
-    .margem-interna {
-      position: static;
-      flex-direction: row;
-      align-items: baseline;
-    }
-    .margem-numero {
-      font-size: 2.5rem;
-    }
-    .margem-nome {
-      writing-mode: horizontal-tb;
-      transform: none;
-    }
-  }
-  .titulo-secao {
-    font-size: var(--t-h2);
-    margin-bottom: clamp(1.5rem, 3vw, 3rem);
-  }
-  .medida {
-    max-width: 68ch;
-  }
-  .legenda {
-    font-size: var(--t-legenda);
-    color: var(--tinta-2);
-  }
-  .dado {
-    font-family: var(--font-dado);
-    font-size: var(--t-dado);
-    font-variant-numeric: tabular-nums;
-    color: var(--tinta-2);
-  }
-
-  /* Início */
-  .hero {
-    position: relative;
-    min-height: 100svh;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: 0 clamp(1.25rem, 4vw, 4rem) clamp(2rem, 7vh, 5rem);
-  }
-  /* Trilho da travessia: o hero fica preso enquanto a câmera atravessa o vitral. Sem JavaScript, é só uma tela. */
-  @media (prefers-reduced-motion: no-preference) {
-    :root.js .hero-trilho {
-      height: 200svh;
-    }
-    :root.js .hero {
-      position: sticky;
-      top: 0;
-    }
-  }
-  @media (prefers-reduced-motion: no-preference) and (max-width: 767px) {
-    :root.js .hero-trilho {
-      height: 120svh;
-    }
-  }
-  .hero-veu {
-    position: absolute;
-    inset: auto 0 0 0;
-    height: 72%;
-    z-index: -1;
-    pointer-events: none;
-    background: radial-gradient(90% 85% at 18% 88%, color-mix(in oklch, var(--fundo) 94%, transparent) 30%, transparent 75%);
-  }
-  .hero h1 {
-    font-size: var(--t-display);
-    max-width: 12ch;
-  }
-  .hero h1 span {
-    display: block;
-  }
-  .hero-sub {
-    margin-top: 1.25rem;
-    font-size: var(--t-lead);
-    line-height: 1.3;
-    font-weight: 500;
-    max-width: 30ch;
-  }
-  .hero-apoio {
-    margin-top: 0.75rem;
-    max-width: 46ch;
-    color: var(--tinta-2);
-  }
-  .hero-acoes {
-    margin-top: 1.5rem;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.75rem 1.25rem;
-  }
-  .hero-local {
-    margin-top: 1rem;
-    font-size: var(--t-legenda);
-    color: var(--tinta-2);
-  }
-  @media (max-width: 767px) {
-    .hero-veu {
-      height: 78%;
-      background: linear-gradient(to top, color-mix(in oklch, var(--fundo) 96%, transparent) 55%, transparent);
-    }
-  }
-
-  /* Sobre */
-  .sobre-grade {
-    display: grid;
-    gap: 2rem 4rem;
-  }
-  @media (min-width: 1024px) {
-    .sobre-grade {
-      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-    }
-  }
-  .sobre-lead {
-    font-size: var(--t-lead);
-    line-height: 1.4;
-  }
-  /* Inicial iluminada: único gradiente em texto do site, conforme docs/07. */
-  .sobre-lead::first-letter {
-    font-family: var(--font-titulo);
-    font-weight: 600;
-    float: left;
-    font-size: 3.2em;
-    line-height: 0.82;
-    padding: 0.08em 0.1em 0 0;
-    color: var(--acento);
-  }
-  @supports (background-clip: text) {
-    .sobre-lead::first-letter {
-      background-image: linear-gradient(var(--folha, 110deg), var(--acento), color-mix(in oklch, var(--acento) 45%, var(--tinta)) 45%, var(--acento) 70%);
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
-    }
-  }
-  .sobre-texto p + p {
-    margin-top: 1.25rem;
-  }
-  .bloco-titulo {
-    font-size: var(--t-h3);
-    font-family: var(--font-titulo);
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-  }
-  .sobre-lateral > * + * {
-    margin-top: 2.5rem;
-  }
-
-  /* Letra W, o momento em tela branca */
-  .inicial {
-    --papel: #f7f3ea;
-    --letra: #050505;
-    position: relative;
-    color: var(--letra);
-    display: grid;
-    place-items: center;
-    min-height: 90svh;
-    overflow: hidden;
-    user-select: none;
-    isolation: isolate;
-  }
-  .inicial::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background: var(--papel);
-    opacity: var(--papel-luz, 1);
-  }
-  :root[data-tema="pergaminho"] .inicial {
-    --papel: #050505;
-    --letra: #f7f3ea;
-  }
-  .inicial span {
-    font-family: var(--font-titulo);
-    font-weight: 500;
-    font-size: min(78vh, 72vw);
-    line-height: 0.8;
-  }
-
-  /* Agora */
-  .agora-grade {
-    display: grid;
-    gap: 3rem 4rem;
-  }
-  @media (min-width: 1024px) {
-    .agora-grade {
-      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-      align-items: start;
-    }
-  }
-  .agora-cargo {
-    font-size: var(--t-h3);
-  }
-  .agora-empresa {
-    margin-top: 0.25rem;
-    color: var(--acento);
-  }
-  .lista-trabalho {
-    margin-top: 2rem;
-    display: grid;
-    gap: 0.9rem;
-    list-style: none;
-    padding: 0;
-  }
-  .ferramentas {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem 1.25rem;
-    list-style: none;
-    padding: 0;
-  }
-  @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
-    /* A árvore fica presa enquanto o traçado se desenha e o Divisor entra. */
-    :root.js .agora-grade {
-      min-height: 150svh;
-    }
-    :root.js .agora-figura {
-      position: sticky;
-      top: calc(var(--altura-barra) + 1rem);
-    }
-  }
-  .arvore-caixa {
-    position: relative;
-    max-width: 520px;
-  }
-  .arvore {
-    width: 100%;
-    display: block;
-    color: var(--acento);
-  }
-  .arvore path {
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 0.45;
-    vector-effect: non-scaling-stroke;
-    stroke-width: 1.25px;
-  }
-  .arvore circle {
-    fill: var(--fundo);
-    stroke: currentColor;
-    stroke-width: 1.25px;
-    vector-effect: non-scaling-stroke;
-  }
-  .arvore .folha {
-    fill: var(--acento-2);
-    stroke: none;
-  }
-  .divisor {
-    position: absolute;
-    inset: 0;
-  }
-  .divisor-luz {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    color: var(--chuva);
-  }
-  .divisor-luz path {
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 2.25px;
-    vector-effect: non-scaling-stroke;
-    filter: drop-shadow(0 0 3px currentColor);
-  }
-  .divisor-luz circle {
-    fill: currentColor;
-  }
-  .divisor-no {
-    position: absolute;
-    width: 2.75rem;
-    height: 2.75rem;
-    margin: -1.375rem 0 0 -1.375rem;
-    background: transparent;
-    border: 0;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: box-shadow var(--dur-hover) ease;
-  }
-  .divisor-no:disabled {
-    cursor: default;
-  }
-  .divisor-no:not(:disabled):hover {
-    box-shadow: inset 0 0 0 1px var(--acento);
-  }
-  /* Em telas estreitas os nós folha ficam próximos: o alvo diminui só na largura, mantendo 44 px de altura. */
-  @media (max-width: 479px) {
-    .divisor-no {
-      width: 2rem;
-      margin-left: -1rem;
-    }
-  }
-  .divisor-janela {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 24%;
-    pointer-events: none;
-    color: var(--acento);
-  }
-  .divisor-aro {
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1px;
-    vector-effect: non-scaling-stroke;
-  }
-  .petala {
-    fill: transparent;
-    stroke: currentColor;
-    stroke-width: 1px;
-    vector-effect: non-scaling-stroke;
-    transition: fill var(--dur-ui) ease;
-  }
-  .petala.acesa {
-    fill: var(--chuva);
-  }
-  .divisor-ajuda {
-    position: absolute;
-    left: 0;
-    top: 0;
-    max-width: 30%;
-    font-size: var(--t-dado);
-    pointer-events: none;
-  }
-  @media (max-width: 479px) {
-    /* Celular: a janela e a ajuda ficam fora do desenho, para não cobrirem os nós. */
-    .divisor-ajuda {
-      top: auto;
-      bottom: -3.5rem;
-      max-width: 60%;
-    }
-    .divisor-reiniciar {
-      bottom: -4rem;
-    }
-    .arvore-caixa {
-      margin-bottom: 4.5rem;
-    }
-    .divisor-janela {
-      width: 20%;
-      top: -1rem;
-    }
-  }
-  .divisor-reiniciar {
-    position: absolute;
-    right: 0;
-    bottom: -3.5rem;
-  }
-
-  /* Trajetória */
-  .caminho {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-  }
-  .passo {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0 clamp(1rem, 3vw, 3rem);
-    padding: 1.5rem 0;
-    border-top: 1px solid color-mix(in oklch, var(--tinta-2) 24%, transparent);
-  }
-  @media (min-width: 640px) {
-    .passo {
-      grid-template-columns: minmax(5rem, 9rem) minmax(0, 1fr);
-    }
-  }
-  .passo-ano:empty {
-    display: none;
-  }
-  @media (min-width: 640px) {
-    .passo-ano:empty {
-      display: block;
-    }
-  }
-  .passo:last-child {
-    border-bottom: 1px solid color-mix(in oklch, var(--tinta-2) 24%, transparent);
-  }
-  .passo-ano {
-    font-family: var(--font-numero);
-    font-size: clamp(2rem, 3.4vw, 3.25rem);
-    line-height: 1;
-    color: var(--tinta-2);
-    align-self: start;
-    position: sticky;
-    top: calc(var(--altura-barra) + 1rem);
-  }
-  .passo {
-    transition: border-color var(--dur-ui) ease;
-  }
-  .passo[data-aceso="sim"] {
-    border-top-color: color-mix(in oklch, var(--acento) 60%, transparent);
-  }
-  .passo[data-ti="sim"] .passo-ano {
-    color: var(--acento);
-  }
-  .passo h3 {
-    font-size: var(--t-corpo);
-  }
-  .passo[data-ti="sim"] h3 {
-    font-size: var(--t-h3);
-  }
-  .passo-empresa {
-    color: var(--tinta-2);
-  }
-  .passo-descricao {
-    margin-top: 0.4rem;
-    max-width: 68ch;
-    color: var(--tinta-2);
-  }
-  .passo[data-ti="sim"] .passo-descricao {
-    color: var(--tinta);
-  }
-
-  /* Formação: lancetas */
-  .lancetas {
-    display: grid;
-    gap: 2.5rem clamp(1.5rem, 3vw, 3rem);
-  }
-  @media (min-width: 900px) {
-    .lancetas {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-  }
-  .lanceta-janela {
-    --luz: 1;
-    height: clamp(320px, 52vh, 520px);
-    width: min(100%, clamp(160px, 26vh, 260px));
-    position: relative;
-    clip-path: polygon(0% 100%, 0.0% 44.0%, 4.2% 29.5%, 8.3% 23.7%, 12.5% 19.4%, 16.7% 15.9%, 20.8% 13.0%, 25.0% 10.4%, 29.2% 8.1%, 33.3% 6.1%, 37.5% 4.3%, 41.7% 2.7%, 45.8% 1.3%, 50.0% 0.0%, 54.2% 1.3%, 58.3% 2.7%, 62.5% 4.3%, 66.7% 6.1%, 70.8% 8.1%, 75.0% 10.4%, 79.2% 13.0%, 83.3% 15.9%, 87.5% 19.4%, 91.7% 23.7%, 95.8% 29.5%, 100.0% 44.0%, 100% 100%);
-    background: color-mix(in oklch, var(--tinta-2) 12%, var(--fundo));
-    overflow: hidden;
-  }
-  .lanceta-janela::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    transform-origin: bottom;
-    transform: scaleY(var(--luz));
-    background: linear-gradient(to top, var(--acento), color-mix(in oklch, var(--acento) 45%, var(--chuva)));
-  }
-  .lanceta-janela::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background:
-      linear-gradient(90deg, transparent calc(50% - 1px), var(--fundo) calc(50% - 1px), var(--fundo) calc(50% + 1px), transparent calc(50% + 1px)),
-      repeating-linear-gradient(0deg, transparent 0 64px, var(--fundo) 64px 66px);
-  }
-  .lanceta h3 {
-    margin-top: 1.25rem;
-    font-size: var(--t-h3);
-  }
-  .lanceta-instituicao {
-    color: var(--acento);
-    margin-top: 0.25rem;
-  }
-  .lanceta-destaques {
-    margin-top: 0.75rem;
-    font-size: var(--t-legenda);
-    color: var(--tinta-2);
-  }
-  .formacao-rodape {
-    margin-top: 3rem;
-    display: grid;
-    gap: 2rem 4rem;
-  }
-  @media (min-width: 900px) {
-    .formacao-rodape {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-
-  /* Competências: fileiras por evidência */
-  .filtros {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.25rem;
-    margin: 1.5rem 0 2.5rem;
-  }
-  .filtro {
-    min-height: 2.75rem;
-    padding: 0.4rem 0.9rem;
-    background: transparent;
-    color: var(--tinta-2);
-    border: 1px solid color-mix(in oklch, var(--tinta-2) 40%, transparent);
-    border-radius: 2px;
-    cursor: pointer;
-    font-size: var(--t-legenda);
-    transition: color var(--dur-hover) ease, border-color var(--dur-hover) ease, background-color var(--dur-hover) ease, transform var(--dur-toque) ease-out;
-  }
-  .filtro:hover {
-    color: var(--tinta);
-    border-color: var(--acento);
-  }
-  .filtro:active {
-    transform: scale(0.97);
-  }
-  .filtro[aria-pressed="true"] {
-    background: var(--acento);
-    border-color: var(--acento);
-    color: var(--fundo);
-  }
-  :root:not(.js) .filtros {
-    display: none;
-  }
-  [data-grupo-filtro="area"] {
-    position: relative;
-  }
-  /* Portas reais: folhas de ouro que se abrem ao escolher um filtro. Nunca cobrem o conteúdo em repouso. */
-  .porta {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 50%;
-    pointer-events: none;
-    background: linear-gradient(to bottom, color-mix(in oklch, var(--acento) 70%, var(--fundo)), color-mix(in oklch, var(--acento) 38%, var(--fundo)));
-    transform: scaleX(0);
-    z-index: 2;
-  }
-  .porta-esq {
-    left: 0;
-    transform-origin: left;
-  }
-  .porta-dir {
-    right: 0;
-    transform-origin: right;
-  }
-  .fileira {
-    padding: clamp(1.5rem, 3vw, 2.75rem) 0;
-    border-top: 1px solid color-mix(in oklch, var(--acento) 45%, transparent);
-    display: grid;
-    gap: 1rem 3rem;
-  }
-  @media (min-width: 1024px) {
-    .fileira {
-      grid-template-columns: minmax(0, 3fr) minmax(0, 9fr);
-    }
-  }
-  .fileira h3 {
-    font-family: var(--font-titulo);
-    font-weight: 600;
-    font-size: var(--t-h3);
-  }
-  .fileira-itens {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem 1.5rem;
-  }
-  .fileira[data-evidencia="trabalho"] .fileira-itens {
-    font-size: var(--t-lead);
-    line-height: 1.35;
-  }
-  .fileira[data-evidencia="laboratorio"] .fileira-itens li,
-  .fileira[data-evidencia="formacao"] .fileira-itens li {
-    color: var(--tinta-2);
-  }
-  .fileira-itens li {
-    transition: opacity var(--dur-ui) ease;
-  }
-  .fileira-itens li[data-oculto="sim"] {
-    display: none;
-  }
-  .fileira[data-vazia="sim"] {
-    display: none;
-  }
-
-  /* Certificados */
-  .relicario {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  .selo[data-brilho="sim"]::after {
-    opacity: 1;
-  }
-  /* Em tela larga a lista deixa o terço direito livre para o relicário 3D. */
-  @media (min-width: 1200px) {
-    .relicario,
-    #certificados .medida,
-    #certificados .filtros {
-      max-width: 56%;
-    }
-  }
-  .selo {
-    --angulo: 90deg;
-    position: relative;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 0.25rem 2rem;
-    padding: 1rem 0;
-    border-top: 1px solid color-mix(in oklch, var(--tinta-2) 20%, transparent);
-  }
-  .selo[data-oculto="sim"] {
-    display: none;
-  }
-  .selo::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity var(--dur-ui) ease;
-    background: linear-gradient(var(--angulo), transparent 30%, color-mix(in oklch, var(--acento) 10%, transparent) 50%, transparent 70%);
-  }
-  .selo-nome {
-    font-weight: 500;
-  }
-  .selo-meta {
-    font-size: var(--t-legenda);
-    color: var(--tinta-2);
-  }
-  .selo-acao {
-    align-self: center;
-    white-space: nowrap;
-    font-size: var(--t-legenda);
-  }
-  @media (max-width: 640px) {
-    .selo {
-      grid-template-columns: minmax(0, 1fr);
-    }
-    .selo-acao {
-      justify-self: start;
-    }
-  }
-  :root.js .selo[data-prioridade="C"]:not([data-mostrar="sim"]) {
-    display: none;
-  }
-
-  /* Contato */
-  .chamado-email {
-    display: inline-block;
-    margin-top: 1.5rem;
-    font-size: clamp(1.125rem, 0.75rem + 2.2vw, 2.5rem);
-    overflow-wrap: anywhere;
-  }
-  .chamado-acoes {
-    margin-top: 2rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem 1.25rem;
-    align-items: center;
-  }
-
-  .rodape {
-    padding: 3rem clamp(1.25rem, 4vw, 4rem);
-    border-top: 1px solid color-mix(in oklch, var(--tinta-2) 24%, transparent);
-    font-size: var(--t-legenda);
-    color: var(--tinta-2);
-    display: grid;
-    gap: 1rem 3rem;
-  }
-  @media (min-width: 900px) {
-    .rodape {
-      grid-template-columns: 1fr auto;
-    }
-  }
-  .rodape-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.25rem 1.25rem;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  /* Vidro de vitral */
-  .vitral {
-    background: color-mix(in oklch, var(--superficie) calc(var(--vidro-alfa) * 100%), transparent);
-    border: 1px solid color-mix(in oklch, var(--acento) 30%, transparent);
-    backdrop-filter: blur(14px);
-    box-shadow: var(--sombra-pedra);
   }
 
   /* Índice e menus */
@@ -1334,3 +617,326 @@
 :root:not(.js) .sem-js-oculto {
   display: none;
 }
+
+/* ===== Conceito Sinal: moldura de instrumento, régua e elementos de base (docs/05) ===== */
+@layer components {
+  .moldura {
+    position: fixed;
+    inset: 0;
+    z-index: 45;
+    pointer-events: none;
+  }
+  /* Marcas em L nos quatro cantos: delimitam a área de medida. */
+  .moldura::before,
+  .moldura::after {
+    content: "";
+    position: absolute;
+    inset: var(--moldura);
+    background:
+      linear-gradient(var(--forma), var(--forma)) top left / 12px 1px,
+      linear-gradient(var(--forma), var(--forma)) top left / 1px 12px,
+      linear-gradient(var(--forma), var(--forma)) top right / 12px 1px,
+      linear-gradient(var(--forma), var(--forma)) top right / 1px 12px,
+      linear-gradient(var(--forma), var(--forma)) bottom left / 12px 1px,
+      linear-gradient(var(--forma), var(--forma)) bottom left / 1px 12px,
+      linear-gradient(var(--forma), var(--forma)) bottom right / 12px 1px,
+      linear-gradient(var(--forma), var(--forma)) bottom right / 1px 12px;
+    background-repeat: no-repeat;
+  }
+  /* Embaixo, o mesmo cuidado da barra: o conteúdo some antes de passar sob os dados dos cantos inferiores. */
+  .moldura::after {
+    inset: auto 0 0 0;
+    height: calc(var(--moldura) + 1.75rem);
+    background: linear-gradient(to top, color-mix(in oklch, var(--fundo) 92%, transparent) 45%, transparent);
+  }
+  .moldura-canto {
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    gap: 1.25ch;
+    color: var(--tinta-2);
+    white-space: nowrap;
+    padding: 0.15rem calc(var(--moldura) + 0.5rem);
+    /* Sem isto, o texto dos cantos se mistura ao conteúdo que passa por baixo. */
+    background: color-mix(in oklch, var(--fundo) 94%, transparent);
+  }
+  .moldura-se,
+  .moldura-sd {
+    top: calc(var(--moldura) * 0.25);
+  }
+  .moldura-ie,
+  .moldura-id {
+    bottom: calc(var(--moldura) * 0.25);
+  }
+  .moldura-se,
+  .moldura-ie {
+    left: 0;
+  }
+  .moldura-sd,
+  .moldura-id {
+    right: 0;
+  }
+  /* Celular: só os cantos de cima. O resto fica no Índice. */
+  @media (max-width: 767px) {
+    .moldura-ie,
+    .moldura-id,
+    .moldura-se span:nth-child(2) {
+      display: none;
+    }
+  }
+
+  .regua {
+    position: fixed;
+    right: calc(var(--moldura) * 0.25);
+    top: calc(var(--faixa) + var(--altura-barra));
+    bottom: calc(var(--moldura) + 1.5rem);
+    width: 2.5rem;
+    z-index: 44;
+    container-type: size;
+  }
+  .regua-trilho {
+    position: absolute;
+    right: 0.5rem;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    /* Uma marcação a cada 100 px de rolagem. `--passo` é calculado da altura real do documento. */
+    background: repeating-linear-gradient(to bottom, color-mix(in oklch, var(--tinta-2) 45%, transparent) 0 1px, transparent 1px var(--passo, 4%));
+  }
+  .regua-marca {
+    position: absolute;
+    right: -4px;
+    top: 0;
+    width: 12px;
+    height: 2px;
+    background: var(--sinal);
+  }
+  .regua-traco {
+    position: absolute;
+    right: 0.5rem;
+    width: 12px;
+    height: 2px;
+    background: var(--forma);
+    transform: translateY(-1px);
+    display: block;
+  }
+  /* Alvo de toque de 44 px sem aumentar o traço visível. */
+  .regua-traco::before {
+    content: "";
+    position: absolute;
+    inset: -20px -12px;
+  }
+  .regua-nome {
+    position: absolute;
+    right: 20px;
+    top: -0.55rem;
+    padding: 0 0.4rem;
+    font-size: var(--t-dado);
+    background: var(--fundo);
+    color: var(--tinta);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--dur-hover) ease;
+  }
+  .regua-traco:hover .regua-nome,
+  .regua-traco:focus-visible .regua-nome {
+    opacity: 1;
+  }
+  @media (max-width: 767px) {
+    .regua {
+      width: 1rem;
+    }
+    .regua-nome {
+      display: none;
+    }
+  }
+}
+
+@layer components {
+  .botao-sec {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
+    padding: 0.5rem 1.25rem;
+    border: var(--borda);
+    border-radius: var(--raio-1);
+    color: var(--tinta);
+    background: transparent;
+    font-weight: 560;
+    text-decoration: none;
+    cursor: pointer;
+    transition: border-color var(--dur-hover) ease, color var(--dur-hover) ease, transform var(--dur-toque) ease-out;
+  }
+  .botao-sec:hover {
+    border: var(--borda-ativa);
+    color: var(--sinal);
+  }
+  .botao-sec:active {
+    transform: scale(0.97);
+  }
+  .botao-sec:disabled,
+  .botao:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .bootlog {
+    position: absolute;
+    right: calc(var(--moldura) + 3rem);
+    bottom: calc(var(--moldura) + 2.5rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--tinta-2);
+    text-align: right;
+    pointer-events: none;
+  }
+  @media (max-width: 767px) {
+    .bootlog {
+      display: none;
+    }
+  }
+
+  .hexdump {
+    margin: 0;
+    color: var(--tinta-2);
+    line-height: 1.7;
+    overflow: hidden;
+    white-space: pre;
+  }
+  .hexdump-offset {
+    color: var(--sinal);
+  }
+  .hexdump-ascii {
+    color: var(--tinta);
+  }
+
+  /* A placa tem proporção própria, presa ao topo direito da seção: não estica com a altura da seção. */
+  .trilhas {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 2;
+    max-height: 100%;
+    color: var(--forma);
+    opacity: 0.32;
+    pointer-events: none;
+    z-index: -1;
+  }
+  /* Em tela estreita o texto ocupa a largura toda: a placa ficaria atrás da leitura. */
+  @media (max-width: 899px) {
+    .trilhas {
+      display: none;
+    }
+  }
+
+  /* /sistema */
+  .amostras-tema {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    margin-top: 1rem;
+  }
+  .cartao-tema {
+    background: var(--fundo);
+    color: var(--tinta);
+    border: var(--borda);
+    padding: 1.25rem;
+    display: grid;
+    gap: 0.5rem;
+    align-content: start;
+  }
+  .tira {
+    display: grid;
+    grid-template-columns: repeat(11, 1fr);
+    height: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+  .papeis {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+  }
+  .papeis th,
+  .papeis td {
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    border-bottom: var(--borda);
+    vertical-align: middle;
+  }
+  .papeis .amostra {
+    display: inline-block;
+    width: 2.5rem;
+    height: 1.25rem;
+    border: var(--borda);
+    vertical-align: middle;
+  }
+  .sistema-bloco {
+    position: relative;
+    margin-top: 1rem;
+    padding: 1.5rem;
+    background: var(--superficie);
+    border: var(--borda);
+    isolation: isolate;
+    overflow: hidden;
+  }
+}
+
+
+@layer components {
+  /* Vidro líquido, versão web. Referência visual: o vidro do iOS 26. O pacote nativo `expo-glass-effect` só existe em iOS,
+     então aqui são desfoque, saturação e brilho do que está atrás, mais o realce especular da borda. */
+  .vidro {
+    border-radius: 999px;
+    background: color-mix(in oklch, var(--tinta) 7%, transparent);
+    -webkit-backdrop-filter: blur(12px) saturate(1.8) brightness(1.12);
+    backdrop-filter: blur(12px) saturate(1.8) brightness(1.12);
+    box-shadow:
+      inset 1px 1px 0 color-mix(in oklch, var(--tinta) 38%, transparent),
+      inset -1px -1px 0 color-mix(in oklch, var(--tinta) 10%, transparent),
+      inset 0 0 16px color-mix(in oklch, var(--tinta) 6%, transparent),
+      0 12px 32px -12px oklch(0% 0 0 / 0.65);
+  }
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .vidro {
+      background: color-mix(in oklch, var(--superficie) 94%, transparent);
+    }
+  }
+  :root[data-tema="claro"] .vidro {
+    background: color-mix(in oklch, var(--superficie) 55%, transparent);
+    box-shadow:
+      inset 1px 1px 0 color-mix(in oklch, var(--superficie) 95%, transparent),
+      inset -1px -1px 0 color-mix(in oklch, var(--tinta) 14%, transparent),
+      0 10px 28px -12px oklch(0% 0 0 / 0.3);
+  }
+  /* A lente: um segundo vidro, mais claro, desliza até o link da seção atual. */
+  .barra-links::before {
+    content: "";
+    position: absolute;
+    top: 0.3rem;
+    bottom: 0.3rem;
+    left: 0;
+    width: var(--lente-l, 0);
+    transform: translateX(var(--lente-x, 0));
+    opacity: var(--lente-o, 0);
+    border-radius: 999px;
+    background: color-mix(in oklch, var(--tinta) 15%, transparent);
+    box-shadow:
+      inset 1px 1px 0 color-mix(in oklch, var(--tinta) 45%, transparent),
+      inset -1px -1px 0 color-mix(in oklch, var(--tinta) 14%, transparent);
+    transition: transform 0.45s cubic-bezier(0.34, 1.4, 0.64, 1), width 0.45s cubic-bezier(0.34, 1.4, 0.64, 1), opacity var(--dur-ui) ease;
+    pointer-events: none;
+  }
+  .barra-link {
+    z-index: 1;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .barra-links::before {
+      transition: none;
+    }
+  }
+}
+

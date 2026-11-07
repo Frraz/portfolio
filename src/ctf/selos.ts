@@ -9,17 +9,16 @@ export const SELOS = [
   "CABECALHO-HTTP", // 3: cabeçalho X-Selo
   "SECURITY-TXT", // 4: comentário em security.txt
   "BASE64-NAO-CIFRA", // 5: variável CSS, em Base64
-  "METADADO-SVG", // 6: metadados do SVG da rosácea
+  "METADADO-SVG", // 6: metadados do SVG das trilhas de placa
   "LUMEN", // 7: letras da chuva, com ela pausada
   "LS-MENOS-A", // 8: `ls -a` no terminal
 ] as const;
 
 export const ARTE_FONTE = String.raw`
-       .-"""-.
-     .'  \ | /  '.
-    /  '. \|/ .'  \
-   |  --- ( ) ---  |     Rendilhado feito de texto.
-    \  .' /|\ '.  /      Quem lê o código-fonte encontra o selo 0.
-     '.  / | \  .'
-       '-.___.-'
+   o-------+          +-----o
+           |          |
+       o---+---o      +--o
+               |
+   o-----------+------o       Trilhas de placa feitas de texto.
+                              Quem lê o código-fonte encontra o selo 0.
 `;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import dynamic from "next/dynamic";
@@ -18,7 +18,7 @@ export function Barra({ nome, secoes, ui }: Props) {
   const rota = usePathname();
   const naInicial = rota === "/";
   const [atual, setAtual] = useState("inicio");
-  const [comFundo, setComFundo] = useState(!naInicial);
+  const lista = useRef<HTMLUListElement>(null);
   const [pausada, setPausada] = useState(false);
   const [terminal, setTerminal] = useState(false);
   const [terminalUsado, setTerminalUsado] = useState(false);
@@ -65,17 +65,6 @@ export function Barra({ nome, secoes, ui }: Props) {
 
   useEffect(() => {
     if (!naInicial) return;
-    // Na travessia do vitral a barra fica transparente; o fundo só entra depois do trilho do hero.
-    const trilho = document.querySelector<HTMLElement>(".hero-trilho");
-    let limite = 0;
-    const medir = () => {
-      limite = (trilho ? trilho.offsetHeight - window.innerHeight : 0) + window.innerHeight * 0.7;
-    };
-    medir();
-    const aoRolar = () => setComFundo(window.scrollY > limite);
-    aoRolar();
-    addEventListener("resize", medir);
-    addEventListener("scroll", aoRolar, { passive: true });
     const obs = new IntersectionObserver(
       (entradas) => {
         for (const e of entradas) if (e.isIntersecting) setAtual(e.target.id);
@@ -86,12 +75,25 @@ export function Barra({ nome, secoes, ui }: Props) {
       const el = document.getElementById(s.id);
       if (el) obs.observe(el);
     });
-    return () => {
-      removeEventListener("resize", medir);
-      removeEventListener("scroll", aoRolar);
-      obs.disconnect();
-    };
+    return () => obs.disconnect();
   }, [naInicial, secoes]);
+
+  // A lente de vidro desliza até o link da seção atual. Mede o link e entrega o deslocamento por variáveis de CSS.
+  useEffect(() => {
+    const ul = lista.current;
+    if (!ul) return;
+    const posicionar = () => {
+      const link = ul.querySelector<HTMLElement>('.barra-link[aria-current="true"]');
+      if (!link) return ul.style.setProperty("--lente-o", "0");
+      ul.style.setProperty("--lente-x", `${link.offsetLeft}px`);
+      ul.style.setProperty("--lente-l", `${link.offsetWidth}px`);
+      ul.style.setProperty("--lente-o", "1");
+    };
+    posicionar();
+    const ro = new ResizeObserver(posicionar);
+    ro.observe(ul);
+    return () => ro.disconnect();
+  }, [atual, naInicial]);
 
   const alternarChuva = (forcar?: boolean) => {
     const nova = forcar ?? !pausada;
@@ -108,12 +110,12 @@ export function Barra({ nome, secoes, ui }: Props) {
   };
 
   return (
-    <header className="barra sem-impressao" data-fundo={comFundo ? "sim" : "nao"}>
+    <header className="barra sem-impressao">
       <Link transitionTypes={["rota"]} href="/" className="barra-nome">
         {nome}
       </Link>
       <nav aria-label={ui.navegacao}>
-        <ul className="barra-links">
+        <ul className="barra-links vidro" ref={lista}>
           {secoes
             .filter((s) => s.id !== "inicio")
             .map((s) => (
@@ -125,7 +127,7 @@ export function Barra({ nome, secoes, ui }: Props) {
             ))}
         </ul>
       </nav>
-      <div className="barra-acoes">
+      <div className="barra-acoes vidro">
         <Link transitionTypes={["rota"]} className="botao-quieto" href="/cv">
           {ui.curriculo}
         </Link>

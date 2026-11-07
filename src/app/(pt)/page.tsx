@@ -1,6 +1,5 @@
 import { CarregadorMovimento } from "@/componentes/CarregadorMovimento";
-import { conteudo, secoesAtivas } from "@/conteudo";
-import { fracaoDecorrida } from "@/formatos";
+import { conteudo } from "@/conteudo";
 import { Palco } from "@/gl/Palco";
 import { Agora } from "@/secoes/Agora";
 import { Certificados } from "@/secoes/Certificados";
@@ -31,27 +30,19 @@ const pessoa = {
 };
 
 export default function Pagina() {
-  const secoes = secoesAtivas(c);
-  const dados = (id: string) => {
-    const s = secoes.find((x) => x.id === id)!;
-    return { numero: s.numero, margem: s.margem };
-  };
   return (
     <>
-      <Palco fracoes={c.formacao.cursos.map((k) => (k.concluido ? 1 : fracaoDecorrida(k.inicio, k.fim)))} />
+      <Palco />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(pessoa) }} />
       <CarregadorMovimento />
-      <div className="fibra sem-js-oculto" aria-hidden="true">
-        <span className="fibra-luz" />
-      </div>
       <Inicio c={c} />
-      <Sobre c={c} {...dados("sobre")} />
-      <Agora c={c} {...dados("agora")} />
-      <Trajetoria c={c} {...dados("trajetoria")} />
-      <Formacao c={c} {...dados("formacao")} />
-      <Competencias c={c} {...dados("competencias")} />
-      <Certificados c={c} {...dados("certificados")} />
-      <Contato c={c} {...dados("contato")} />
+      <Sobre c={c} />
+      <Agora c={c} />
+      <Trajetoria c={c} />
+      <Formacao c={c} />
+      <Competencias c={c} />
+      <Certificados c={c} />
+      <Contato c={c} />
       <Rodape c={c} />
     </>
   );

@@ -15,7 +15,7 @@ function podeUsarWebGL() {
 }
 
 /** Baixa a cena só depois da primeira pintura, em ociosidade: o LCP é o texto. */
-export function CarregadorCena({ fracoes }: { fracoes: number[] }) {
+export function CarregadorCena() {
   const [ativa, setAtiva] = useState(false);
   useEffect(() => {
     const conexao = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
@@ -23,5 +23,5 @@ export function CarregadorCena({ fracoes }: { fracoes: number[] }) {
     const ocioso = window.requestIdleCallback ?? ((f: () => void) => window.setTimeout(f, 300));
     ocioso(() => setAtiva(true));
   }, []);
-  return ativa ? <Experiencia fracoes={fracoes} /> : null;
+  return ativa ? <Experiencia /> : null;
 }

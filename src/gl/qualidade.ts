@@ -3,10 +3,10 @@
  * corrigido em execução pelo controlador de quadros.
  */
 export type Nivel = "alto" | "medio" | "baixo";
-export const CONFIG: Record<Nivel, { camadas: number; dprMax: number; pos: boolean; nave: boolean; relicario: boolean; atmosfera: boolean }> = {
-  alto: { camadas: 3, dprMax: 2, pos: true, nave: true, relicario: true, atmosfera: true },
-  medio: { camadas: 2, dprMax: 1.5, pos: true, nave: true, relicario: false, atmosfera: false },
-  baixo: { camadas: 1, dprMax: 1.25, pos: false, nave: false, relicario: false, atmosfera: false },
+export const CONFIG: Record<Nivel, { camadas: number; dprMax: number; pos: boolean }> = {
+  alto: { camadas: 3, dprMax: 2, pos: true },
+  medio: { camadas: 2, dprMax: 1.5, pos: true },
+  baixo: { camadas: 1, dprMax: 1.25, pos: false },
 };
 const ORDEM: Nivel[] = ["baixo", "medio", "alto"];
 

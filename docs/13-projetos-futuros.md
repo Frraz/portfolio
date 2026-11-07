@@ -13,7 +13,7 @@ Como ativar a seção "Obras" e adicionar projetos com demo, sem refatorar. Hoje
 | Navegação, sitemap, terminal e índice | Incluem "Obras" automaticamente quando ela está ativa |
 | Verificador de conteúdo | Bloqueia nomes de projetos enquanto eles não estiverem publicados |
 
-**Efeito narrativo:** ao ativar "Obras", o site passa de oito para **nove seções**, completando o número que atravessa as referências. A seção Contato vai de 7 para 8 sozinha.
+**Efeito na navegação:** ao ativar "Obras", a régua da moldura ganha um traço a mais e a seção entra antes de Contato, sem mudar nada à mão.
 
 ## Adicionar um projeto
 
@@ -42,7 +42,7 @@ Como ativar a seção "Obras" e adicionar projetos com demo, sem refatorar. Hoje
 
 ## Visual planejado
 
-Cada projeto é um **painel de vitral**, em uma nave lateral (uma capela). A demo aparece como imagem, e `Abrir demonstração` é um link externo.
+**A definir quando a seção for ativada**, dentro do conceito Sinal ([04](04-direcao-criativa.md)). Proposta inicial: cada projeto como um **serviço implantado**, com a stack real, o estado conferido no dia (`em produção`, `demonstração`) e a captura da tela. A demo aparece como imagem, e `Abrir demonstração` é um link externo. O estado nunca é inventado: vem da conferência registrada na base.
 
 - **Composição:** cada obra tem proporção própria, sem carrossel de cards iguais.
 - **Página do projeto:** `/obras/[slug]`, com contexto, o que fiz, stack, destaques e link da demo.

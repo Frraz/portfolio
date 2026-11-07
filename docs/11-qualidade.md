@@ -57,9 +57,10 @@ Meta: WCAG 2.2 AA. A automação só pega parte dos problemas, então o teste ma
 - [ ] Movimento reduzido: todas as linhas da [tabela](06-motion-e-webgl.md#movimento-reduzido).
 - [ ] Sem CSS e sem JavaScript: a página é lida em ordem.
 - [ ] Alto contraste do sistema e `forced-colors`.
-- [ ] Sem flashes acima de 3 por segundo, inclusive na tela branca.
+- [ ] Sem flashes acima de 3 por segundo, inclusive nas decodificações de título.
 - [ ] Controle para pausar a chuva, visível.
-- [ ] Letra gótica: 5 pessoas leem o nome e os títulos sem hesitar. Se falhar, ajustar o peso ou o tamanho.
+- [ ] Decodificação de títulos e mudança de largura do nome: leitor de tela lê o texto final, sem embaralhamento.
+- [ ] Moldura e régua: nada do que só a moldura mostra é necessário para usar o site.
 
 ## SEO
 
@@ -87,13 +88,13 @@ Aplicação da skill SEO Audit ao site. Palavras-chave reais, sem repetição ar
 
 | Tipo | Ferramenta | O que cobre |
 |---|---|---|
-| Unidade | Vitest | Esquemas, numeração de seções, comandos do terminal, verificação de selos, verificador de conteúdo |
+| Unidade | Vitest | Esquemas, numeração de seções, comandos do terminal, verificação de flags, dados derivados (hexdump, fingerprint, tempo decorrido), verificador de conteúdo |
 | Conteúdo | `verificar-conteudo` | Termos, telefone, PII, nomes de projeto, datas |
 | Contraste | `verificar-contraste` | Todos os pares de todos os temas |
 | E2E | Playwright | Fluxos do recrutador, navegação, filtros na URL, terminal, CTF, revelação de WhatsApp, PDF |
 | Cabeçalhos | Playwright com a imagem real do Docker | CSP, HSTS e demais cabeçalhos em cada rota; sem violações de CSP no console |
-| Acessibilidade | axe + Playwright | Todas as rotas nos 5 temas e idiomas |
-| Legibilidade sobre a cena | Playwright com quadros fixos | Luminância atrás de cada bloco de texto, em cada tema ([limites](06-motion-e-webgl.md#legibilidade-sobre-a-cena)) |
+| Acessibilidade | axe + Playwright | Todas as rotas nos 3 temas e idiomas |
+| Legibilidade sobre a cena | Playwright com quadros fixos | Luminância atrás de cada bloco de texto, nos três temas e nas duas cenas enquanto existirem ([limites](06-motion-e-webgl.md#legibilidade-sobre-a-cena)) |
 | Regressão visual | Playwright + Storybook | Componentes e cada seção, em 390 e 1440 px, com a cena em quadro fixo |
 | WebGL | Playwright com GPU em software e aparelhos reais | Cena inicia sem erro, perda de contexto, fallback, cada nível de qualidade |
 | Desempenho | Lighthouse CI + orçamentos | Rotas principais |
@@ -121,6 +122,24 @@ As skills Impeccable e `taste-skill` insistem em olhar o resultado. A cada fase 
 - Hover, foco, pressionado, desativado, carregando, erro, vazio.
 - Seleção, cursor de digitação, barra de rolagem, foco e numerais na paleta.
 - Toda exigência do briefing fácil de achar em segundos.
+
+## Avaliação do redesign
+
+Critérios próprios do pedido de 06/11/2026 ([briefing](00-briefing.md#pedido-de-redesign-06112026)).
+
+### Teste sem palavras
+
+O pedido central: quem olha deduz, sem ler, que a pessoa é boa com tecnologia.
+
+1. Capturas da primeira tela e de três seções, em 1440 e 390 px, com **todo o texto borrado** (desfoque de 12 px no DOM, cena intacta).
+2. Mostrar por 5 segundos a 5 pessoas que não conhecem o site, uma de cada vez.
+3. Perguntar: "Que tipo de profissional você acha que fez isto, e em que área?"
+
+**Passa quando** 4 de 5 respondem com tecnologia, e ao menos 3 citam segurança, redes, servidores ou infraestrutura. Rodado uma vez antes da escolha da cena (imagens guardadas em `test-results/sem-palavras/`) e de novo na R8.
+
+### Princípio do dado real
+
+Revisão manual de cada elemento da moldura, do boot log, do registro da sessão, do hexdump, dos fingerprints e do terminal: cada valor exibido tem origem conferível. Um valor sem origem é defeito bloqueante.
 
 ## Rubrica de premiação
 

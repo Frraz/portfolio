@@ -1,17 +1,25 @@
 import { TEMAS } from "../src/temas/temas.ts";
-import { contraste, mistura } from "../src/temas/cor.ts";
+import { contraste, luminancia } from "../src/temas/cor.ts";
 
-const VIDRO_ALFA = 0.82;
+// Pares de docs/05-design-system.md. `forma` é só gráfico (3:1).
 const pares: [string, string, number][] = [
   ["tinta", "fundo", 4.5],
   ["tinta", "superficie", 4.5],
+  ["tinta", "superficie2", 4.5],
   ["tinta2", "fundo", 4.5],
   ["tinta2", "superficie", 4.5],
-  ["acento", "fundo", 4.5],
-  ["acento", "superficie", 4.5],
+  ["tinta2", "superficie2", 4.5],
+  ["tintaDado", "fundo", 4.5],
+  ["tintaDado", "superficie", 4.5],
+  ["tintaDado", "superficie2", 4.5],
+  ["sinal", "fundo", 4.5],
+  ["sinal", "superficie", 4.5],
+  ["sinal", "superficie2", 4.5],
   ["alerta", "fundo", 4.5],
   ["alerta", "superficie", 4.5],
-  ["acento2", "superficie", 3],
+  ["alerta", "superficie2", 4.5],
+  ["forma", "fundo", 3],
+  ["forma", "superficie", 3],
 ];
 let falhas = 0;
 for (const t of TEMAS) {
@@ -23,15 +31,13 @@ for (const t of TEMAS) {
       falhas++;
     }
   }
-  // Vidro: pior caso é a cor mais forte da cena atrás do painel.
-  const atras = t.esquema === "dark" ? c.chuvaCabeca : c.chuva;
-  const fundo = mistura(c.superficie, atras, VIDRO_ALFA);
-  for (const papel of ["tinta", "tinta2"]) {
-    const r = contraste(c[papel], fundo);
-    if (r < 4.5) {
-      console.error(`✗ ${t.id}: ${papel} sobre vidro = ${r.toFixed(2)}`);
-      falhas++;
-    }
+  // O teto de luz da cena é calculado por `tinta2` (src/temas/cor.ts). Texto em `tintaDado` sobre a chuva só fica
+  // legível se ela não tiver menos contraste com a luz que `tinta2`: mais clara no tema escuro, mais escura no claro.
+  const lt2 = luminancia(c.tinta2);
+  const ltd = luminancia(c.tintaDado);
+  if (t.esquema === "dark" ? ltd < lt2 : ltd > lt2) {
+    console.error(`✗ ${t.id}: tintaDado tem menos contraste com a cena que tinta2`);
+    falhas++;
   }
 }
 if (falhas) process.exit(1);
